@@ -1,3 +1,5 @@
+import sys
+
 def LoadDSV(filename, delimiter='|'):
     with open(filename,'r', encoding='cp1251') as dsv:
         for line in dsv:
@@ -49,6 +51,14 @@ def EscapeQuotes(s):
         s=s.replace('"','\\"')
     return s
 
+def FormatPO(msgid, msgstr="", msgctxt=None):
+    s = ""
+    if msgctxt:
+        s += 'msgctxt "%s"\n' % EscapeQuotes(msgctxt)
+    s += 'msgid "%s"\n' % EscapeQuotes(msgid)
+    s += 'msgstr "%s"\n' % EscapeQuotes(msgstr)
+    return s
+
 def SavePO(filename,template,dictionary,ignorelist):
     with open(filename,'w',encoding='cp65001') as pofile:
         print('msgid ""', file=pofile)
@@ -78,3 +88,34 @@ def SavePOT(filename,template,ignorelist):
                 print('', file=pofile)
                 print('msgid "%s"' % EscapeQuotes(text), file=pofile)
                 print('msgstr ""', file=pofile)
+
+# Working with raws
+def tags(s):
+    tag_start = None
+    for i, char in enumerate(s):
+        if tag_start is None:
+            if char=='[':
+                tag_start = i
+            else:
+                pass
+        elif char==']':
+            yield s[tag_start+1:i].split(':')
+            tag_start = None
+
+def is_translatable(s):
+    return any((char>='a' and char<='z') for char in s)
+
+def bracket_tag(tag):
+    return "[%s]" % ':'.join(tag)
+
+def ExtractTranslatablesFormRaws(file):
+    object = None
+    context = None
+    for line in file:
+        for tag in tags(line):
+            if tag[0] == 'OBJECT':
+                object = tag[1]
+            elif object and (tag[0] == object or (object in {'ITEM','BUILDING'} and tag[0].startswith(object))):
+                context = bracket_tag(tag)
+            elif 'TILE' not in tag[0] and any(is_translatable(s) for s in tag[1:]):
+                yield (context, bracket_tag(tag))
