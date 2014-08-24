@@ -1,7 +1,6 @@
 from dfgettext import *
 
-template = LoadStringDump('stringdump_0_40_04.txt')
+template = LoadStringDump('stringdump_0_40_09.txt')
 ignorelist = {line[1] for line in LoadDSV('ignored.txt')}
 dictionary = LoadFromTrans('trans.txt')
 SavePO('DwarfFortress.po',template,dictionary,ignorelist)
-
