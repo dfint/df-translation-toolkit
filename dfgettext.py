@@ -59,7 +59,7 @@ def FormatPO(msgid, msgstr="", msgctxt=None):
     s += 'msgstr "%s"\n' % EscapeQuotes(msgstr)
     return s
 
-def SavePO(filename,template,dictionary,ignorelist):
+def SavePO(filename,template,dictionary,ignorelist={}):
     with open(filename,'w',encoding='cp65001') as pofile:
         print('msgid ""', file=pofile)
         print('msgstr ""', file=pofile)
