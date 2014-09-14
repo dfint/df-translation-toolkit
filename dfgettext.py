@@ -116,6 +116,6 @@ def ExtractTranslatablesFormRaws(file):
             if tag[0] == 'OBJECT':
                 object = tag[1]
             elif object and (tag[0] == object or (object in {'ITEM','BUILDING'} and tag[0].startswith(object))):
-                context = bracket_tag(tag)
+                context = ':'.join(tag) # don't enclose context string into brackets - transifex dislike this
             elif 'TILE' not in tag[0] and any(is_translatable(s) for s in tag[1:]):
                 yield (context, bracket_tag(tag))
