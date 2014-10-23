@@ -111,6 +111,7 @@ def bracket_tag(tag):
 def ExtractTranslatablesFormRaws(file):
     object = None
     context = None
+    keys = set()
     for line in file:
         for tag in tags(line):
             if tag[0] == 'OBJECT':
@@ -118,5 +119,7 @@ def ExtractTranslatablesFormRaws(file):
             elif object and (tag[0] == object or (object in {'ITEM','BUILDING'} and tag[0].startswith(object)) or \
                     object.endswith('_'+tag[0])):
                 context = ':'.join(tag) # don't enclose context string into brackets - transifex dislike this
-            elif 'TILE' not in tag[0] and any(is_translatable(s) for s in tag[1:]):
+                keys.clear()
+            elif 'TILE' not in tag[0] and any(is_translatable(s) for s in tag[1:]) and tag not in keys:
+                keys.add(tag)
                 yield (context, bracket_tag(tag))
