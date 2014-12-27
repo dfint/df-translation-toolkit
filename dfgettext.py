@@ -120,6 +120,6 @@ def ExtractTranslatablesFormRaws(file):
                     object.endswith('_'+tag[0])):
                 context = ':'.join(tag) # don't enclose context string into brackets - transifex dislike this
                 keys.clear()
-            elif 'TILE' not in tag[0] and any(is_translatable(s) for s in tag[1:]) and bracket_tag(tag) not in keys:
-                keys.add(bracket_tag(tag))
+            elif 'TILE' not in tag[0] and any(is_translatable(s) for s in tag[1:]) and tuple(tag) not in keys:
+                keys.add(tuple(tag))
                 yield (context, bracket_tag(tag))
