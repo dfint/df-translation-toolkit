@@ -108,7 +108,7 @@ def is_translatable(s):
 def bracket_tag(tag):
     return "[%s]" % ':'.join(tag)
 
-def ExtractTranslatablesFormRaws(file):
+def ExtractTranslatablesFromRaws(file):
     object = None
     context = None
     keys = set()
