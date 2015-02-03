@@ -155,8 +155,11 @@ def translate_raw_file(file, dictionary):
                 key = (br_tag, context)
                 if key in dictionary:
                     s += dictionary[key]
+                elif (br_tag, None) in dictionary:
+                    s += dictionary[(br_tag, None)]
                 else:
                     s += br_tag
             yield s
         else:
             yield line.rstrip()
+
