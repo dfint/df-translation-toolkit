@@ -132,3 +132,31 @@ def ExtractTranslatablesFromRaws(file):
             elif 'TILE' not in tag[0] and any(is_translatable(s) for s in tag[1:]) and tuple(tag) not in keys:
                 keys.add(tuple(tag))
                 yield (context, bracket_tag(tag))
+
+import re
+
+re_leading_spaces = re.compile("^([^\[]*)\[")
+
+def translate_raw_file(file, dictionary):
+    object = None
+    context = None
+    for line in file:
+        if '[' in line:
+            result = re_leading_spaces.search(line)
+            s = result.group(1)
+            for tag in tags(line):
+                if tag[0] == 'OBJECT':
+                    object = tag[1]
+                elif object and (tag[0] == object or (object in {'ITEM', 'BUILDING'} and tag[0].startswith(object)) or
+                                     object.endswith('_' + tag[0])):
+                    context = ':'.join(tag)
+                
+                br_tag = bracket_tag(tag)
+                key = (br_tag, context)
+                if key in dictionary:
+                    s += dictionary[key]
+                else:
+                    s += br_tag
+            yield s
+        else:
+            yield line.rstrip()
