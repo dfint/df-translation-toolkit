@@ -37,7 +37,11 @@ def LoadMO(filename):
         for i in range(number_of_strings):
             original_string = load_string(mofile, original_string_table_offset + i * 8)
             translation_string = load_string(mofile, traslation_string_table_offset + i * 8)
-            yield (original_string, translation_string)
+            if '\x04' in original_string:
+                context, original_string = original_string.split('\x04')
+            else:
+                context = None
+            yield dict(msgctxt=context, msgid=original_string, msgstr=translation_string)
 
 
 def EscapeQuotes(s):

@@ -1,8 +1,8 @@
 import sys
 from dfgettext import *
 
-dictionary = {key:val for key,val in LoadMO('for_translation_dwarf-fortress_dwarffortress-040x-hardcoded-strings_ru.mo')}
-template = LoadStringDump('stringdump_0_40_12.txt')
+dictionary = {item['msgid']:item['msgstr'] for item in LoadMO('out.mo')}
+template = LoadStringDump('stringdump_0_40_24_noprefix.txt')
 
 exclusions = {'Histories of '}
 
