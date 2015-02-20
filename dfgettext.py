@@ -61,38 +61,37 @@ def FormatPO(msgid, msgstr="", msgctxt=None):
     return s
 
 
-def SavePO(filename, template, dictionary, ignorelist=None):
+def SavePO(pofile, template, dictionary, ignorelist=None):
     if not ignorelist:
         ignorelist = {}
-    with open(filename, 'w', encoding='cp65001') as pofile:
-        print('msgid ""', file=pofile)
-        print('msgstr ""', file=pofile)
-        print('"Content-Type: text/plain; charset=UTF-8\\n"', file=pofile)
-        print('"Language: ru_RU\\n"', file=pofile)
-        for id, text in template:
-            if text not in ignorelist:
-                print('', file=pofile)
-                if text in dictionary and len(dictionary[text]) > 1:
-                    for item in dictionary[text][1:]:
-                        if len(item.strip()) > 0:
-                            print('#', item.strip(), file=pofile)  # translator comments
-                print('msgid "%s"' % EscapeQuotes(text), file=pofile)
-                if text in dictionary:
-                    print('msgstr "%s"' % EscapeQuotes(dictionary[text][0]), file=pofile)
-                else:
-                    print('msgstr ""', file=pofile)
-
-
-def SavePOT(filename, template, ignorelist):
-    with open(filename, 'w', encoding='cp65001') as pofile:
-        print('msgid ""', file=pofile)
-        print('msgstr ""', file=pofile)
-        print('"Content-Type: text/plain; charset=UTF-8\\n"', file=pofile)
-        for id, text in template:
-            if text not in ignorelist:
-                print('', file=pofile)
-                print('msgid "%s"' % EscapeQuotes(text), file=pofile)
+    
+    print('msgid ""', file=pofile)
+    print('msgstr ""', file=pofile)
+    print('"Content-Type: text/plain; charset=UTF-8\\n"', file=pofile)
+    print('"Language: ru_RU\\n"', file=pofile)
+    for id, text in template:
+        if text not in ignorelist:
+            print('', file=pofile)
+            if text in dictionary and len(dictionary[text]) > 1:
+                for item in dictionary[text][1:]:
+                    if len(item.strip()) > 0:
+                        print('#', item.strip(), file=pofile)  # translator comments
+            print('msgid "%s"' % EscapeQuotes(text), file=pofile)
+            if text in dictionary:
+                print('msgstr "%s"' % EscapeQuotes(dictionary[text][0]), file=pofile)
+            else:
                 print('msgstr ""', file=pofile)
+
+
+def SavePOT(pofile, template, ignorelist):
+    print('msgid ""', file=pofile)
+    print('msgstr ""', file=pofile)
+    print('"Content-Type: text/plain; charset=UTF-8\\n"', file=pofile)
+    for id, text in template:
+        if text not in ignorelist:
+            print('', file=pofile)
+            print('msgid "%s"' % EscapeQuotes(text), file=pofile)
+            print('msgstr ""', file=pofile)
 
 
 # Working with raws
