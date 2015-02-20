@@ -1,47 +1,47 @@
-def LoadDSV(filename, delimiter='|'):
-    with open(filename, 'r', encoding='cp1251') as dsv:
-        for line in dsv:
-            if '|' in line:
-                parts = line.split(delimiter)
-                yield parts
+def LoadDSV(file, delimiter='|'):
+    for line in file:
+        if '|' in line:
+            parts = line.split(delimiter)
+            yield parts
 
 
-def LoadFromTrans(filename):
-    return {line[1]: line[2:] for line in LoadDSV(filename)}
+def LoadFromTrans(file):
+    return {line[1]: line[2:] for line in LoadDSV(file)}
 
 
-def LoadStringDump(filename):
-    return [line[:2] for line in LoadDSV(filename)]
+def LoadStringDump(file):
+    return (line[:2] for line in LoadDSV(file))
 
 
 def read_uint(file_object):
     return int.from_bytes(file_object.read(4), byteorder='little')
 
 
-def LoadMO(filename):
+def LoadMO(mofile):
     def load_string(file_object, offset):
         file_object.seek(offset)
         string_size = read_uint(file_object)
         string_offset = read_uint(file_object)
         file_object.seek(string_offset)
         return file_object.read(string_size).decode(encoding="utf-8")
-
-    with open(filename, 'rb') as mofile:
-        magic_number = mofile.read(4)
-        if magic_number != b'\xde\x12\x04\x95':
-            return None
-        mofile.seek(8)
-        number_of_strings = read_uint(mofile)
-        original_string_table_offset = read_uint(mofile)
-        traslation_string_table_offset = read_uint(mofile)
-        for i in range(number_of_strings):
-            original_string = load_string(mofile, original_string_table_offset + i * 8)
-            translation_string = load_string(mofile, traslation_string_table_offset + i * 8)
-            if '\x04' in original_string:
-                context, original_string = original_string.split('\x04')
-            else:
-                context = None
-            yield dict(msgctxt=context, msgid=original_string, msgstr=translation_string)
+    
+    mofile.seek(0)
+    magic_number = mofile.read(4)
+    if magic_number != b'\xde\x12\x04\x95':
+        raise IOError("Wrong mo-file format")
+    
+    mofile.seek(8)
+    number_of_strings = read_uint(mofile)
+    original_string_table_offset = read_uint(mofile)
+    traslation_string_table_offset = read_uint(mofile)
+    for i in range(number_of_strings):
+        original_string = load_string(mofile, original_string_table_offset + i * 8)
+        translation_string = load_string(mofile, traslation_string_table_offset + i * 8)
+        if '\x04' in original_string:
+            context, original_string = original_string.split('\x04')
+        else:
+            context = None
+        yield dict(msgctxt=context, msgid=original_string, msgstr=translation_string)
 
 
 def EscapeQuotes(s):
