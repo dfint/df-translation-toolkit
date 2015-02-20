@@ -108,7 +108,7 @@ def tags(s):
             else:
                 pass
         elif char == ']':
-            yield split_tag(s)
+            yield split_tag(s[tag_start:i])
             tag_start = None
 
 
@@ -170,25 +170,29 @@ def translate_raw_file(file, dictionary):
                     context = ':'.join(tag)
                 
                 br_tag = bracket_tag(tag)
-                key = (br_tag, context)
-                if key in dictionary:
-                    s += dictionary[key]
-                elif (br_tag, None) in dictionary:
-                    s += dictionary[(br_tag, None)]
-                elif not is_translatable(tag[-1]):
-                    last = last_sutable(tag, is_translatable)
-                    tag = tag[:last+1]
-                    tag[-1] = ''
-                    br_tag = bracket_tag(tag)
+                if any(is_translatable(s) for s in tag[1:]):
                     key = (br_tag, context)
                     if key in dictionary:
-                        s += dictionary[key]
+                        br_tag = dictionary[key]
                     elif (br_tag, None) in dictionary:
-                        s += dictionary[(br_tag, None)]
-                    else:
-                        s += br_tag
-                else:
-                    s += br_tag
+                        br_tag = dictionary[(br_tag, None)]
+                    elif not is_translatable(tag[-1]):
+                        last = last_sutable(tag, is_translatable)
+                        new_tag = tag[:last+1]
+                        new_tag[-1] = ''
+                        br_tag = bracket_tag(new_tag)
+                        key = (br_tag, context)
+                        new_tag = None
+                        if key in dictionary:
+                            new_tag = split_tag(dictionary[key])
+                        elif (br_tag, None) in dictionary:
+                            new_tag = split_tag(dictionary[(br_tag, None)])
+                        
+                        if new_tag:
+                            tag[:len(new_tag)-1] = new_tag[:-1]
+                            br_tag = bracket_tag(tag)
+                
+                s += br_tag
             yield s
         else:
             yield line.rstrip()
