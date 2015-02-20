@@ -108,12 +108,23 @@ def tags(s):
             tag_start = None
 
 
+translatable_tags = {'SINGULAR', 'PLURAL', 'STP', 'NO_SUB'}
+
+
 def is_translatable(s):
-    return any((char >= 'a' and char <= 'z') for char in s)
+    return s in translatable_tags or any((char >= 'a' and char <= 'z') for char in s)
 
 
 def bracket_tag(tag):
     return "[%s]" % ':'.join(tag)
+
+
+def last_sutable(s, func):
+    for i in range(len(s)-1,0,-1):
+        if func(s[i]):
+            return i+1  # if the last element is sutable, then return len(s), so that s[:i] gives full list
+    else:
+        return 0  # if there aren't sutable elements, then return 0, so that s[:i] gives empty list
 
 
 def ExtractTranslatablesFromRaws(file):
@@ -129,6 +140,10 @@ def ExtractTranslatablesFromRaws(file):
                 context = ':'.join(tag)  # don't enclose context string into brackets - transifex dislike this
                 keys.clear()
             elif 'TILE' not in tag[0] and any(is_translatable(s) for s in tag[1:]) and tuple(tag) not in keys:
+                if not is_translatable(tag[-1]):
+                    last = last_sutable(tag, is_translatable)
+                    tag = tag[:last]
+                    tag.append('')  # Add an empty element to the tag to mark the tag as not completed
                 keys.add(tuple(tag))
                 yield (context, bracket_tag(tag))
 
@@ -156,6 +171,18 @@ def translate_raw_file(file, dictionary):
                     s += dictionary[key]
                 elif (br_tag, None) in dictionary:
                     s += dictionary[(br_tag, None)]
+                elif not is_translatable(tag[-1]):
+                    last = last_sutable(tag, is_translatable)
+                    tag = tag[:last+1]
+                    tag[-1] = ''
+                    br_tag = bracket_tag(tag)
+                    key = (br_tag, context)
+                    if key in dictionary:
+                        s += dictionary[key]
+                    elif (br_tag, None) in dictionary:
+                        s += dictionary[(br_tag, None)]
+                    else:
+                        s += br_tag
                 else:
                     s += br_tag
             yield s
