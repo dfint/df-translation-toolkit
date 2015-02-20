@@ -1,0 +1,27 @@
+
+import sys
+from dfgettext import *
+
+mofilename = sys.argv[1]
+with open(mofilename, 'rb') as mofile:
+    imported = [item for item in LoadMO(mofile)]
+
+pofilename = sys.argv[2]
+with open(pofilename, 'w', encoding='cp65001') as pofile:
+    print('msgid ""', file=pofile)
+    print('msgstr ""', file=pofile)
+    print('"Content-Type: text/plain; charset=UTF-8\\n"', file=pofile)
+    
+    for item in imported:
+        if item['msgid']:
+            msgid = split_tag(item['msgid'])
+            msgstr = split_tag(item['msgstr'])
+            if not is_translatable(msgid[-1]):
+                last = last_sutable(msgid, is_translatable)
+                msgid = msgid[:last+1]
+                msgid[-1] = ''
+                msgstr = msgstr[:last+1]
+                msgstr[-1] = ''
+                item['msgid'] = bracket_tag(msgid)
+                item['msgstr'] = bracket_tag(msgstr)
+            print(FormatPO(**item), file=pofile)

@@ -94,6 +94,10 @@ def SavePOT(pofile, template, ignorelist):
             print('msgstr ""', file=pofile)
 
 
+def split_tag(s):
+    return s.strip('[]').split(':')
+
+
 # Working with raws
 def tags(s):
     tag_start = None
@@ -104,7 +108,7 @@ def tags(s):
             else:
                 pass
         elif char == ']':
-            yield s[tag_start + 1:i].split(':')
+            yield split_tag(s)
             tag_start = None
 
 
