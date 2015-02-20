@@ -11,7 +11,8 @@ mofilename = sys.argv[1]
 dictionary = {(item['msgid'],item['msgctxt']):item['msgstr'] for item in LoadMO(mofilename)}
 
 path = sys.argv[2]
-raws = os.listdir(path)
+raws = filter(lambda x: not x.startswith('language_'), os.listdir(path))
+
 for file_name in raws:
     basename, ext = os.path.splitext(file_name)
     if ext == '.txt':

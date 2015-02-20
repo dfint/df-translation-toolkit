@@ -108,7 +108,7 @@ def tags(s):
             tag_start = None
 
 
-translatable_tags = {'SINGULAR', 'PLURAL', 'STP', 'NO_SUB'}
+translatable_tags = {'SINGULAR', 'PLURAL', 'STP', 'NO_SUB', 'NP', 'NA'}
 
 
 def is_translatable(s):
