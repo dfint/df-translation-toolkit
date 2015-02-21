@@ -10,10 +10,12 @@ else:
 
 raws = filter(lambda x: not x.startswith('language_'), os.listdir(path))
 
-for file_name in raws:
-    fullpath = os.path.join(path, file_name)
-    if os.path.isfile(fullpath) and file_name.endswith('.txt'):
-        with open(fullpath) as file:
-            for context, item in ExtractTranslatablesFromRaws(file):
-                print('#:', file_name)
-                print(FormatPO(msgid=item, msgstr="", msgctxt=context))
+potfilename = sys.argv[2]
+with open(potfilename, 'w', encoding='utf-8') as potfile:
+    for file_name in raws:
+        fullpath = os.path.join(path, file_name)
+        if os.path.isfile(fullpath) and file_name.endswith('.txt'):
+            with open(fullpath) as file:
+                for context, item in ExtractTranslatablesFromRaws(file):
+                    print('#:', file_name, file=potfile)
+                    print(FormatPO(msgid=item, msgstr="", msgctxt=context), file=potfile)
