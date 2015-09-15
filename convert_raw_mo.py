@@ -1,13 +1,14 @@
+# What The File is this ?
 
 import sys
 from dfgettext import *
 
 mofilename = sys.argv[1]
 with open(mofilename, 'rb') as mofile:
-    imported = [item for item in LoadMO(mofile)]
+    imported = [item for item in load_mo(mofile)]
 
 pofilename = sys.argv[2]
-with open(pofilename, 'w', encoding='cp65001') as pofile:
+with open(pofilename, 'w', encoding='utf-8') as pofile:
     print('msgid ""', file=pofile)
     print('msgstr ""', file=pofile)
     print('"Content-Type: text/plain; charset=UTF-8\\n"', file=pofile)
@@ -24,4 +25,4 @@ with open(pofilename, 'w', encoding='cp65001') as pofile:
                 msgstr[-1] = ''
                 item['msgid'] = bracket_tag(msgid)
                 item['msgstr'] = bracket_tag(msgstr)
-            print(FormatPO(**item), file=pofile)
+            print(format_po(**item), file=pofile)

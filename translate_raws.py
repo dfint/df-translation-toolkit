@@ -9,7 +9,7 @@ if len(sys.argv)<3:
 
 mofilename = sys.argv[1]
 with open(mofilename, 'rb') as mofile:
-    dictionary = {(item['msgid'],item['msgctxt']):item['msgstr'] for item in LoadMO(mofile)}
+    dictionary = {(item['msgid'],item['msgctxt']):item['msgstr'] for item in load_mo(mofile)}
 
 path = sys.argv[2]
 raws = filter(lambda x: not x.startswith('language_'), os.listdir(path))
