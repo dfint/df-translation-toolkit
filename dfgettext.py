@@ -28,7 +28,7 @@ def load_mo(mofile):
     mofile.seek(0)
     magic_number = mofile.read(4)
     if magic_number != b'\xde\x12\x04\x95':
-        raise IOError("Wrong mo-file format")
+        raise ValueError("Wrong mo-file format")
     
     mofile.seek(8)
     number_of_strings = read_uint(mofile)
