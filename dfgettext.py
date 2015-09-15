@@ -1,23 +1,23 @@
-def LoadDSV(file, delimiter='|'):
+def load_dsv(file, delimiter='|'):
     for line in file:
         if '|' in line:
             parts = line.split(delimiter)
             yield parts
 
 
-def LoadFromTrans(file):
-    return {line[1]: line[2:] for line in LoadDSV(file)}
+def load_trans(file):
+    return {line[1]: line[2:] for line in load_dsv(file)}
 
 
-def LoadStringDump(file):
-    return (line[:2] for line in LoadDSV(file))
+def load_string_dump(file):
+    return (line[:2] for line in load_dsv(file))
 
 
 def read_uint(file_object):
     return int.from_bytes(file_object.read(4), byteorder='little')
 
 
-def LoadMO(mofile):
+def load_mo(mofile):
     def load_string(file_object, offset):
         file_object.seek(offset)
         string_size = read_uint(file_object)
@@ -44,7 +44,7 @@ def LoadMO(mofile):
         yield dict(msgctxt=context, msgid=original_string, msgstr=translation_string)
 
 
-def EscapeQuotes(s):
+def escape_quotes(s):
     if '\\' in s:
         s = s.replace('\\', '\\\\')
     if '"' in s:
@@ -52,16 +52,16 @@ def EscapeQuotes(s):
     return s
 
 
-def FormatPO(msgid, msgstr="", msgctxt=None):
+def format_po(msgid, msgstr="", msgctxt=None):
     s = ""
     if msgctxt:
-        s += 'msgctxt "%s"\n' % EscapeQuotes(msgctxt)
-    s += 'msgid "%s"\n' % EscapeQuotes(msgid)
-    s += 'msgstr "%s"\n' % EscapeQuotes(msgstr)
+        s += 'msgctxt "%s"\n' % escape_quotes(msgctxt)
+    s += 'msgid "%s"\n' % escape_quotes(msgid)
+    s += 'msgstr "%s"\n' % escape_quotes(msgstr)
     return s
 
 
-def SavePO(pofile, template, dictionary, ignorelist=None):
+def save_po(pofile, template, dictionary, ignorelist=None):
     if not ignorelist:
         ignorelist = {}
     
@@ -76,21 +76,21 @@ def SavePO(pofile, template, dictionary, ignorelist=None):
                 for item in dictionary[text][1:]:
                     if len(item.strip()) > 0:
                         print('#', item.strip(), file=pofile)  # translator comments
-            print('msgid "%s"' % EscapeQuotes(text), file=pofile)
+            print('msgid "%s"' % escape_quotes(text), file=pofile)
             if text in dictionary:
-                print('msgstr "%s"' % EscapeQuotes(dictionary[text][0]), file=pofile)
+                print('msgstr "%s"' % escape_quotes(dictionary[text][0]), file=pofile)
             else:
                 print('msgstr ""', file=pofile)
 
 
-def SavePOT(pofile, template, ignorelist):
+def save_pot(pofile, template, ignorelist):
     print('msgid ""', file=pofile)
     print('msgstr ""', file=pofile)
     print('"Content-Type: text/plain; charset=UTF-8\\n"', file=pofile)
     for id, text in template:
         if text not in ignorelist:
             print('', file=pofile)
-            print('msgid "%s"' % EscapeQuotes(text), file=pofile)
+            print('msgid "%s"' % escape_quotes(text), file=pofile)
             print('msgstr ""', file=pofile)
 
 
@@ -131,7 +131,7 @@ def last_sutable(s, func):
         return 0  # if there aren't sutable elements, then return 0, so that s[:i] gives empty list
 
 
-def ExtractTranslatablesFromRaws(file):
+def extract_translatables_from_raws(file):
     object = None
     context = None
     keys = set()

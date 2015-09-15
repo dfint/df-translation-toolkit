@@ -1,13 +1,13 @@
 import sys
 
-from dfgettext import LoadMO
+from dfgettext import load_mo
 
 from collections import defaultdict, Counter
 
 trans = defaultdict(Counter)
 
 if len(sys.argv)>1:
-    for item in LoadMO(sys.argv[1]):
+    for item in load_mo(sys.argv[1]):
         if item['msgid']:
             trans[item['msgid']][item['msgstr']]+=1
 

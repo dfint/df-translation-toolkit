@@ -2,11 +2,13 @@ import sys
 
 from dfgettext import *
 
+print(sys.argv, file=sys.stderr)
+
 with open(sys.argv[1], 'rb') as mofile:
-    dictionary = {item['msgid']:item['msgstr'] for item in LoadMO(mofile)}
+    dictionary = {item['msgid']:item['msgstr'] for item in load_mo(mofile)}
 
 with open(sys.argv[2]) as stringdump:
-    template = LoadStringDump(stringdump)
+    template = load_string_dump(stringdump)
 
     exclusions = {'Histories of '}
 

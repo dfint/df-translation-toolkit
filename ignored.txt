@@ -1,12 +1,25 @@
+|     a1|
+|     a2|
+| (S)|
+| (invalid order)|
 | : Numbered body parts cannot have children -- number set to 1 (make individual parts if possible)|
 | : Special attack interaction token not recognized : |
 | : Special attack material missing state -- set to liquid|
+| AUGIS |
+| BP Add Type |
 | BP Mod |
+| BP Remove Type |
 | BY |
 | Color Mod Ending With (|
 | NOT FOUND|
+| P|
+| STORKIS |
+| STRANGUS |
 | Shearable Tissue |
 | Was Not Used|
+| [C:6:0:1]|
+| [C:7:0:0]|
+| [C:7:0:1]|
 | [PLUS_TISSUE_LAYER:SCALE:BY_CATEGORY:THROAT]|
 | has self-referential diplomacy state|
 | missing plural string|
@@ -18,17 +31,28 @@
 | seems to have correct format but could not find proper BPs in any caste, so not added|
 | was not found, using first tissue instead|
 | x |
+|"[B]|
 |%s|
 |&r|
 |(E->W)|
 |(N->S)|
 |(S->N)|
 |(W->E)|
+|([LIP])|
+|([lip])|
 |(empty tissue)|
 |(no mat1)|
 |(no mat3)|
 |) Was Not Used|
 |)[R]|
+|* Eviction Underway *|
+|* Move Underway *|
+|** Loading Adventurer **|
+|** Loading Fortress **|
+|** Starting New Arena **|
+|** Starting New Outpost **|
+|** Starting Reclaim **|
+|** Unretiring Outpost **|
 |*** Error(s) finalizing the creature |
 |*** Error(s) finalizing the entity |
 |*** Error(s) finalizing the interaction |
@@ -41,16 +65,44 @@
 |*** Error(s) found in Random Interaction Generation|
 |*** Error(s) found in Random Material Generation|
 |*** Error(s) found in the file "|
+|*** STARTING NEW GAME ***|
 |*.dat|
 |*.sav|
+|*START REGION DIM SAVE*|
+|*START REGION GEOLOGY SAVE*|
+|*START REGION MAP SAVE*|
+|*START REGION SAVE*|
+|*START REGION SUBREGION SAVE*|
 |, Region Pop: Null Square Count|
 |, entity #|
 |, layer |
 |, repaired|
+|-bm|
+|-detailed|
+|-detailed.bmp|
+|-dip|
+|-drn|
+|-el|
+|-elw|
+|-evil|
+|-historical_map-|
+|-hyd|
 |-legends|
+|-nob|
 |-param-|
+|-rain|
+|-sal|
+|-sav|
+|-site_map-|
+|-str|
+|-territory_map-|
+|-tmp|
+|-trd|
+|-veg|
+|-vol|
 |-world_gen_param|
 |-world_history|
+|-world_map|
 |-world_sites_and_pops|
 |.[B]|
 |.bmp|
@@ -63,6 +115,7 @@
 |.xml|
 |/CHOICE|
 |/LINK|
+|/R|
 |/TITLE|
 |/raw|
 |/raw/|
@@ -101,10 +154,12 @@
 |: NULL job on building load|
 |: NULL master on building load|
 |: NULL subord on building load|
+|: Negative precedence changed to zero|
 |: No tissue thickness|
 |: Null Item Assignment (Id |
 |: Null Pop Num|
 |: Null Unit Assignment (Id |
+|: Precedence exceeding |
 |: REQUIRED_BEDROOM exceeds 1000000, capped|
 |: REQUIRED_BEDROOM negative, set to 0|
 |: REQUIRED_BOXES exceeds 100, capped|
@@ -124,9 +179,12 @@
 |: Smelt Ore Not Found, Token - |
 |: Thread Metal Ore Not Found, Token - |
 |: Tissue |
+|: Unrecognized Building Token: |
 |: Unrecognized Color Token in Material Template: |
 |: Unrecognized Reaction Token: |
 |: number capped at 32|
+|: site walker could not find walkable area|
+|: site walker could not return to home zone|
 |:ALL]|
 |:BP missing body part group token|
 |:BP missing body part token|
@@ -147,6 +205,7 @@
 |:BP:BY_CATEGORY:ALL:SPLEEN|
 |:BP:BY_CATEGORY:ALL:STOMACH|
 |:BY_CATEGORY:ALL:|
+|:COMMON]|
 |:DEFAULT]|
 |:END:|
 |:LOCALIZED|
@@ -168,6 +227,8 @@
 |:WEATHER_FALLING_MATERIAL]|
 |</active_interaction>|
 |</aggressor_ent_id>|
+|</agreement_id>|
+|</agreement_subject_id>|
 |</animated_string>|
 |</appeared>|
 |</artifact>|
@@ -189,15 +250,19 @@
 |</birth_year>|
 |</body_state>|
 |</breed_id>|
+|</builder_hfid>|
 |</building_id>|
 |</caste>|
 |</cause>|
 |</changee_hfid>|
 |</changer_hfid>|
 |</civ_id>|
+|</concluder_hfid>|
 |</contacted_enid>|
 |</contactor_enid>|
 |</coords>|
+|</cultural_identity_id>|
+|</cultural_identity_reputation>|
 |</current_identity_id>|
 |</death_seconds72>|
 |</death_year>|
@@ -214,6 +279,7 @@
 |</defending_squad_site>|
 |</depth>|
 |</df_world>|
+|</dispute>|
 |</doer_hfid>|
 |</end_seconds72>|
 |</end_year>|
@@ -221,21 +287,27 @@
 |</entities>|
 |</entity>|
 |</entity_former_position_link>|
+|</entity_former_squad_link>|
 |</entity_id>|
+|</entity_id_1>|
+|</entity_id_2>|
 |</entity_link>|
 |</entity_population>|
 |</entity_populations>|
 |</entity_position_link>|
 |</entity_reputation>|
+|</entity_squad_link>|
 |</event>|
 |</eventcol>|
 |</feature_layer_id>|
 |</first_ageless_season_count>|
 |</first_ageless_year>|
 |</ghost>|
+|</goal>|
 |</group_1_hfid>|
 |</group_2_hfid>|
 |</group_hfid>|
+|</hf_id>|
 |</hf_link>|
 |</hf_skill>|
 |</hfid>|
@@ -258,8 +330,12 @@
 |</item>|
 |</join_entity_id>|
 |</journey_pet>|
+|</known_identity_id>|
+|</last_meet_seconds72>|
+|</last_meet_year>|
 |</link_strength>|
 |</master_wcid>|
+|</meet_count>|
 |</migrant_entity_id>|
 |</name>|
 |</new_ab_id>|
@@ -276,9 +352,30 @@
 |</parent_eventcol>|
 |</position_profile_id>|
 |</race>|
+|</reason>|
 |</region>|
 |</regions>|
 |</rejector_enid>|
+|</relationship_profile_hf>|
+|</rep_bonded>|
+|</rep_brigand>|
+|</rep_buddy>|
+|</rep_bully>|
+|</rep_comrade>|
+|</rep_enemy_fighter>|
+|</rep_friendly>|
+|</rep_friendly_fighter>|
+|</rep_grudge>|
+|</rep_hated_group>|
+|</rep_hero>|
+|</rep_killer>|
+|</rep_loyal_soldier>|
+|</rep_monster>|
+|</rep_murderer>|
+|</rep_psychopath>|
+|</rep_respected_group>|
+|</rep_trade_partner>|
+|</rep_violent>|
 |</seconds72>|
 |</secret_goal>|
 |</site>|
@@ -286,6 +383,8 @@
 |</site_id1>|
 |</site_id2>|
 |</site_id>|
+|</site_id_1>|
+|</site_id_2>|
 |</site_link>|
 |</sites>|
 |</situation>|
@@ -298,6 +397,8 @@
 |</slayer_shooter_item_id>|
 |</snatcher_hfid>|
 |</sphere>|
+|</squad_id>|
+|</squad_position>|
 |</start_seconds72>|
 |</start_year>|
 |</state>|
@@ -307,6 +408,7 @@
 |</sub_id>|
 |</subregion_id>|
 |</subtype>|
+|</target_civ_id>|
 |</target_enid>|
 |</target_hfid>|
 |</teacher_hfid>|
@@ -322,13 +424,16 @@
 |</wcid>|
 |</world_constructions>|
 |</woundee_hfid>|
-|</wounder_hfid>|
+/wounder_hfid>|
 |</year>|
 |<?xml version="1.0" encoding='UTF-8'?>|
 |<SWAP>|
+|<abandoned/>|
 |<active_interaction>|
 |<adventurer/>|
 |<aggressor_ent_id>|
+|<agreement_id>|
+|<agreement_subject_id>|
 |<animated/>|
 |<animated_string>|
 |<appeared>|
@@ -351,15 +456,19 @@
 |<birth_year>|
 |<body_state>|
 |<breed_id>|
+|<builder_hfid>|
 |<building_id>|
 |<caste>|
 |<cause>|
 |<changee_hfid>|
 |<changer_hfid>|
 |<civ_id>|
+|<concluder_hfid>|
 |<contacted_enid>|
 |<contactor_enid>|
 |<coords>|
+|<cultural_identity_id>|
+|<cultural_identity_reputation>|
 |<current_identity_id>|
 |<death_seconds72>|
 |<death_year>|
@@ -377,6 +486,7 @@
 |<deity/>|
 |<depth>|
 |<df_world>|
+|<dispute>|
 |<doer_hfid>|
 |<end_seconds72>|
 |<end_year>|
@@ -384,25 +494,32 @@
 |<entities>|
 |<entity>|
 |<entity_former_position_link>|
+|<entity_former_squad_link>|
 |<entity_id>|
+|<entity_id_1>|
+|<entity_id_2>|
 |<entity_link>|
 |<entity_population>|
 |<entity_populations>|
 |<entity_position_link>|
 |<entity_reputation>|
+|<entity_squad_link>|
 |<escape/>|
 |<event>|
 |<eventcol>|
 |<feature_layer_id>|
+|<first/>|
 |<first_ageless_season_count>|
 |<first_ageless_year>|
 |<force/>|
 |<ghost/>|
 |<ghost>|
+|<goal>|
 |<goal>immortality</goal>|
 |<group_1_hfid>|
 |<group_2_hfid>|
 |<group_hfid>|
+|<hf_id>|
 |<hf_link>|
 |<hf_skill>|
 |<hfid>|
@@ -428,11 +545,15 @@
 |<item>|
 |<join_entity_id>|
 |<journey_pet>|
+|<known_identity_id>|
+|<last_meet_seconds72>|
+|<last_meet_year>|
 |<law_add>harsh</law_add>|
 |<law_remove>harsh</law_remove>|
 |<link_strength>|
 |<link_type>apprentice</link_type>|
 |<link_type>child</link_type>|
+|<link_type>companion</link_type>|
 |<link_type>criminal</link_type>|
 |<link_type>deity</link_type>|
 |<link_type>enemy</link_type>|
@@ -457,6 +578,7 @@
 |<link_type>slave</link_type>|
 |<link_type>spouse</link_type>|
 |<master_wcid>|
+|<meet_count>|
 |<migrant_entity_id>|
 |<name>|
 |<name_only/>|
@@ -483,6 +605,26 @@
 |<region>|
 |<regions>|
 |<rejector_enid>|
+|<relationship_profile_hf>|
+|<rep_bonded>|
+|<rep_brigand>|
+|<rep_buddy>|
+|<rep_bully>|
+|<rep_comrade>|
+|<rep_enemy_fighter>|
+|<rep_friendly>|
+|<rep_friendly_fighter>|
+|<rep_grudge>|
+|<rep_hated_group>|
+|<rep_hero>|
+|<rep_killer>|
+|<rep_loyal_soldier>|
+|<rep_monster>|
+|<rep_murderer>|
+|<rep_psychopath>|
+|<rep_respected_group>|
+|<rep_trade_partner>|
+|<rep_violent>|
 |<return/>|
 |<same square> |
 |<seconds72>|
@@ -492,6 +634,8 @@
 |<site_id1>|
 |<site_id2>|
 |<site_id>|
+|<site_id_1>|
+|<site_id_2>|
 |<site_link>|
 |<sites>|
 |<situation>|
@@ -504,6 +648,8 @@
 |<slayer_shooter_item_id>|
 |<snatcher_hfid>|
 |<sphere>|
+|<squad_id>|
+|<squad_position>|
 |<start_seconds72>|
 |<start_year>|
 |<state>|
@@ -513,6 +659,7 @@
 |<sub_id>|
 |<subregion_id>|
 |<subtype>|
+|<target_civ_id>|
 |<target_enid>|
 |<target_hfid>|
 |<teacher_hfid>|
@@ -524,6 +671,7 @@
 |<type>add hf hf link</type>|
 |<type>add hf site link</type>|
 |<type>agreement concluded</type>|
+|<type>agreement formed</type>|
 |<type>agreement made</type>|
 |<type>agreement rejected</type>|
 |<type>agreement void</type>|
@@ -561,6 +709,7 @@
 |<type>first contact failed</type>|
 |<type>first contact</type>|
 |<type>hf abducted</type>|
+|<type>hf attacked site</type>|
 |<type>hf confronted</type>|
 |<type>hf destroyed site</type>|
 |<type>hf died</type>|
@@ -577,6 +726,8 @@
 |<type>hf simple battle event</type>|
 |<type>hf travel</type>|
 |<type>hf wounded</type>|
+|<type>insurrection started</type>|
+|<type>insurrection</type>|
 |<type>item stolen</type>|
 |<type>journey</type>|
 |<type>masterpiece arch constructed</type>|
@@ -600,6 +751,8 @@
 |<type>replaced structure</type>|
 |<type>site conquered</type>|
 |<type>site died</type>|
+|<type>site dispute</type>|
+|<type>site retired</type>|
 |<type>site taken over</type>|
 |<type>site tribute forced</type>|
 |<type>theft</type>|
@@ -607,6 +760,7 @@
 |<underground_region>|
 |<underground_regions>|
 |<unit_id>|
+|<unretire/>|
 |<unsolved_murders>|
 |<used_identity_id>|
 |<war_eventcol>|
@@ -627,10 +781,13 @@
 |A socket error occurred.  This is a catch-all for socket-related errors not listed elsewhere. |
 |A!|
 |A+|
+|A: |
+|AAR|
 |ABOVE|
 |ABOVE_NORMAL|
 |ABSORPTION|
 |ABSTRACT_BUILDING|
+|ABSTRACT_INCLINED|
 |ABUSE_BODIES|
 |ACCEPTABLE|
 |ACCOUNTING|
@@ -664,7 +821,10 @@
 |ADV_REACTION_PRODUCTS|
 |ADV_SLEEP_INTERRUPTED|
 |AGILITY|
+|AGL|
+|AGREEMENT|
 |AGRICULTURE|
+|AHM|
 |ALCHEMIST|
 |ALCHEMY|
 |ALCOHOL|
@@ -679,18 +839,23 @@
 |ALLOWED_CREATURE|
 |ALLUVIAL|
 |ALL_ACTIVE|
+|ALL_BRANCHES|
+|ALL_BRANCHES_AND_TRUNK|
+|ALL_BRANCHES_AND_TWIGS|
 |ALL_CAVES_VISIBLE|
 |ALL_CAVES_VISIBLE:|
 |ALL_MAIN|
 |ALL_NAMES|
 |ALL_SOLID|
 |ALL_STONE|
+|ALREADY_SEARCHED_AREA|
 |ALTRUISM|
 |ALTTILE|
 |ALT_GRASS_TILES|
 |ALT_PERIOD|
 |ALWAYS|
 |AMBER|
+|AMBITION|
 |AMBUSHER|
 |AMBUSHPREDATOR|
 |AMBUSH_AMBUSHER|
@@ -712,6 +877,7 @@
 |AMPHIBIOUS|
 |AMULET|
 |ANALYTICAL_ABILITY|
+|ANGER_PROPENSITY|
 |ANIMALCARE|
 |ANIMALS|
 |ANIMALTRAIN|
@@ -720,6 +886,7 @@
 |ANIMAL_DISSECTOR|
 |ANIMAL_HUNTING_TRAINING|
 |ANIMAL_SELECT_TRAINER|
+|ANIMAL_TRAINED|
 |ANIMAL_TRAINER|
 |ANIMAL_TRAINING_KNOWLEDGE|
 |ANIMAL_TRAP_CATCH|
@@ -729,6 +896,7 @@
 |ANIMATED|
 |ANNOUNCE_ZOOM|
 |ANVIL|
+|ANXIETY_PROPENSITY|
 |ANY|
 |ANY_BONE_MATERIAL|
 |ANY_CRAFT|
@@ -773,6 +941,7 @@
 |ANY_WETLAND|
 |ANY_YARN_MATERIAL|
 |APERTURE|
+|APN|
 |APPALLING|
 |APPEARANCE_MODIFIER|
 |APPLY_CREATURE_VARIATION|
@@ -790,6 +959,8 @@
 |ARB_SYNC|
 |ARCHITECT|
 |ARCH_ELEMENT|
+|ARENA_CONFLICT_STATE_1|
+|ARENA_CONFLICT_STATE_2|
 |ARENA_CREATURE_BLANK_LIST|
 |ARENA_CREATURE_NEW_ITEM|
 |ARENA_CREATURE_REMOVE_ITEM|
@@ -797,7 +968,14 @@
 |ARENA_CREATURE_SIDE_UP|
 |ARENA_CREATURE_STRING|
 |ARENA_CREATURE_UNDEAD|
+|ARENA_MORALE|
 |ARENA_RESTRICTED|
+|ARENA_TREE_AGE|
+|ARENA_TREE_FILTER|
+|ARENA_WEATHER|
+|ARENA_WEATHER_CLEAR_SPATTER|
+|ARENA_WEATHER_MUD|
+|ARENA_WEATHER_SNOW|
 |ARG1|
 |ARG2|
 |ARG3|
@@ -807,6 +985,9 @@
 |ARMORER|
 |ARMORLEVEL|
 |ARMORSTAND|
+|ARMY|
+|ARMY_CONTROLLER|
+|ARMY_TRACKING_INFO|
 |AROUND|
 |ART|
 |ARTERIES|
@@ -814,9 +995,12 @@
 |ARTIFACT_BEGUN|
 |ARTIFICE|
 |ARTIFICIAL_HIVEABLE|
+|ARTWORK|
+|ARTWORK_DEFACED|
 |ART_FACET_MODIFIER|
 |ART_IMAGE|
 |ART_IMAGE_ELEMENT_MODIFIER|
+|ART_INCLINED|
 |ASH|
 |ASH_GLAZE|
 |ASSAULT|
@@ -832,10 +1016,13 @@
 |ATTACK|
 |ATTACK_CONTACT_PERC|
 |ATTACK_ENEMIES|
+|ATTACK_FLAG_BAD_MULTIATTACK|
 |ATTACK_FLAG_CANLATCH|
 |ATTACK_FLAG_EDGE|
+|ATTACK_FLAG_INDEPENDENT_MULTIATTACK|
 |ATTACK_FLAG_WITH|
 |ATTACK_PENETRATION_PERC|
+|ATTACK_PREPARE_AND_RECOVER|
 |ATTACK_PRIORITY|
 |ATTACK_SKILL|
 |ATTACK_TRIGGER|
@@ -884,21 +1071,32 @@
 |A_D|
 |A_DATE|
 |A_DISPLAY|
+|A_DISPLAY_ODOR|
+|A_DISPLAY_TRACKS|
 |A_END_TRAVEL|
 |A_ENTER_NAME|
+|A_FRESHEST_TRACK|
 |A_GROUND|
+|A_HOLD|
 |A_INTERACT|
+|A_INV_DRAW_WEAPON|
 |A_INV_DROP|
 |A_INV_EATDRINK|
 |A_INV_LOOK|
 |A_INV_PUTIN|
 |A_INV_REMOVE|
 |A_INV_WEAR|
+|A_JUMP|
 |A_LOG|
+|A_LOG_AGREEMENTS|
+|A_LOG_BESTIARY|
 |A_LOG_ENTITIES|
+|A_LOG_EVENTS|
 |A_LOG_FEATURE_LAYERS|
+|A_LOG_FILTER|
 |A_LOG_LINE|
 |A_LOG_MAP|
+|A_LOG_PEOPLE|
 |A_LOG_SITES|
 |A_LOG_SUBREGIONS|
 |A_LOG_TASKS|
@@ -936,15 +1134,18 @@
 |A_MOVE_W|
 |A_MOVE_W_DOWN|
 |A_MOVE_W_UP|
+|A_ODOR|
 |A_RANDOM_NAME|
 |A_RETURN_TO_ARENA|
 |A_SEARCH|
 |A_SHOOT|
+|A_SHORT_WAIT|
 |A_SLEEP|
 |A_SLEEP_DAWN|
 |A_SLEEP_SLEEP|
 |A_SLEEP_WAIT|
 |A_SNEAK|
+|A_SPEED_SNEAK|
 |A_STANCE|
 |A_STATUS|
 |A_STATUS_ATT_SKILL|
@@ -964,6 +1165,7 @@
 |A_TRAVEL_SLEEP|
 |A_WAIT|
 |A_WEATHER|
+|A_YIELD|
 |Acceptable Fish Liquid Flood Overflow|
 |Acceptable Liquid Flood Overflow|
 |Adventure Move|
@@ -1016,10 +1218,13 @@
 |BALLISTAARROWHEAD|
 |BALLISTAPARTS|
 |BANDITRY|
+|BANDIT_EMPTY_CONTAINER|
+|BANDIT_GRAB_ITEM|
 |BANDS|
 |BAR|
 |BARRED|
 |BARREL|
+|BASHFUL|
 |BASIC_COLOR|
 |BASIC_MAT|
 |BATTLE|
@@ -1029,6 +1234,7 @@
 |BEAST_END_YEAR:|
 |BEAST_HUNTER|
 |BEAUTY|
+|BECOME_A_LEGENDARY_WARRIOR|
 |BED|
 |BEEKEEPER|
 |BEEKEEPING|
@@ -1047,6 +1253,7 @@
 |BIRTH|
 |BIRTH_ANIMAL|
 |BIRTH_CITIZEN|
+|BIRTH_WILD_ANIMAL|
 |BITE|
 |BLACK|
 |BLACKSMITH|
@@ -1100,6 +1307,7 @@
 |BOWYER|
 |BOX|
 |BP|
+|BP_ADD_TYPE|
 |BP_APPEARANCE_MODIFIER|
 |BP_LAYERS|
 |BP_LAYERS_OVER|
@@ -1107,11 +1315,18 @@
 |BP_POSITION|
 |BP_RELATION|
 |BP_RELSIZE|
+|BP_REMOVE_TYPE|
 |BP_REQUIRED|
 |BRACELET|
 |BRAG_ON_KILL|
 |BRAIDED|
 |BRAIN_TEMPLATE|
+|BRANCHES|
+|BRANCHES_AND_TWIGS|
+|BRANCHES_NAME|
+|BRANCH_DENSITY|
+|BRANCH_RADIUS|
+|BRAVERY|
 |BREAK_GRIP|
 |BREATHE|
 |BREATHE_FIRE|
@@ -1119,6 +1334,7 @@
 |BREWER|
 |BREWING|
 |BRIDGE|
+|BRING_PEACE_TO_THE_WORLD|
 |BROADNESS|
 |BROAD_CHIN|
 |BROKEN|
@@ -1145,6 +1361,7 @@
 |BUILDING_ORIENT_UP|
 |BUILDING_ROLLERS_SPEED_DOWN|
 |BUILDING_ROLLERS_SPEED_UP|
+|BUILDING_TOPPLED_BY_GHOST|
 |BUILDING_TRACK_STOP_DUMP|
 |BUILDING_TRACK_STOP_FRICTION_DOWN|
 |BUILDING_TRACK_STOP_FRICTION_UP|
@@ -1156,7 +1373,9 @@
 |BUILDING_TRIGGER_MAX_MAGMA_DOWN|
 |BUILDING_TRIGGER_MAX_MAGMA_UP|
 |BUILDING_TRIGGER_MAX_SIZE_DOWN|
+|BUILDING_TRIGGER_MAX_SIZE_DOWN_PLUS|
 |BUILDING_TRIGGER_MAX_SIZE_UP|
+|BUILDING_TRIGGER_MAX_SIZE_UP_PLUS|
 |BUILDING_TRIGGER_MAX_TRACK_CART_DOWN|
 |BUILDING_TRIGGER_MAX_TRACK_CART_UP|
 |BUILDING_TRIGGER_MAX_WATER_DOWN|
@@ -1164,7 +1383,9 @@
 |BUILDING_TRIGGER_MIN_MAGMA_DOWN|
 |BUILDING_TRIGGER_MIN_MAGMA_UP|
 |BUILDING_TRIGGER_MIN_SIZE_DOWN|
+|BUILDING_TRIGGER_MIN_SIZE_DOWN_PLUS|
 |BUILDING_TRIGGER_MIN_SIZE_UP|
+|BUILDING_TRIGGER_MIN_SIZE_UP_PLUS|
 |BUILDING_TRIGGER_MIN_TRACK_CART_DOWN|
 |BUILDING_TRIGGER_MIN_TRACK_CART_UP|
 |BUILDING_TRIGGER_MIN_WATER_DOWN|
@@ -1224,6 +1445,7 @@
 |BUILDJOB_FARM_SPRING|
 |BUILDJOB_FARM_SUMMER|
 |BUILDJOB_FARM_WINTER|
+|BUILDJOB_NOW|
 |BUILDJOB_PROMOTE|
 |BUILDJOB_RACKSTAND_ASSIGN|
 |BUILDJOB_RACKSTAND_DEFAULTS1|
@@ -1287,10 +1509,12 @@
 |BUILDS_OUTDOOR_FORTIFICATIONS|
 |BUILDS_OUTDOOR_TOMBS|
 |BUILD_COLOR|
+|BUILD_CONSTRUCTION|
 |BUILD_ITEM|
 |BUILD_KEY|
 |BUILD_LABOR|
 |BUILD_MORALE|
+|BUILD_ROAD|
 |BURN_WOOD|
 |BURROWS|
 |BUTCHER|
@@ -1337,10 +1561,17 @@
 |Buildjob: Stockpile, Give To|
 |Buildjob: Stockpile, Link/Anywhere|
 |Buildjob: Stockpile, Wheelbarrow|
+|Button|
 |C|
 |CABINET|
 |CAGE|
 |CANCEL_JOB|
+|CANNOT_CLIMB|
+|CANNOT_JUMP|
+|CANNOT_MAKE_CAMPFIRE|
+|CANNOT_REST|
+|CANNOT_SET_FIRE|
+|CANNOT_STAND|
 |CANNOT_UNDEAD|
 |CANOPENDOORS|
 |CAN_BE_HIDDEN|
@@ -1350,6 +1581,11 @@
 |CAN_SPEAK|
 |CAN_STONE|
 |CAN_USE_ARTIFACT|
+|CAP|
+|CAP_NAME|
+|CAP_PERIOD|
+|CAP_RADIUS|
+|CAR|
 |CARAVAN_ARRIVAL|
 |CARNIVORE|
 |CARPENTER|
@@ -1427,23 +1663,28 @@
 |CE_PARALYSIS|
 |CE_PHYS_ATT_CHANGE|
 |CE_REMOVE_TAG|
+|CE_SENSE_CREATURE_CLASS|
 |CE_SKILL_ROLL_ADJUST|
 |CE_SPEED_CHANGE|
 |CE_SWELLING|
 |CE_UNCONSCIOUSNESS|
 |CE_VOMIT_BLOOD|
+|CGL|
 |CHAIN|
 |CHAIN_METAL_TEXT|
 |CHAIR|
 |CHANGETAB|
 |CHANGE_BODY_SIZE_PERC|
+|CHANGE_FREQUENCY_PERC|
 |CHAOS|
 |CHAR|
 |CHARCOAL|
+|CHARGE_ATTACK|
 |CHARITY|
 |CHASM|
 |CHAT_WORTHY|
 |CHEEK_WHISKERS_TEMPLATE|
+|CHEER_PROPENSITY|
 |CHEESE|
 |CHEESEMAKING|
 |CHEESE_CREATURE|
@@ -1460,13 +1701,19 @@
 |CHITIN_MATERIALS|
 |CHITIN_TEMPLATE|
 |CHITIN_TISSUES|
+|CHM|
 |CHOICE|
 |CHOOSE_NAME_CLEAR|
 |CHOOSE_NAME_RANDOM|
 |CHOOSE_NAME_TYPE|
 |CIRCULATION|
+|CITIZEN_BECOMES_NONSOLDIER|
+|CITIZEN_BECOMES_SOLDIER|
 |CITIZEN_DEATH|
+|CITIZEN_LOST_TO_STRESS|
 |CITIZEN_MISSING|
+|CITIZEN_SNATCHED|
+|CITIZEN_TANTRUM|
 |CITY|
 |CIV|
 |CIVZONE_ACTIVE|
@@ -1474,6 +1721,11 @@
 |CIVZONE_CLAY_COLLECT|
 |CIVZONE_DUMP|
 |CIVZONE_FISH|
+|CIVZONE_GATHER|
+|CIVZONE_GATHER_OPTIONS|
+|CIVZONE_GATHER_OPTIONS_GATHER_FALLEN|
+|CIVZONE_GATHER_OPTIONS_PICK_SHRUBS|
+|CIVZONE_GATHER_OPTIONS_PICK_TREES|
 |CIVZONE_HOSPITAL|
 |CIVZONE_HOSPITAL_OPTIONS|
 |CIVZONE_MEETING|
@@ -1500,6 +1752,9 @@
 |CLEAN_SHAVEN|
 |CLEAR|
 |CLERK|
+|CLIMB|
+|CLIMBING|
+|CLOSEMINDED|
 |CLOSE_MEGA_ANNOUNCEMENT|
 |CLOSE_SET|
 |CLOTH|
@@ -1540,6 +1795,7 @@
 |COMBAT_CHARGE_TANGLE_TUMBLE|
 |COMBAT_COUNTERSTRIKE|
 |COMBAT_DODGE|
+|COMBAT_EVENT_ATTACK_INTERRUPTED|
 |COMBAT_EVENT_ENRAGED|
 |COMBAT_EVENT_KNOCKED_OUT|
 |COMBAT_EVENT_LATCH_BP|
@@ -1560,6 +1816,7 @@
 |COMBAT_SURPRISE_CHARGE|
 |COMBAT_TWIST_WEAPON|
 |COMBAT_WRESTLE_ADJUST_GRIP|
+|COMBAT_WRESTLE_CATCH_ATTACK|
 |COMBAT_WRESTLE_CHOKEHOLD|
 |COMBAT_WRESTLE_LOCK|
 |COMBAT_WRESTLE_RELEASE_CHOKE|
@@ -1572,11 +1829,14 @@
 |COMBAT_WRESTLE_THROW|
 |COMEDY|
 |COMMANDER|
+|COMMERCE|
 |COMMON_DOMESTIC|
 |COMMON_DOMESTIC_MOUNT|
 |COMMON_DOMESTIC_PACK|
 |COMMON_DOMESTIC_PET|
 |COMMON_DOMESTIC_PULL|
+|COMPANION|
+|COMPETITION|
 |COMPLETE_OCEAN_EDGE_MIN|
 |COMPLETE_OCEAN_EDGE_MIN:|
 |COMPRESSED_SAVES|
@@ -1586,13 +1846,17 @@
 |COMPRESSIVE_YIELD|
 |CON|
 |CONCENTRATION|
+|CONFIDENCE|
+|CONFLICT_CONVERSATION|
 |CONNECTIVE_TISSUE_ANCHOR|
 |CONNECTOR|
 |CONNECTS|
 |CONQUERED_SITE|
 |CONSOLATION|
 |CONSOLE|
+|CONSTRUCTION_SUSPENDED|
 |CONSTRUCTTOPICLIST|
+|CONSUME_FAILURE|
 |CONTACT|
 |CONTAINER_CAPACITY|
 |CONTAINS|
@@ -1600,10 +1864,12 @@
 |CONTEXT|
 |CONTEXT_BP|
 |CONTEXT_CREATURE|
+|CONTEXT_CREATURE_OR_LOCATION|
 |CONTEXT_ITEM|
 |CONTEXT_LOCATION|
 |CONTEXT_MATERIAL|
 |CONTEXT_REGION|
+|CONTINUOUS|
 |CONTYPE|
 |CONVERSATION|
 |CONVERTED_SPOUSE|
@@ -1611,6 +1877,7 @@
 |CON_CAT|
 |COOK|
 |COOKABLE_LIVE|
+|COOKED_MASTERPIECE|
 |COOK_BLOOD|
 |COOK_PEOPLE|
 |COOK_VERMIN|
@@ -1621,16 +1888,22 @@
 |CORPSE|
 |CORPSEPIECE|
 |COSMETIC|
+|COUGH_BLOOD|
 |COULD NOT NULLIFY CONSTRUCTION ROAD EDGE|
 |COUNTER_TRIGGER|
 |COURAGE|
 |COVER|
 |COVERAGE|
 |COVERED|
+|CPN|
 |CP_COLOR|
 |CRAFTS|
 |CRAFTSMAN|
+|CRAFTSMANSHIP|
+|CRAFT_A_MASTERWORK|
+|CRAWL|
 |CRAZED|
+|CREATE_A_GREAT_WORK_OF_ART|
 |CREATION|
 |CREATION_ZONE|
 |CREATIVITY|
@@ -1655,18 +1928,28 @@
 |CROSSBOW|
 |CROSSBOWMAN|
 |CROWN|
+|CRUELTY|
 |CRUTCH|
 |CRUTCH_WALK|
 |CRYSTAL_GLASSABLE|
+|CSH|
 |CULL_HISTORICAL_FIGURES|
 |CULL_HISTORICAL_FIGURES:|
 |CULL_SYMBOL|
+|CULTURAL_IDENTITY|
+|CUNNING|
+|CURIOUS|
 |CURIOUSBEAST_EATER|
 |CURIOUSBEAST_GUZZLER|
 |CURIOUSBEAST_ITEM|
+|CURIOUS_GUZZLER|
 |CURLY|
 |CURRENCY|
 |CURRENCY_BY_YEAR|
+|CURRENT_DATE|
+|CURRENT_SMELL|
+|CURRENT_TEMPERATURE|
+|CURRENT_WEATHER|
 |CURSOR_DOWN|
 |CURSOR_DOWNLEFT|
 |CURSOR_DOWNLEFT_FAST|
@@ -1806,9 +2089,13 @@
 |CVCT_MASTER|
 |CVCT_REPLACEMENT|
 |CVCT_TARGET|
+|CV_ADD_CTAG|
 |CV_ADD_TAG|
+|CV_CONVERT_CTAG|
 |CV_CONVERT_TAG|
+|CV_NEW_CTAG|
 |CV_NEW_TAG|
+|CV_REMOVE_CTAG|
 |CV_REMOVE_TAG|
 |CYAN_B|
 |CYAN_G|
@@ -1822,6 +2109,7 @@
 |Cannot generate random creatures -- missing body |
 |Cannot generate random creatures -- missing body detail plan |
 |Cannot generate random creatures -- missing body gloss |
+|Cannot generate random creatures -- missing creature variation |
 |Cannot generate random creatures -- missing material template |
 |Cannot generate random creatures -- missing tissue template |
 |Capslock|
@@ -1851,6 +2139,7 @@
 |Connected Component Overflow|
 |Connectivity Overflow|
 |Connectivity Placement Overflow|
+|Copyright(C)1994-2006 Firelight Technologies Pty, Ltd.|
 |Could not locate adventure start square|
 |Couldn't connect to the specified host. |
 |Couldn't find the specified device. |
@@ -1862,6 +2151,7 @@
 |D|
 |D!|
 |D+|
+|D: |
 |DAGGER|
 |DAILY|
 |DANCE|
@@ -1869,6 +2159,7 @@
 |DARK_FORTRESS|
 |DARK_GREEN|
 |DAWN|
+|DAWN_BREAKS|
 |DAY|
 |DDRAW.DLL|
 |DEAD_PICKED_COLOR|
@@ -1880,6 +2171,7 @@
 |DEAD_TREE_COLOR|
 |DEAD_TREE_TILE|
 |DEATH|
+|DECORUM|
 |DEEP_SET|
 |DEEP_SPECIAL|
 |DEEP_SURFACE|
@@ -1892,6 +2184,7 @@
 |DEITY|
 |DEITY_CURSE_VAMPIRE_|
 |DEITY_CURSE_WEREBEAST_|
+|DEMAND_FORGOTTEN|
 |DEMAND_MAX|
 |DEMON|
 |DEMON_|
@@ -1899,6 +2192,7 @@
 |DEMON_NUMBER:|
 |DENSE|
 |DEPRAVITY|
+|DEPRESSION_PROPENSITY|
 |DESCRIPTION|
 |DESCRIPTOR_COLOR|
 |DESCRIPTOR_PATTERN|
@@ -1921,6 +2215,7 @@
 |DESIGNATE_FORTIFY|
 |DESIGNATE_HIDE|
 |DESIGNATE_MELT|
+|DESIGNATE_MINE_MODE|
 |DESIGNATE_NO_DUMP|
 |DESIGNATE_NO_HIDE|
 |DESIGNATE_NO_MELT|
@@ -1931,7 +2226,9 @@
 |DESIGNATE_STAIR_DOWN|
 |DESIGNATE_STAIR_UP|
 |DESIGNATE_STAIR_UPDOWN|
+|DESIGNATE_STANDARD_MARKER|
 |DESIGNATE_TOGGLE_ENGRAVING|
+|DESIGNATE_TOGGLE_MARKER|
 |DESIGNATE_TRACK|
 |DESIGNATE_TRAFFIC|
 |DESIGNATE_TRAFFIC_DECREASE_WEIGHT|
@@ -1970,8 +2267,15 @@
 |DIPLOMAT_ARRIVAL|
 |DIPLOMAT_BODYGUARDS|
 |DIPSCRIPT|
+|DIRECTED_BRANCHES|
+|DIRECTED_BRANCHES_AND_TRUNK|
+|DIRECTED_BRANCHES_NAME|
+|DIRECTED_BRANCH_DENSITY|
+|DIRECTED_BRANCH_RADIUS|
 |DISCIPLINE|
+|DISCORD|
 |DISCUSS|
+|DISDAIN_ADVICE|
 |DISEASE|
 |DISEASE_RESISTANCE|
 |DISPLAY_COLOR|
@@ -1988,6 +2292,12 @@
 |DISTURBER_ONLY|
 |DIURNAL|
 |DIVE_HUNTS_VERMIN|
+|DIVINE|
+|DIVINE_|
+|DIVINE_MAT_ARMOR|
+|DIVINE_MAT_CLOTHING|
+|DIVINE_MAT_CRAFTS|
+|DIVINE_MAT_WEAPONS|
 |DMA Failure.  See debug output for more information. |
 |DOCTOR|
 |DODGE_FLYING_OBJECT|
@@ -2011,12 +2321,15 @@
 |DRAINAGE_FREQUENCY|
 |DRAINAGE_RANGES|
 |DRAINAGE_RANGES:|
-|DREAM|
+|DRAW_ITEM|
 |DREAMS|
 |DRESSING_WOUNDS|
 |DRESS_WOUNDS|
 |DRINK|
 |DRINKING_BLOOD|
+|DRINK_ITEM|
+|DRINK_MAT|
+|DROP_ITEM|
 |DRUNK|
 |DRY|
 |DSP Format error.  A DSP unit may have attempted to connect to this network with the wrong format. |
@@ -2028,6 +2341,7 @@
 |DUTIFULNESS|
 |DUTY|
 |DUTY_BOUND|
+|DYED_MASTERPIECE|
 |DYER|
 |D_ANNOUNCE|
 |D_ARTLIST|
@@ -2048,6 +2362,7 @@
 |D_BURROWS_DELETE|
 |D_BURROWS_NAME|
 |D_BURROWS_REMOVE|
+|D_BURROWS_WORKSHOP_LIMIT|
 |D_CIVLIST|
 |D_CIVZONE|
 |D_D|
@@ -2100,6 +2415,8 @@
 |D_LOOK_ARENA_ADV_MODE|
 |D_LOOK_ARENA_CREATURE|
 |D_LOOK_ARENA_MAGMA|
+|D_LOOK_ARENA_MOUNT|
+|D_LOOK_ARENA_TREE|
 |D_LOOK_ARENA_WATER|
 |D_LOOK_DUMP|
 |D_LOOK_FOLLOW|
@@ -2222,12 +2539,14 @@
 |Duplicate Body Token: |
 |Duplicate Object: |
 |Dw|
+|Dwarf Fortress|
 |Dwf Look: Follow|
 |Dz|
 |D~|
 |EARRING|
 |EARTH|
 |EAT_BONE_PORRIDGE|
+|EAT_ITEM|
 |EAT_SAPIENT_KILL|
 |EAT_SAPIENT_OTHER|
 |EBO_ITEM|
@@ -2241,21 +2560,27 @@
 |EGG_MATERIAL|
 |EGG_SIZE|
 |EGG_SPENT|
+|EI|
 |ELECTED|
+|ELECTION_RESULTS|
 |ELEV|
 |ELEVATION|
 |ELEVATION_FREQUENCY|
 |ELEVATION_RANGES|
 |ELEVATION_RANGES:|
+|ELOQUENCE|
 |ELSE|
 |EMBARK_POINTS|
 |EMBARK_POINTS:|
 |EMBARK_RECTANGLE|
 |EMBARK_WARNING_ALWAYS|
 |EMBEDDED|
+|EMBRACE|
 |EMERGENCY: Unknown case in async_wait|
+|EMOTIONALLY_OBSESSIVE|
 |EMPATHY|
 |EMPTY|
+|EMPTY_CONTAINER|
 |ENCRUSTGEM|
 |ENCRUST_GEM|
 |END|
@@ -2274,6 +2599,7 @@
 |ENTITY|
 |ENVIRONMENT|
 |ENVIRONMENT_SPEC|
+|ENVY_PROPENSITY|
 |EQUIPMENT_IMPROVEMENTS|
 |EQUIPMENT_MANIFESTS|
 |EQUIPMENT_WAGON|
@@ -2286,6 +2612,7 @@
 |ESCORT_TAX_COLLECTOR|
 |ESTABLISH_COLONY_TRADE_AGREEMENTS|
 |ETHIC|
+|EVAPORATES|
 |EVIL|
 |EVIL_ALLOWED|
 |EVIL_CLOUD_|
@@ -2298,8 +2625,10 @@
 |EVIL_SQ_COUNTS|
 |EVIL_SQ_COUNTS:|
 |EXCITEMENT_SEEKING|
+|EXCLUSIVE_START_BIOME|
 |EXECUTIONS|
 |EXECUTION_SKILL|
+|EXERTION|
 |EXHAUSTION|
 |EXOSKELETON_TISSUE_LAYERS|
 |EXPORTED_IN_LEGENDS|
@@ -2311,9 +2640,13 @@
 |EXTRACT_VIAL|
 |EXTRAVISION|
 |EXTRA_BUTCHER_OBJECT|
+|EXTREME_EMOTION|
 |EYEBROW_TEMPLATE|
 |EYELASH_TEMPLATE|
 |EYE_TEMPLATE|
+|Elevation negative on graphical map export (main)|
+|Elevation negative on graphical map export (midmap)|
+|Empty announcement |
 |Empty biased index vector|
 |End|
 |End of file unexpectedly reached while trying to read essential data (truncated data?). |
@@ -2358,11 +2691,15 @@
 |FACIAL_HAIR_TISSUES|
 |FACIAL_HAIR_TISSUE_LAYERS|
 |FADE|
+|FAIL_TO_GRAB_SURFACE|
+|FAIRNESS|
+|FALL_IN_LOVE|
 |FALL_OVER|
 |FAME|
 |FAMILY|
 |FAMILY_RELATIONSHIP|
 |FANCIFUL|
+|FAREWELL_HELPER|
 |FARMER|
 |FARMING CIVILIZATION PLACED WITHOUT CROPS|
 |FAT|
@@ -2407,6 +2744,7 @@
 |FIT_FOR_RESURRECTION|
 |FIXED_TEMP|
 |FLAME|
+|FLAME_HIT|
 |FLAME_TEMPLATE|
 |FLASHES|
 |FLASK|
@@ -2420,6 +2758,7 @@
 |FLOW|
 |FLOWERY|
 |FLUX|
+|FLY|
 |FMOD was not initialized correctly to support this function. |
 |FMOD_HARDWARE was specified but the sound card does not have the resources necessary to play it. |
 |FOCUS|
@@ -2450,6 +2789,8 @@
 |FORMER_SLAVE|
 |FORTRESS|
 |FORTRESSES|
+|FORTRESS_SEED_CAP|
+|FORT_POSITION_SUCCESSION|
 |FOUND_TRAP|
 |FPS|
 |FPS_CAP|
@@ -2462,6 +2803,7 @@
 |FREQUENCY|
 |FRIENDLINESS|
 |FRIENDLY_COLOR|
+|FRIENDSHIP|
 |FRONT|
 |FRONT_COMPOUND_ADJ|
 |FRONT_COMPOUND_NOUN_PLUR|
@@ -2485,10 +2827,15 @@
 |Fnt|
 |Fx|
 |F~|
+|GAIN_SITE_CONTROL|
+|GAIT|
 |GAMBLING|
 |GAMES|
 |GAPS|
 |GAS|
+|GELD|
+|GELDABLE|
+|GELDER|
 |GEM|
 |GEMS_USE_ADJ|
 |GEMS_USE_ADJ_NOUN|
@@ -2503,9 +2850,12 @@
 |GENERAL_MATERIAL_FORCE_MULTIPLIER|
 |GENERATED|
 |GENERATES_MIASMA|
+|GENERATE_DIVINE_MATERIALS|
+|GENERATE_DIVINE_MATERIALS:|
 |GENEROSITY|
 |GETS_INFECTIONS_FROM_ROT|
 |GETS_WOUND_INFECTIONS|
+|GET_ITEM_DATA_FROM_REAGENT|
 |GET_MATERIAL_FROM_REAGENT|
 |GHOST|
 |GHOST_ATTACK|
@@ -2926,6 +3276,7 @@
 |GO_TO_TAG|
 |GO_TO_TAG could not find target, setting to end: |
 |GPU does not support non-power-of-two textures, using |
+|GPU unable to accommodate texture catalog. Retry without graphical tiles, update your drivers, or better yet update your GPU.|
 |GRAPHICS|
 |GRAPHICS_BLACK_SPACE|
 |GRAPHICS_FONT|
@@ -2945,10 +3296,13 @@
 |GRASS_COLORS|
 |GRASS_TILES|
 |GRATE|
+|GRATITUDE|
 |GRAVITATE_BODY_SIZE|
 |GRAY|
 |GRAZER|
+|GRAZE_COEFFICIENT|
 |GREASY|
+|GREED|
 |GREEN_B|
 |GREEN_G|
 |GREEN_R|
@@ -2961,6 +3315,20 @@
 |GRIND_VERMIN|
 |GROUNDED_ANIMAL_ANGER|
 |GROWDUR|
+|GROWTH|
+|GROWTH_DENSITY|
+|GROWTH_DROPS_OFF|
+|GROWTH_DROPS_OFF_NO_CLOUD|
+|GROWTH_HAS_SEED|
+|GROWTH_HOST_TILE|
+|GROWTH_ITEM|
+|GROWTH_NAME|
+|GROWTH_PRINT|
+|GROWTH_TIMING|
+|GROWTH_TRUNK_HEIGHT_PERC|
+|GUARDIAN_ENTITY_|
+|GUILD_REQUEST_TAKEN|
+|GUILD_WAGES_CHANGED|
 |GUTS|
 |GUT_TEMPLATE|
 |G_FPS_CAP|
@@ -3016,13 +3384,17 @@
 |HARDENS_WITH_WATER|
 |HARD_ITEM_MATERIAL|
 |HARD_MAT|
+|HARD_WORK|
+|HARMONY|
 |HASSHELL|
 |HAS_BLOOD|
 |HAS_DOORS|
+|HAS_ITEM_REACTION_PRODUCT|
 |HAS_MATERIAL_REACTION_PRODUCT|
 |HAS_NERVES|
 |HAS_TOOL_USE|
 |HATCH_COVER|
+|HATE_PROPENSITY|
 |HAUL_ANIMALS|
 |HAUL_BODY|
 |HAUL_FOOD|
@@ -3030,6 +3402,8 @@
 |HAUL_ITEM|
 |HAUL_REFUSE|
 |HAUL_STONE|
+|HAUL_TRADE|
+|HAUL_WATER|
 |HAUL_WOOD|
 |HAVE_BOTTOM_LAYER_1|
 |HAVE_BOTTOM_LAYER_1:|
@@ -3043,12 +3417,19 @@
 |HEAR|
 |HEART_TEMPLATE|
 |HEATDAM_POINT|
+|HEAVY_ATTACK|
+|HEAVY_BRANCHES|
+|HEAVY_BRANCHES_AND_TRUNK|
+|HEAVY_BRANCHES_NAME|
+|HEAVY_BRANCH_DENSITY|
+|HEAVY_BRANCH_RADIUS|
 |HEAVY_OBJECT_HAULING|
 |HEIGHT|
 |HELM|
 |HELP|
 |HERBALISM|
 |HERBALIST|
+|HF|
 |HF_LINK|
 |HIDE|
 |HIGH|
@@ -3071,6 +3452,7 @@
 |HOLD_MEAT_FOR_CARVING|
 |HOLY|
 |HOMEOTHERM|
+|HOPEFUL|
 |HORN|
 |HORN_TEMPLATE|
 |HOSPITALITY|
@@ -3339,6 +3721,7 @@
 |HUMANOID_HEAD_POSITIONS|
 |HUMANOID_RELSIZES|
 |HUMANOID_RIBCAGE_POSITIONS|
+|HUMOR|
 |HUNT|
 |HUNTER|
 |HUNTING|
@@ -3373,6 +3756,7 @@
 |IF_EXISTS_SET_IGNITE_POINT|
 |IF_EXISTS_SET_MAT_FIXED_TEMP|
 |IF_EXISTS_SET_MELTING_POINT|
+|IF_POINTS_REMAIN|
 |IGNEOUS_ALL|
 |IGNEOUS_EXTRUSIVE|
 |IGNEOUS_INTRUSIVE|
@@ -3383,6 +3767,7 @@
 |IMMOBILE|
 |IMMOBILE_LAND|
 |IMMODERATION|
+|IMMODESTY|
 |IMMOLATE|
 |IMMORTALITY|
 |IMPACT_ELASTICITY|
@@ -3395,10 +3780,13 @@
 |IMPROVEMENT|
 |INCIDENT|
 |INDEF_FAMILY_RELATIONSHIP|
+|INDEPENDENCE|
 |INDEX|
 |INDIVIDUAL_NAME|
 |INDIV_CONTROLLABLE|
 |INDOOR_FARMING|
+|INDOOR_GARDENS|
+|INDOOR_ORCHARDS|
 |INDOOR_WOOD|
 |INGESTION|
 |INIT FAILED!|
@@ -3415,6 +3803,7 @@
 |INTERNAL|
 |INTIMIDATION|
 |INTRO|
+|INTROSPECTION|
 |INTUITION|
 |INVADERS|
 |INVADERS_IGNORE_NEUTRALS|
@@ -3472,6 +3861,7 @@
 |ITEM_INSTRUMENT|
 |ITEM_MELT|
 |ITEM_PANTS|
+|ITEM_REACTION_PRODUCT|
 |ITEM_SHIELD|
 |ITEM_SHOES|
 |ITEM_SIEGEAMMO|
@@ -3511,6 +3901,8 @@
 |JEALOUSY|
 |JEWELER|
 |JEWELS|
+|JOBS_REMOVED_FROM_UNPOWERED_BUILDING|
+|JOB_OVERWRITTEN|
 |JOINT|
 |JUDGING_INTENT|
 |JUSTICE|
@@ -3520,6 +3912,7 @@
 |JUSTIFIED_IF_NO_REPERCUSSIONS|
 |JUSTIFIED_IF_SELF_DEFENSE|
 |JUTTING_CHIN|
+|K|
 |KEYBINDING_COMPLETE|
 |KEY_HOLD_MS|
 |KEY_REPEAT_ACCEL_LIMIT|
@@ -3559,6 +3952,8 @@
 |LAKE_TROPICAL_BRACKISHWATER|
 |LAKE_TROPICAL_FRESHWATER|
 |LAKE_TROPICAL_SALTWATER|
+|LAND_ELEVATED_STATUS|
+|LAND_GAINS_STATUS|
 |LAND_HOLDER|
 |LAND_HOLDER_TRIGGER|
 |LAND_NAME|
@@ -3571,11 +3966,13 @@
 |LARGE_ROAMING|
 |LASHER|
 |LAVA|
+|LAW|
 |LAWS|
 |LAW_ENFORCE|
 |LAW_ENFORCEMENT|
 |LAW_MAKING|
 |LAYER|
+|LAYERS_SLOW|
 |LAYER_LINKED|
 |LAYER_PERMIT|
 |LAYER_SIZE|

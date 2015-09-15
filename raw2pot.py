@@ -16,6 +16,6 @@ with open(potfilename, 'w', encoding='utf-8') as potfile:
         fullpath = os.path.join(path, file_name)
         if os.path.isfile(fullpath) and file_name.endswith('.txt'):
             with open(fullpath) as file:
-                for context, item in ExtractTranslatablesFromRaws(file):
+                for context, item in extract_translatables_from_raws(file):
                     print('#:', file_name, file=potfile)
-                    print(FormatPO(msgid=item, msgstr="", msgctxt=context), file=potfile)
+                    print(format_po(msgid=item, msgstr="", msgctxt=context), file=potfile)
