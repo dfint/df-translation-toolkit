@@ -1,3 +1,6 @@
+import re
+
+
 def load_dsv(file, delimiter='|'):
     for line in file:
         if '|' in line:
@@ -69,7 +72,7 @@ def save_po(pofile, template, dictionary, ignorelist=None):
     print('msgstr ""', file=pofile)
     print('"Content-Type: text/plain; charset=UTF-8\\n"', file=pofile)
     print('"Language: ru_RU\\n"', file=pofile)
-    for id, text in template:
+    for _, text in template:
         if text not in ignorelist:
             print('', file=pofile)
             if text in dictionary and len(dictionary[text]) > 1:
@@ -87,7 +90,7 @@ def save_pot(pofile, template, ignorelist):
     print('msgid ""', file=pofile)
     print('msgstr ""', file=pofile)
     print('"Content-Type: text/plain; charset=UTF-8\\n"', file=pofile)
-    for id, text in template:
+    for _, text in template:
         if text not in ignorelist:
             print('', file=pofile)
             print('msgid "%s"' % escape_quotes(text), file=pofile)
@@ -116,7 +119,7 @@ translatable_tags = {'SINGULAR', 'PLURAL', 'STP', 'NO_SUB', 'NP', 'NA'}
 
 
 def is_translatable(s):
-    return s in translatable_tags or any((char >= 'a' and char <= 'z') for char in s)
+    return s in translatable_tags or any('a' <= char <= 'z' for char in s)
 
 
 def bracket_tag(tag):
@@ -124,7 +127,7 @@ def bracket_tag(tag):
 
 
 def last_sutable(s, func):
-    for i in range(len(s)-1,0,-1):
+    for i in range(len(s)-1, 0, -1):
         if func(s[i]):
             return i+1  # if the last element is sutable, then return len(s), so that s[:i] gives full list
     else:
@@ -132,15 +135,15 @@ def last_sutable(s, func):
 
 
 def extract_translatables_from_raws(file):
-    object = None
+    obj = None
     context = None
     keys = set()
     for line in file:
         for tag in tags(line):
             if tag[0] == 'OBJECT':
-                object = tag[1]
-            elif object and (tag[0] == object or (object in {'ITEM', 'BUILDING'} and tag[0].startswith(object)) or
-                                 object.endswith('_' + tag[0])):
+                obj = tag[1]
+            elif obj and (tag[0] == obj or (obj in {'ITEM', 'BUILDING'} and tag[0].startswith(obj)) or
+                          obj.endswith('_' + tag[0])):
                 context = ':'.join(tag)  # don't enclose context string into brackets - transifex dislike this
                 keys.clear()
             elif 'TILE' not in tag[0] and any(is_translatable(s) for s in tag[1:]) and tuple(tag) not in keys:
@@ -151,12 +154,11 @@ def extract_translatables_from_raws(file):
                 keys.add(tuple(tag))
                 yield (context, bracket_tag(tag))
 
-import re
-
 re_leading_spaces = re.compile("^([^\[]*)\[")
 
+
 def translate_raw_file(file, dictionary):
-    object = None
+    obj = None
     context = None
     for line in file:
         if '[' in line:
@@ -164,9 +166,9 @@ def translate_raw_file(file, dictionary):
             s = result.group(1)
             for tag in tags(line):
                 if tag[0] == 'OBJECT':
-                    object = tag[1]
-                elif object and (tag[0] == object or (object in {'ITEM', 'BUILDING'} and tag[0].startswith(object)) or
-                                     object.endswith('_' + tag[0])):
+                    obj = tag[1]
+                elif obj and (tag[0] == obj or (obj in {'ITEM', 'BUILDING'} and tag[0].startswith(obj)) or
+                              obj.endswith('_' + tag[0])):
                     context = ':'.join(tag)
                 
                 br_tag = bracket_tag(tag)
