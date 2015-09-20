@@ -25,7 +25,11 @@ def parse_file(file):
                 if prev_lines:
                     yield prev_lines
                     prev_lines = ''
-                prev_lines += line
+                
+                if line.endswith(']\n') or line[-1] == ']':
+                    yield line
+                else:
+                    prev_lines += line
             else:
                 prev_lines += line
         elif prev_lines:
