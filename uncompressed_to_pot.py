@@ -21,7 +21,7 @@ def parse_file(file):
     prev_lines = ''
     for line in file:
         if any(char.islower() for char in skip_tags(line)):
-            if line[0] == '[':
+            if line[0] == '[' or '~' in line:
                 if prev_lines:
                     yield prev_lines
                     prev_lines = ''
@@ -47,7 +47,7 @@ keys = set()
 for cur_dir, _, files in os.walk(path):
     for file_name in files:
         full_path = os.path.join(cur_dir, file_name)
-        if file_name != 'index.txt' and os.path.isfile(full_path) and os.path.splitext(file_name)[1]=='.txt':
+        if os.path.isfile(full_path) and os.path.splitext(file_name)[1]=='.txt':
             print(full_path, file=sys.stderr)
             with open(full_path) as file:
                 for parsed_line in parse_file(file):
