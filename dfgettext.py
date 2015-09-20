@@ -55,12 +55,16 @@ def escape_quotes(s):
     return s
 
 
+def format_lines(s):
+    return '"%s"' % '\\n"\n"'.join(escape_quotes(s).split('\n'))
+
+
 def format_po(msgid, msgstr="", msgctxt=None):
     s = ""
     if msgctxt:
-        s += 'msgctxt "%s"\n' % escape_quotes(msgctxt)
-    s += 'msgid "%s"\n' % escape_quotes(msgid)
-    s += 'msgstr "%s"\n' % escape_quotes(msgstr)
+        s += 'msgctxt %s\n' % format_lines(msgctxt)
+    s += 'msgid %s\n' % format_lines(msgid)
+    s += 'msgstr %s\n' % format_lines(msgstr)
     return s
 
 
