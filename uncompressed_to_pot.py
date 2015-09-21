@@ -21,7 +21,7 @@ def parse_file(file):
     prev_lines = ''
     for line in file:
         if any(char.islower() for char in skip_tags(line)):
-            if line[0] == '[' or '~' in line:
+            if '~' in line or line[0] == '[' and not (prev_lines and prev_lines.rstrip()[-1].isalpha()):
                 if prev_lines:
                     yield prev_lines
                     prev_lines = ''
