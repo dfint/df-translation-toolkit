@@ -16,16 +16,20 @@ def skip_tags(s):
             yield char
 
 
-def parse_file(file):
+def parse_file(file, join_paragraphs=True):
     first_line = file.readline()
     prev_lines = ''
     for line in file:
         if any(char.islower() for char in skip_tags(line)):
-            if '~' in line or line[0] == '[' and not (prev_lines and prev_lines.rstrip()[-1].isalpha()):
+            if not join_paragraphs or '~' in line or line[0] == '[' and not (prev_lines and prev_lines.rstrip()[-1].isalpha()):
                 if prev_lines:
                     yield prev_lines
                     prev_lines = ''
                 
+                # tilda = line.find('~')
+                # if tilda > -1:
+                    # line = line[tilda+1:]
+                    
                 if line.endswith(']\n') or line[-1] == ']':
                     yield line
                 else:
@@ -43,6 +47,8 @@ if len(sys.argv) > 1:
 else:
     path = '.'
 
+join_paragraphs = '--split' not in sys.argv[1:]
+
 keys = set()
 for cur_dir, _, files in os.walk(path):
     for file_name in files:
@@ -50,7 +56,7 @@ for cur_dir, _, files in os.walk(path):
         if os.path.isfile(full_path) and os.path.splitext(file_name)[1]=='.txt':
             print(full_path, file=sys.stderr)
             with open(full_path) as file:
-                for parsed_line in parse_file(file):
+                for parsed_line in parse_file(file, join_paragraphs):
                     if parsed_line in keys:
                         print('Key already exists:', repr(parsed_line), file=sys.stderr)
                     else:
