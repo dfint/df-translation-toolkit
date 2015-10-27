@@ -1,26 +1,51 @@
 import sys
+import argparse
+from collections import OrderedDict
 
 from dfgettext import *
 
 print(sys.argv, file=sys.stderr)
+parser = argparse.ArgumentParser(add_help=True, description='A convertor from MO gettext format to a delimiter-separated values file')
+parser.add_argument('inputfile', help='Source MO file name')
+parser.add_argument('outputfile', help='A name of the output file')
+parser.add_argument('codepage', type=int, help='Encoding of the outfile (427, 850, 860, 1251 etc.)')
 
-with open(sys.argv[1], 'rb') as mofile:
-    dictionary = {item['msgid']:item['msgstr'] for item in load_mo(mofile)}
+args = parser.parse_args(sys.argv[1:])
 
-with open(sys.argv[2]) as stringdump:
-    template = load_string_dump(stringdump)
+with open(args.inputfile, 'rb') as mofile:
+    dictionary = OrderedDict((item['msgid'], item['msgstr']) for item in load_mo(mofile))
 
-    exclusions = {'Histories of '}
+encoding = 'cp' + str(args.codepage)
 
-    for id, original_string in template:
-        if original_string in dictionary:
-            translation = dictionary[original_string]
-            if translation != original_string:
-                if original_string not in exclusions:
-                    if original_string[0]==' ' and translation[0]!=' ' and translation[0]!=',':
-                        translation = ' '+translation
-                        print("Warning: leading space added for the translation of the '%s' string." % original_string, file = sys.stderr)
-                    if original_string[-1]==' ' and translation[-1]!=' ':
-                        translation = translation+' '
-                        print("Warning: trailing space added for the translation of the '%s' string." % original_string, file = sys.stderr)
-                print("%s|%s|%s|" % (id, original_string, translation))
+exclusions_left = {'  Choose Name  ', '  Trade Agreement with '}
+exclusions_right = {'  Choose Name  '}
+
+with open(args.outputfile, 'wb') as outfile:
+    if args.codepage == 1251:
+        exclusions_right.add('Histories of ')
+    
+    for original_string in dictionary:
+        translation = dictionary[original_string]
+        if original_string and translation and translation != original_string:
+            if (original_string not in exclusions_left and
+                    original_string[0]==' ' and
+                        translation[0]!=' ' and
+                        translation[0]!=','):
+                translation = ' ' + translation
+                print("Leading space added to the translation of the string: %r" % original_string, file=sys.stderr)
+            
+            if original_string not in exclusions_right and original_string[-1]==' ' and translation[-1]!=' ':
+                translation += ' '
+                print("Trailing space added to the translation of the string: %r" % original_string, file=sys.stderr)
+            
+            translation = translation.translate({0xfeff: None, 0x2019: "'", 0x201d: '"'})
+            line = "|%s|%s|\r\n" % (original_string, translation)
+            # Try to encode strict:
+            try:
+                encoded = line.encode(encoding, errors='strict')
+            except UnicodeEncodeError:
+                print('Some characters in the translation of string %r '
+                      'cannot be represented in cp%d. Using backslashreplace mode.' %
+                      (original_string, args.codepage), file=sys.stderr)
+                encoded = line.encode(encoding, errors='backslashreplace')
+            outfile.write(encoded)
