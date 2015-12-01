@@ -142,7 +142,7 @@ def extract_translatables_from_raws(file):
     obj = None
     context = None
     keys = set()
-    for line in file:
+    for i, line in enumerate(file, 1):
         for tag in tags(line):
             if tag[0] == 'OBJECT':
                 obj = tag[1]
@@ -156,7 +156,7 @@ def extract_translatables_from_raws(file):
                     tag = tag[:last]
                     tag.append('')  # Add an empty element to the tag to mark the tag as not completed
                 keys.add(tuple(tag))
-                yield (context, bracket_tag(tag))
+                yield (context, bracket_tag(tag), i)
 
 re_leading_spaces = re.compile("^([^\[]*)\[")
 
