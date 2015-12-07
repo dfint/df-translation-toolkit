@@ -1,4 +1,5 @@
 import re
+from collections import defaultdict
 
 
 def load_dsv(file, delimiter='|'):
@@ -47,12 +48,43 @@ def load_mo(mofile):
         yield dict(msgctxt=context, msgid=original_string, msgstr=translation_string)
 
 
-def escape_quotes(s):
-    if '\\' in s:
-        s = s.replace('\\', '\\\\')
-    if '"' in s:
-        s = s.replace('"', '\\"')
-    return s
+def unescape_string(s):
+    s = s.strip('"')
+    return re.sub(r'\\(.)', r'\1', s)
+
+
+def load_po(pofile):
+    def split_first(s, delimiter=' '):
+        try:
+            i = s.index(delimiter)
+            return s[:i], s[i+len(delimiter):]
+        except ValueError:
+            return s, ''
+    
+    item = defaultdict(str)
+    prev = None
+    for line in pofile:
+        line = line.strip()
+        if not line:
+            if item:
+                yield item
+                item = defaultdict(str)
+                prev = None
+        elif line.startswith('#'):
+            key, value = split_first(line)
+            item[key] += value
+            if key == '#':
+                item[key] += '\n'
+        elif line.startswith('"'):
+            assert prev is not None
+            item[prev] += unescape_string(line)
+        else:
+            # msgid, msgstr, msgctxt etc.
+            key, value = split_first(line)
+            item[key] = unescape_string(value)
+            prev = key
+    
+    yield item
 
 
 def format_lines(s):
