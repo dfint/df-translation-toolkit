@@ -49,8 +49,12 @@ def load_mo(mofile):
 
 
 def unescape_string(s):
-    s = s.strip('"')
-    return re.sub(r'\\(.)', r'\1', s)
+    return s.strip('"')\
+            .replace('\\', r'\\')\
+            .replace('\t', r'\t')\
+            .replace('\r', r'\r')\
+            .replace('\n', r'\n')\
+            .replace('\"', r'\"')
 
 
 def load_po(pofile):
