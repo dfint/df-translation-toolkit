@@ -56,7 +56,7 @@ def escape_quotes(s):
 
 
 def format_lines(s):
-    return '"%s"' % '\\n"\n"'.join(escape_quotes(s).split('\n'))
+    return '\n'.join('%r' % (x + '\n') for x in s.split('\n'))
 
 
 def format_po(msgid, msgstr="", msgctxt=None):
@@ -83,9 +83,9 @@ def save_po(pofile, template, dictionary, ignorelist=None):
                 for item in dictionary[text][1:]:
                     if len(item.strip()) > 0:
                         print('#', item.strip(), file=pofile)  # translator comments
-            print('msgid "%s"' % escape_quotes(text), file=pofile)
+            print('msgid %r' % text, file=pofile)
             if text in dictionary:
-                print('msgstr "%s"' % escape_quotes(dictionary[text][0]), file=pofile)
+                print('msgstr %r' % dictionary[text][0], file=pofile)
             else:
                 print('msgstr ""', file=pofile)
 
@@ -97,7 +97,7 @@ def save_pot(pofile, template, ignorelist):
     for _, text in template:
         if text not in ignorelist:
             print('', file=pofile)
-            print('msgid "%s"' % escape_quotes(text), file=pofile)
+            print('msgid %r' % text, file=pofile)
             print('msgstr ""', file=pofile)
 
 
