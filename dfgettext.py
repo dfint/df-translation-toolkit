@@ -48,13 +48,21 @@ def load_mo(mofile):
         yield dict(msgctxt=context, msgid=original_string, msgstr=translation_string)
 
 
+def strip_once(s, chars=' '):
+    if s[0] in chars:
+        s = s[1:]
+    if s[-1] in chars:
+        s = s[:-1]
+    return s
+
+
 def unescape_string(s):
-    return s.strip('"')\
-            .replace('\\', r'\\')\
-            .replace('\t', r'\t')\
-            .replace('\r', r'\r')\
-            .replace('\n', r'\n')\
-            .replace('\"', r'\"')
+    return strip_once(s, '"')\
+           .replace(r'\\', '\\')\
+           .replace(r'\t', '\t')\
+           .replace(r'\r', '\r')\
+           .replace(r'\n', '\n')\
+           .replace(r'\"', '\"')
 
 
 def load_po(pofile):
