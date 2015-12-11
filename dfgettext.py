@@ -65,6 +65,16 @@ def unescape_string(s):
            .replace(r'\"', '\"')
 
 
+def escape_string(s):
+    return '"%s"' % (s\
+                    .replace('\\', r'\\')\
+                    .replace('\t', r'\t')\
+                    .replace('\r', r'\r')\
+                    .replace('\n', r'\n')\
+                    .replace('\"', r'\"'))
+    
+
+
 def load_po(pofile):
     def split_first(s, delimiter=' '):
         try:
@@ -100,7 +110,7 @@ def load_po(pofile):
 
 
 def format_lines(s):
-    return '\n'.join('%r' % (x + '\n') for x in s.split('\n'))
+    return '\n'.join('%s' % escape_string(x + '\n') for x in s.split('\n'))
 
 
 def format_po(msgid, msgstr="", msgctxt=None):
@@ -127,9 +137,9 @@ def save_po(pofile, template, dictionary, ignorelist=None):
                 for item in dictionary[text][1:]:
                     if len(item.strip()) > 0:
                         print('#', item.strip(), file=pofile)  # translator comments
-            print('msgid %r' % text, file=pofile)
+            print('msgid %s' % escape_string(text), file=pofile)
             if text in dictionary:
-                print('msgstr %r' % dictionary[text][0], file=pofile)
+                print('msgstr %s' % escape_string(dictionary[text][0]), file=pofile)
             else:
                 print('msgstr ""', file=pofile)
 
@@ -141,7 +151,7 @@ def save_pot(pofile, template, ignorelist):
     for _, text in template:
         if text not in ignorelist:
             print('', file=pofile)
-            print('msgid %r' % text, file=pofile)
+            print('msgid %s' % escape_string(text), file=pofile)
             print('msgstr ""', file=pofile)
 
 
