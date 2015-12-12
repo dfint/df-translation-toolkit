@@ -1,3 +1,4 @@
+#! python3
 import sys
 import argparse
 from collections import OrderedDict
@@ -8,20 +9,18 @@ print(sys.argv, file=sys.stderr)
 parser = argparse.ArgumentParser(add_help=True, description='A convertor from MO gettext format to a delimiter-separated values file')
 parser.add_argument('inputfile', help='Source MO file name')
 parser.add_argument('outputfile', help='A name of the output file')
-parser.add_argument('codepage', type=int, help='Encoding of the outfile (427, 850, 860, 1251 etc.)')
+parser.add_argument('codepage', help='Encoding of the outfile (cp427, cp850, cp860, cp1251 etc.)')
 
 args = parser.parse_args(sys.argv[1:])
 
 with open(args.inputfile, 'rb') as mofile:
     dictionary = OrderedDict((item['msgid'], item['msgstr']) for item in load_mo(mofile))
 
-encoding = 'cp' + str(args.codepage)
-
 exclusions_left = {'  Choose Name  ', '  Trade Agreement with '}
 exclusions_right = {'  Choose Name  '}
 
 with open(args.outputfile, 'wb') as outfile:
-    if args.codepage == 1251:
+    if args.codepage == 'cp1251':
         exclusions_right.add('Histories of ')
     
     for original_string in dictionary:
@@ -42,10 +41,10 @@ with open(args.outputfile, 'wb') as outfile:
             line = "|%s|%s|\r\n" % (original_string, translation)
             # Try to encode strict:
             try:
-                encoded = line.encode(encoding, errors='strict')
+                encoded = line.encode(args.codepage, errors='strict')
             except UnicodeEncodeError:
                 print('Some characters in the translation of string %r '
                       'cannot be represented in cp%d. Using backslashreplace mode.' %
                       (original_string, args.codepage), file=sys.stderr)
-                encoded = line.encode(encoding, errors='backslashreplace')
+                encoded = line.encode(args.codepage, errors='backslashreplace')
             outfile.write(encoded)
