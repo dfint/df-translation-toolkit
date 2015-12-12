@@ -110,7 +110,7 @@ def load_po(pofile):
 
 
 def format_lines(s):
-    return '\n'.join('%s' % escape_string(x + '\n') for x in s.split('\n'))
+    return '\n'.join('%s' % escape_string(x) for x in s.splitlines(keepends=True)) or '""'
 
 
 def format_po(msgid, msgstr="", msgctxt=None):
