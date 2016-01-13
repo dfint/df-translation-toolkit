@@ -1,7 +1,7 @@
 from dfgettext import *
 
 with open(sys.argv[1]) as stringdump:
-    template = load_string_dump(stringdump)
+    template = (line.rstrip('\n') for line in stringdump)
     with open('ignored.txt') as ignored:
         ignorelist = {line[1] for line in load_dsv(ignored)}
     
@@ -9,4 +9,4 @@ with open(sys.argv[1]) as stringdump:
         dictionary = load_trans(trans)
     
     with open('DwarfFortress.po', 'w', encoding='cp65001') as pofile:
-        save_po(pofile, template, dictionary, ignorelist)
+        save_po(pofile, (line for line in template if line not in ignorelist), dictionary)

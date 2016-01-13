@@ -122,26 +122,22 @@ def format_po(msgid, msgstr="", msgctxt=None):
     return s
 
 
-def save_po(pofile, template, dictionary, ignorelist=None):
-    if not ignorelist:
-        ignorelist = {}
-    
+def save_po(pofile, template, dictionary):
     print('msgid ""', file=pofile)
     print('msgstr ""', file=pofile)
     print('"Content-Type: text/plain; charset=UTF-8\\n"', file=pofile)
     print('"Language: ru_RU\\n"', file=pofile)
-    for _, text in template:
-        if text not in ignorelist:
-            print('', file=pofile)
-            if text in dictionary and len(dictionary[text]) > 1:
-                for item in dictionary[text][1:]:
-                    if len(item.strip()) > 0:
-                        print('#', item.strip(), file=pofile)  # translator comments
-            print('msgid %s' % escape_string(text), file=pofile)
-            if text in dictionary:
-                print('msgstr %s' % escape_string(dictionary[text][0]), file=pofile)
-            else:
-                print('msgstr ""', file=pofile)
+    for text in template:
+        print('', file=pofile)
+        if text in dictionary and len(dictionary[text]) > 1:
+            for item in dictionary[text][1:]:
+                if len(item.strip()) > 0:
+                    print('#', item.strip(), file=pofile)  # translator comments
+        print('msgid %s' % escape_string(text), file=pofile)
+        if text in dictionary:
+            print('msgstr %s' % escape_string(dictionary[text][0]), file=pofile)
+        else:
+            print('msgstr ""', file=pofile)
 
 
 def save_pot(pofile, template):
