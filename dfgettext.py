@@ -144,15 +144,14 @@ def save_po(pofile, template, dictionary, ignorelist=None):
                 print('msgstr ""', file=pofile)
 
 
-def save_pot(pofile, template, ignorelist):
+def save_pot(pofile, template):
     print('msgid ""', file=pofile)
     print('msgstr ""', file=pofile)
     print('"Content-Type: text/plain; charset=UTF-8\\n"', file=pofile)
     for line in template:
-        if line not in ignorelist:
-            print('', file=pofile)
-            print('msgid %s' % escape_string(line), file=pofile)
-            print('msgstr ""', file=pofile)
+        print('', file=pofile)
+        print('msgid %s' % escape_string(line), file=pofile)
+        print('msgstr ""', file=pofile)
 
 
 def split_tag(s):
