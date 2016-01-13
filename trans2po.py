@@ -3,7 +3,7 @@ from dfgettext import *
 with open(sys.argv[1]) as stringdump:
     template = (line.rstrip('\n') for line in stringdump)
     with open('ignored.txt') as ignored:
-        ignorelist = {line[1] for line in load_dsv(ignored)}
+        ignorelist = {line.rstrip('\n').strip('|') for line in ignored}
     
     with open('trans.txt') as trans:
         dictionary = load_trans(trans)
