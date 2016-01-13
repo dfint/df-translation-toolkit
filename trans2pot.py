@@ -2,10 +2,10 @@
 from dfgettext import *
 
 with open(sys.argv[1]) as stringdump:
-    template = load_string_dump(stringdump)
+    template = (line.rstrip('\n') for line in stringdump)
     if len(sys.argv) > 1:
         with open(sys.argv[2]) as ignored:
-            ignorelist = {line[1] for line in load_dsv(ignored)}
+            ignorelist = {line.strip('|') for line in ignored}
     else:
         ignorelist = set()
     
