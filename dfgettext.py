@@ -148,10 +148,10 @@ def save_pot(pofile, template, ignorelist):
     print('msgid ""', file=pofile)
     print('msgstr ""', file=pofile)
     print('"Content-Type: text/plain; charset=UTF-8\\n"', file=pofile)
-    for _, text in template:
-        if text not in ignorelist:
+    for line in template:
+        if line not in ignorelist:
             print('', file=pofile)
-            print('msgid %s' % escape_string(text), file=pofile)
+            print('msgid %s' % escape_string(line), file=pofile)
             print('msgstr ""', file=pofile)
 
 
