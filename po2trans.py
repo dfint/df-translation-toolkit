@@ -1,6 +1,7 @@
 #! python3
 import sys
 import argparse
+import csv
 from collections import OrderedDict
 
 from dfgettext import *
@@ -19,7 +20,8 @@ with open(args.inputfile, 'r', encoding='utf8') as pofile:
 exclusions_left = {'  Choose Name  ', '  Trade Agreement with '}
 exclusions_right = {'  Choose Name  '}
 
-with open(args.outputfile, 'wb') as outfile:
+with open(args.outputfile, 'w', newline='', encoding=args.codepage) as outfile:
+    writer = csv.writer(outfile, dialect='unix')
     if args.codepage == 'cp1251':
         exclusions_right.add('Histories of ')
     
@@ -38,13 +40,5 @@ with open(args.outputfile, 'wb') as outfile:
                 print("Trailing space added to the translation of the string: %r" % original_string, file=sys.stderr)
             
             translation = translation.translate({0xfeff: None, 0x2019: "'", 0x201d: '"'})
-            line = "|%s|%s|\r\n" % (original_string, translation)
-            # Try to encode strict:
-            try:
-                encoded = line.encode(args.codepage, errors='strict')
-            except UnicodeEncodeError:
-                print('Some characters in the translation of string %r '
-                      'cannot be represented in cp%d. Using backslashreplace mode.' %
-                      (original_string, args.codepage), file=sys.stderr)
-                encoded = line.encode(args.codepage, errors='backslashreplace')
-            outfile.write(encoded)
+            
+            writer.writerow([original_string, translation])
