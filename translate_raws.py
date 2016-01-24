@@ -7,9 +7,9 @@ from dfgettext import *
 if len(sys.argv)<3:
     sys.exit()
 
-mofilename = sys.argv[1]
-with open(mofilename, 'rb') as mofile:
-    dictionary = {(item['msgid'],item['msgctxt']):item['msgstr'] for item in load_mo(mofile)}
+pofilename = sys.argv[1]
+with open(pofilename, 'r', encoding='utf-8') as pofile:
+    dictionary = {(item['msgid'],item['msgctxt']):item['msgstr'] for item in load_po(pofile)}
 
 path = sys.argv[2]
 raws = filter(lambda x: not x.startswith('language_'), os.listdir(path))
