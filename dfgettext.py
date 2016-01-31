@@ -252,3 +252,39 @@ def translate_raw_file(file, dictionary):
         else:
             yield line.rstrip()
 
+
+def skip_tags(s):
+    opened = 0
+    for char in s:
+        if char == '[':
+            opened += 1
+        elif char == ']':
+            opened -= 1
+        elif opened == 0:
+            yield char
+
+
+def parse_plain_text_file(file, join_paragraphs=True):
+    first_line = file.readline()
+    paragraph = ''
+    for line in file:
+        if any(char.islower() for char in skip_tags(line)):
+            if not join_paragraphs or '~' in line or line[0] == '[' and not (paragraph and paragraph.rstrip()[-1].isalpha()):
+                if paragraph:
+                    yield paragraph, True
+                    paragraph = ''
+                
+                if line.endswith(']\n') or line[-1] == ']':
+                    yield line, True
+                else:
+                    paragraph += line
+            else:
+                paragraph += line
+        elif paragraph:
+            yield paragraph, True
+            paragraph = ''
+        else:
+            yield line, False  # Not translatable line
+    
+    if paragraph:
+        yield paragraph, True
