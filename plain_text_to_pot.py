@@ -3,6 +3,7 @@
 import os
 import sys
 import dfgettext
+from dfgettext import parse_plain_text_file
 
 
 def skip_tags(s):
@@ -25,10 +26,6 @@ def parse_file(file, join_paragraphs=True):
                 if prev_lines:
                     yield prev_lines
                     prev_lines = ''
-                
-                # tilda = line.find('~')
-                # if tilda > -1:
-                    # line = line[tilda+1:]
                     
                 if line.endswith(']\n') or line[-1] == ']':
                     yield line
@@ -56,10 +53,12 @@ for cur_dir, _, files in os.walk(path):
         if os.path.isfile(full_path) and os.path.splitext(file_name)[1]=='.txt':
             print(full_path, file=sys.stderr)
             with open(full_path) as file:
-                for parsed_line in parse_file(file, join_paragraphs):
-                    if parsed_line in keys:
-                        print('Key already exists:', repr(parsed_line), file=sys.stderr)
+                for text_block, is_translatable in parse_plain_text_file(file, join_paragraphs):
+                    if not is_translatable:
+                        pass
+                    elif text_block in keys:
+                        print('Key already exists:', repr(text_block), file=sys.stderr)
                     else:
-                        keys.add(parsed_line)
+                        keys.add(text_block)
                         print('#: %s' % file_name)
-                        print(dfgettext.format_po(msgid=parsed_line.rstrip('\n')))
+                        print(dfgettext.format_po(msgid=text_block.rstrip('\n')))
