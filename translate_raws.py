@@ -25,5 +25,6 @@ for file_name in raws:
         
         with open(bak_name) as src:
             with open(raw_file, 'w', encoding='cp1251') as dest:
+                print(raw_file, file=sys.stderr)
                 for line in translate_raw_file(src, dictionary):
                     print(line, file=dest)
