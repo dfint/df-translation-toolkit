@@ -265,8 +265,11 @@ def skip_tags(s):
 
 
 def parse_plain_text_file(file, join_paragraphs=True):
-    first_line = file.readline()
     paragraph = ''
+    if join_paragraphs:
+        line = file.readline()  # The first line with the file name
+        yield line, False
+    
     for line in file:
         if any(char.islower() for char in skip_tags(line)):
             if not join_paragraphs or '~' in line or line[0] == '[' and not (paragraph and paragraph.rstrip()[-1].isalpha()):
@@ -280,10 +283,11 @@ def parse_plain_text_file(file, join_paragraphs=True):
                     paragraph += line
             else:
                 paragraph += line
-        elif paragraph:
-            yield paragraph, True
-            paragraph = ''
         else:
+            if paragraph:
+                yield paragraph, True
+                paragraph = ''
+            
             yield line, False  # Not translatable line
     
     if paragraph:
