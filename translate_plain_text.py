@@ -30,16 +30,14 @@ for cur_dir, _, files in os.walk(path):
             with open(bak_name) as src:
                 with open(dest_name, 'w', encoding='cp1251') as dest:
                     print(dest_name, file=sys.stderr)
-                    for text_block, is_translatable in parse_plain_text_file(src):
-                        # print('>',repr(text_block), is_translatable)
+                    for text_block, is_translatable in parse_plain_text_file(src, join_paragraphs):
+                        # print('>', repr(text_block))
                         text_block = text_block.rstrip('\n')
-                        if is_translatable:
-                            if text_block in dictionary:
-                                translation = dictionary[text_block]
-                                if not translation:
-                                    translation = text_block
-                            else:
+                        if text_block in dictionary:
+                            translation = dictionary[text_block]
+                            if not translation:
                                 translation = text_block
-                            print(translation, file=dest)
                         else:
-                            print(text_block, file=dest)
+                            translation = text_block
+                        # print('<', repr(translation))
+                        print(translation, file=dest)
