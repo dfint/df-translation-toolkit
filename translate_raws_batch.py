@@ -2,8 +2,8 @@ import os
 import sys
 from translate_raws import translate_raws
 
-po_file_name = r'..\python-transifex\ru-raw-objects.po'
-base_path = r"d:\Games\PeridexisErrant's Starter Pack 0.42.05-r01"
+base_path = sys.argv[1]
+po_file_name = sys.argv[2]
 
 for cur_dir, _, files in os.walk(base_path):
     if cur_dir.endswith(r'raw\objects'):
