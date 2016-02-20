@@ -20,7 +20,7 @@ with open(args.inputfile, 'r', encoding='utf8') as pofile:
 exclusions_left = {'  Choose Name  ', '  Trade Agreement with '}
 exclusions_right = {'  Choose Name  '}
 
-with open(args.outputfile, 'w', newline='', encoding=args.codepage) as outfile:
+with open(args.outputfile, 'w', newline='', encoding=args.codepage, errors='replace') as outfile:
     writer = csv.writer(outfile, dialect='unix')
     if args.codepage == 'cp1251':
         exclusions_right.add('Histories of ')
