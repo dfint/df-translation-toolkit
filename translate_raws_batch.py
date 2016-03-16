@@ -7,23 +7,23 @@ base_path = sys.argv[1]
 po_file_path = sys.argv[2]
 encoding = 'cp1251' if len(sys.argv) < 4 else sys.argv[3]
 
-lang_prefix = 'ru'
+prefix = '' if len(sys.argv) < 5 else sys.argv[4]
 
 patterns = {
     r'raw\objects': dict(
-        po_filename=lang_prefix+'-raw-objects.po',
+        po_filename=prefix+'raw-objects.po',
         func=translate_raws,
     ),
     r'data_src': dict(
-        po_filename=lang_prefix+'-uncompressed.po',
+        po_filename=prefix+'uncompressed.po',
         func=lambda *args: translate_plain_text(*args, join_paragraphs=True),
     ),
     r'data\speech': dict(
-        po_filename=lang_prefix+'-speech.po',
+        po_filename=prefix+'speech.po',
         func=lambda *args: translate_plain_text(*args, join_paragraphs=False),
     ),
     r'raw\objects\text': dict(
-        po_filename=lang_prefix+'-text.po',
+        po_filename=prefix+'text.po',
         func=lambda *args: translate_plain_text(*args, join_paragraphs=False),
     ),
 }
