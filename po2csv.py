@@ -41,4 +41,4 @@ with open(args.outputfile, 'w', newline='', encoding=args.codepage, errors='repl
             
             translation = translation.translate({0xfeff: None, 0x2019: "'", 0x201d: '"'})
             
-            writer.writerow([original_string, translation])
+            writer.writerow([escape_string(original_string), escape_string(translation)])
