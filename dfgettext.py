@@ -71,7 +71,7 @@ def escape_string(s):
             .replace('\t', r'\t')\
             .replace('\r', r'\r')\
             .replace('\n', r'\n')\
-            .replace('\"', r'\"'))
+            .replace('\"', r'\"')
     
 
 
