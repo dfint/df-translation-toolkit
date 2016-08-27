@@ -10,7 +10,7 @@ print(sys.argv, file=sys.stderr)
 parser = argparse.ArgumentParser(add_help=True, description='A convertor from PO gettext format to a delimiter-separated values file')
 parser.add_argument('inputfile', help='Source PO file name')
 parser.add_argument('outputfile', help='A name of the output file')
-parser.add_argument('codepage', help='Encoding of the outfile (cp427, cp850, cp860, cp1251 etc.)')
+parser.add_argument('codepage', help='Encoding of the outfile (cp427, cp850, cp860, cp1251 etc.)', default='utf8')
 
 args = parser.parse_args(sys.argv[1:])
 
