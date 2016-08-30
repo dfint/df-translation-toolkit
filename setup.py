@@ -7,5 +7,5 @@ setup(name='df_gettext_toolkit',
       author='insolor',
       author_email='insolor@gmail.com',
       # license='MIT',
-      packages=[],
+      packages=['df_gettext_toolkit'],
       zip_safe=False)
