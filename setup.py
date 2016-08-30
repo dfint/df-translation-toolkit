@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(name='df_gettext_toolkit',
       version='0.1',
@@ -7,5 +7,5 @@ setup(name='df_gettext_toolkit',
       author='insolor',
       author_email='insolor@gmail.com',
       # license='MIT',
-      packages=['df_gettext_toolkit'],
+      packages=find_packages(),
       zip_safe=False)
