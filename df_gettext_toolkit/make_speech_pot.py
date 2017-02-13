@@ -1,7 +1,7 @@
 #! python3
 import os
 import sys
-import dfgettext
+from .po import format_po
 
 if len(sys.argv)>1:
     path = sys.argv[1]
@@ -18,5 +18,4 @@ for filename in os.listdir(path):
             for i, line in enumerate(file):
                 if line.rstrip('\n'):
                     print('#: %s:%d' % (filename, i))
-                    print(dfgettext.format_po(msgid=line.rstrip('\n')))
-        
+                    print(format_po(msgid=line.rstrip('\n')))

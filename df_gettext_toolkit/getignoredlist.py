@@ -1,4 +1,4 @@
-from dfgettext import *
+from .parse_raws import load_trans, load_string_dump
 
 with open('trans.txt') as transfile:
     trans = load_trans(transfile)

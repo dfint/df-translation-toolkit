@@ -2,7 +2,8 @@ import sys
 import os
 import shutil
 
-from dfgettext import *
+from .parse_raws import translate_raw_file
+from .po import  load_po
 
 def translate_raws(pofilename, path, encoding, silent=False):
     with open(pofilename, 'r', encoding='utf-8') as pofile:

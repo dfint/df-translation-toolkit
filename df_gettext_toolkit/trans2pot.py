@@ -1,5 +1,6 @@
 ﻿import sys
-from dfgettext import *
+
+from .po import save_pot
 
 with open(sys.argv[1]) as stringdump:
     template = (line.rstrip('\n') for line in stringdump)

@@ -1,4 +1,7 @@
-from dfgettext import *
+import sys
+
+from .parse_raws import load_trans
+from .po import save_po
 
 with open(sys.argv[1]) as stringdump:
     template = (line.rstrip('\n') for line in stringdump)

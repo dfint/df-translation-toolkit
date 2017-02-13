@@ -1,7 +1,7 @@
 import os
 import sys
-from translate_raws import translate_raws
-from translate_plain_text import translate_plain_text
+from .translate_raws import translate_raws
+from .translate_plain_text import translate_plain_text
 
 base_path = sys.argv[1]
 po_file_path = sys.argv[2]

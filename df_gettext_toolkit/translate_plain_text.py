@@ -2,9 +2,10 @@
 
 import os
 import sys
-import dfgettext
 import shutil
-from dfgettext import parse_plain_text_file, load_po
+
+from .parse_raws import parse_plain_text_file
+from .po import load_po
 
 
 def translate_plain_text(pofilename, path, encoding, join_paragraphs=True):
