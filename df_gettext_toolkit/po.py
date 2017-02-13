@@ -33,9 +33,9 @@ def load_mo(mofile):
 
 
 def strip_once(s, chars=' '):
-    if s[0] in chars:
+    if s and s[0] in chars:
         s = s[1:]
-    if s[-1] in chars:
+    if s and s[-1] in chars:
         s = s[:-1]
     return s
 
