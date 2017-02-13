@@ -1,7 +1,8 @@
 import sys
 import os
 
-from dfgettext import *
+from .parse_raws import extract_translatables_from_raws
+from .po import format_po
 
 if len(sys.argv)<2:
     path = '.'

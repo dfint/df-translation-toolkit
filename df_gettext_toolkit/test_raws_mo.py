@@ -1,6 +1,6 @@
 import sys
 
-from dfgettext import load_mo
+from .po import load_mo
 
 from collections import defaultdict, Counter
 

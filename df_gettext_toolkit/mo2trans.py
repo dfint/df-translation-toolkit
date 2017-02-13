@@ -3,7 +3,7 @@ import sys
 import argparse
 from collections import OrderedDict
 
-from dfgettext import *
+from .po import load_mo
 
 print(sys.argv, file=sys.stderr)
 parser = argparse.ArgumentParser(add_help=True, description='A convertor from MO gettext format to a delimiter-separated values file')

@@ -2,9 +2,8 @@
 
 import os
 import sys
-import dfgettext
-from dfgettext import parse_plain_text_file
-
+from .parse_raws import  parse_plain_text_file
+from .po import format_po
 
 def skip_tags(s):
     opened = 0
@@ -61,4 +60,4 @@ for cur_dir, _, files in os.walk(path):
                     else:
                         keys.add(text_block)
                         print('#: %s' % file_name)
-                        print(dfgettext.format_po(msgid=text_block.rstrip('\n')))
+                        print(format_po(msgid=text_block.rstrip('\n')))

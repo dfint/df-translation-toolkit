@@ -4,7 +4,7 @@ import argparse
 import csv
 from collections import OrderedDict
 
-from dfgettext import *
+from .po import load_po, escape_string
 
 print(sys.argv, file=sys.stderr)
 parser = argparse.ArgumentParser(add_help=True, description='A convertor from PO gettext format to a delimiter-separated values file')
