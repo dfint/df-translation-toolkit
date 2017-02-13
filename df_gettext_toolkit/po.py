@@ -59,13 +59,6 @@ def escape_string(s):
 
 
 def load_po(pofile):
-    def split_first(s, delimiter=' '):
-        try:
-            i = s.index(delimiter)
-            return s[:i], s[i+len(delimiter):]
-        except ValueError:
-            return s, ''
-    
     item = defaultdict(str)
     prev = None
     for line in pofile:
@@ -76,7 +69,7 @@ def load_po(pofile):
                 item = defaultdict(str)
                 prev = None
         elif line.startswith('#'):
-            key, value = split_first(line)
+            key, value = line.split(maxsplit=1)
             item[key] += value
             if key == '#':
                 item[key] += '\n'
@@ -85,7 +78,7 @@ def load_po(pofile):
             item[prev] += unescape_string(strip_once(line, '"'))
         else:
             # msgid, msgstr, msgctxt etc.
-            key, value = split_first(line)
+            key, value = line.split(maxsplit=1)
             item[key] = unescape_string(strip_once(value, '"'))
             prev = key
     
