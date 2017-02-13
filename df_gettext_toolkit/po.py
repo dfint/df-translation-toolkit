@@ -92,6 +92,16 @@ def load_po(pofile):
     yield item
 
 
+def get_metadata(entry):
+    def get_metadata_str(s):
+        return dict(item.split(': ', maxsplit=1) for item in s.splitlines())
+    
+    if isinstance(entry, str):
+        return get_metadata_str(entry)
+    elif isinstance(entry, dict) and 'msgstr' in entry:
+        return get_metadata_str(entry['msgstr'])
+
+
 def format_lines(s):
     return '\n'.join('"%s"' % escape_string(x) for x in s.splitlines(keepends=True)) or '""'
 
