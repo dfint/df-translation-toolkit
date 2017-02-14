@@ -5,13 +5,13 @@ def read_uint(file_object):
     return int.from_bytes(file_object.read(4), byteorder='little')
 
 
-def load_mo(mofile):
+def load_mo(mofile, encoding='utf-8'):
     def load_string(file_object, offset):
         file_object.seek(offset)
         string_size = read_uint(file_object)
         string_offset = read_uint(file_object)
         file_object.seek(string_offset)
-        return file_object.read(string_size).decode(encoding="utf-8")
+        return file_object.read(string_size).decode(encoding)
     
     mofile.seek(0)
     magic_number = mofile.read(4)
