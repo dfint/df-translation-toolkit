@@ -69,7 +69,7 @@ def load_po(pofile):
                 item = defaultdict(str)
                 prev = None
         elif line.startswith('#'):
-            key, value = line.split(maxsplit=1)
+            key, _, value = line.partition(' ')
             item[key] += value
             if key == '#':
                 item[key] += '\n'
