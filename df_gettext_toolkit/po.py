@@ -95,6 +95,18 @@ def get_metadata(entry):
         return get_metadata_str(entry['msgstr'])
 
 
+class PoReader:
+    def __init__(self, file_object):
+        file_object.seek(0)
+        self._iterator = load_po(file_object)
+        first_entry = next(self._iterator)
+        assert first_entry['msgid'] == '', 'No metadata entry in the po file'
+        self.meta = get_metadata(first_entry)
+    
+    def __iter__(self):
+        return self._iterator
+
+
 def format_lines(s):
     return '\n'.join('"%s"' % escape_string(x) for x in s.splitlines(keepends=True)) or '""'
 
