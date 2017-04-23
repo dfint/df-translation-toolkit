@@ -33,7 +33,7 @@ for cur_dir, _, files in os.walk(base_path):
         if cur_dir.endswith(pattern):
             print(cur_dir, file=sys.stderr)
             print(file=sys.stderr)
-            po_filename =  os.path.join(po_file_path, prefix+patterns[pattern]['po_filename'])
+            po_filename = os.path.join(po_file_path, prefix+patterns[pattern]['po_filename'])
             func = patterns[pattern]['func']
             func(po_filename, cur_dir, encoding)
             print(file=sys.stderr)
