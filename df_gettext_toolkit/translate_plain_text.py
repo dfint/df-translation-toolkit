@@ -24,7 +24,7 @@ def translate_plain_text(pofilename, path, encoding, join_paragraphs=True):
                 
                 with open(bak_name) as src:
                     with open(dest_name, 'w', encoding=encoding) as dest:
-                        print(dest_name, file=sys.stderr)
+                        yield dest_name
                         for text_block, is_translatable in parse_plain_text_file(src, join_paragraphs):
                             text_block = text_block.rstrip('\n')
                             if text_block in dictionary:
@@ -46,4 +46,5 @@ if __name__ == "__main__":
 
     join_paragraphs = '--split' not in sys.argv[1:]
     
-    translate_plain_text(pofilename, path, 'cp1251', join_paragraphs)
+    for filename in translate_plain_text(pofilename, path, 'cp1251', join_paragraphs):
+        print(filename, file=sys.stderr)
