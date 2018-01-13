@@ -11,6 +11,7 @@ def translate_raws(pofilename, path, encoding, silent=False):
     
     raws = filter(lambda x: not x.startswith('language_'), os.listdir(path))
     for file_name in raws:
+        yield file_name
         basename, ext = os.path.splitext(file_name)
         if ext == '.txt':
             bak_name = os.path.join(path, basename+'.bak')
@@ -32,4 +33,5 @@ if __name__ == "__main__":
     pofilename = sys.argv[1]
     path = sys.argv[2]
     encoding = sys.argv[3]
-    translate_raws(pofilename, path, encoding)
+    for filename in translate_raws(pofilename, path, encoding):
+        print(filename, file=sys.stderr)

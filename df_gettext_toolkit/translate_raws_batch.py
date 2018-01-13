@@ -35,5 +35,6 @@ for cur_dir, _, files in os.walk(base_path):
             print(file=sys.stderr)
             po_filename = os.path.join(po_file_path, prefix+patterns[pattern]['po_filename'])
             func = patterns[pattern]['func']
-            func(po_filename, cur_dir, encoding)
+            for filename in func(po_filename, cur_dir, encoding):
+                print(filename, file=sys.stderr)
             print(file=sys.stderr)
