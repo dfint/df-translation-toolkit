@@ -5,6 +5,7 @@ import csv
 from collections import OrderedDict
 
 from .po import load_po, escape_string
+from .cleanup_string import cleanup
 
 print(sys.argv, file=sys.stderr)
 parser = argparse.ArgumentParser(add_help=True, description='A convertor from PO gettext format to a delimiter-separated values file')
@@ -39,6 +40,6 @@ with open(args.outputfile, 'w', newline='', encoding=args.codepage, errors='repl
                 translation += ' '
                 print("Trailing space added to the translation of the string: %r" % original_string, file=sys.stderr)
             
-            translation = translation.translate({0xfeff: None, 0x2019: "'", 0x201d: '"'})
+            translation = cleanup(translation)
             
             writer.writerow([escape_string(original_string), escape_string(translation)])
