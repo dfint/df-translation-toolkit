@@ -28,10 +28,11 @@ def translate_raws(pofilename, path, encoding, silent=False):
                         try:
                             print(line, file=dest)
                         except UnicodeEncodeError as e:
-                            print('Some characters in the translation of string %r '
-                                  'cannot be represented in cp%d. Using backslashreplace mode.' %
-                                  (original_string, args.codepage), file=sys.stderr)
                             line = line.encode(encoding, errors='backslashreplace').decode(encoding)
+                            print('Some characters of this line: %r '
+                                  'cannot be represented in cp%d. Using backslashreplace mode.' %
+                                  (line, encoding), file=sys.stderr)
+                            
                             print(line, file=dest)
 
 if __name__ == "__main__":

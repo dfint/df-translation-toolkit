@@ -4,6 +4,7 @@ import argparse
 from collections import OrderedDict
 
 from .po import load_mo
+from .cleanup_string import cleanup
 
 print(sys.argv, file=sys.stderr)
 parser = argparse.ArgumentParser(add_help=True, description='A convertor from MO gettext format to a delimiter-separated values file')
@@ -37,7 +38,7 @@ with open(args.outputfile, 'wb') as outfile:
                 translation += ' '
                 print("Trailing space added to the translation of the string: %r" % original_string, file=sys.stderr)
             
-            translation = translation.translate({0xfeff: None, 0x2019: "'", 0x201d: '"'})
+            translation = cleanup(translation)
             line = "|%s|%s|\r\n" % (original_string, translation)
             # Try to encode strict:
             try:
