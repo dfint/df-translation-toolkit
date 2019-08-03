@@ -78,7 +78,11 @@ def ignore_filenames(string):
     return re.fullmatch(r"[\w]+\.[\w]{3}", string)
 
 
-all_rules = [ignore_xml, ignore_square_brackets, ignore_paths, ignore_tags, ignore_filenames]
+def ignore_gl(string):
+    return re.fullmatch(r"(w?gl[A-Z]|W?GL_)[\w]+", string)
+
+
+all_rules = [ignore_xml, ignore_square_brackets, ignore_paths, ignore_tags, ignore_filenames, ignore_gl]
 
 
 def ignore_all(string):
