@@ -75,7 +75,11 @@ def ignore_tags(string):
 
 
 def ignore_filenames(string):
-    return re.fullmatch(r"[\w]+\.[\w]{3}", string)
+    return re.fullmatch(r".+\.[\w]{3}", string) is not None
+
+
+def test_ignore_filenames():
+    assert ignore_filenames("-detailed.bmp") == True
 
 
 def ignore_gl(string):
