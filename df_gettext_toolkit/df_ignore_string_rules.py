@@ -46,3 +46,9 @@ def test_ignore_square_brackets():
     assert ignore_square_brackets("[STATE_ADJ:ALL_SOLID:frozen ") is False
     assert ignore_square_brackets("[STATE_ADJ:ALL_SOLID:") is True
 
+
+all_rules = [ignore_xml, ignore_square_brackets]
+
+
+def ignore_all(string):
+    return any(rule(string) for rule in all_rules)
