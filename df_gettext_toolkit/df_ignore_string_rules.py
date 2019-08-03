@@ -101,8 +101,12 @@ def test_ignore_camel_case():
     assert ignore_camel_case("CAPS") is False
 
 
+def ignore_word_with_number(string):
+    return re.fullmatch(r"[A-Za-z]+\d+", string) is not None
+
+
 all_rules = [ignore_xml, ignore_square_brackets, ignore_paths, ignore_tags, ignore_filenames, ignore_gl,
-             ignore_underline_separated_words, ignore_camel_case]
+             ignore_underline_separated_words, ignore_camel_case, ignore_word_with_number]
 
 
 def ignore_all(string):
