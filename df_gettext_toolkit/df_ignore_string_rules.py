@@ -16,7 +16,8 @@ def test_ignore_xml():
     assert ignore_xml("<no uniforms>") is False
 
 
-square_brackets_exceptions = {'DONE', 'MORE', "CAN'T WORK", "WITH YOU", "LIP"}
+square_brackets_exceptions = {"DONE", "MORE", "CAN'T WORK", "WITH YOU", "LIP", "REQUIRE", "DEMAND", "MANDATE",
+                              "TRADING", "PENDING"}
 
 
 def ignore_square_brackets(string):
@@ -66,7 +67,18 @@ def test_ignore_paths():
     assert ignore_paths('data/save/*.*') is True
 
 
-all_rules = [ignore_xml, ignore_square_brackets, ignore_paths]
+ignore_tags_exceptions = {'CLT'}
+
+
+def ignore_tags(string):
+    return len(string) > 2 and string not in ignore_tags_exceptions and re.fullmatch('[A-Z_]+', string)
+
+
+def ignore_filenames(string):
+    return re.fullmatch(r"[\w]+\.[\w]{3}", string)
+
+
+all_rules = [ignore_xml, ignore_square_brackets, ignore_paths, ignore_tags, ignore_filenames]
 
 
 def ignore_all(string):
