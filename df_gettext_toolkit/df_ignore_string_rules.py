@@ -47,7 +47,28 @@ def test_ignore_square_brackets():
     assert ignore_square_brackets("[STATE_ADJ:ALL_SOLID:") is True
 
 
-all_rules = [ignore_xml, ignore_square_brackets]
+def ignore_paths(string):
+    if '/' not in string or ' ' in string:
+        return False
+
+    parts = re.split(r'[/.]', string)
+    return all(not part or part.islower() or part == '*' for part in parts)
+
+
+def test_ignore_paths():
+    assert ignore_paths('any text') is False
+    assert ignore_paths('/stdout.txt') is True
+    assert ignore_paths('data/save/current') is True
+    assert ignore_paths('data/init/interface.txt') is True
+    assert ignore_paths('objects/b_detail_plan_*.txt') is True
+    assert ignore_paths('/Resting') is False
+    assert ignore_paths('Upright Spear/Spike') is False
+    assert ignore_paths('Track/Ramp (NW)') is False
+    assert ignore_paths('Unknown Body Group/Relation Token(s): ') is False
+    assert ignore_paths('data/save/*.*') is True
+
+
+all_rules = [ignore_xml, ignore_square_brackets, ignore_paths]
 
 
 def ignore_all(string):
