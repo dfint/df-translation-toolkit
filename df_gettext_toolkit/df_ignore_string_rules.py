@@ -105,8 +105,20 @@ def ignore_word_with_number(string):
     return re.fullmatch(r"[A-Za-z]+\d+", string) is not None
 
 
+forbidden_starts = {"String:", "Adventure:", "Hotkey:", "Main:", "Location:", "Buildjob:", "Movie:", "Custom:",
+                    "Orders:", "Dwf Look:", "Arena Creature:", "Squad Schedule:", "Building List:", "Hot Keys:",
+                    "Load Game:", "old save:", "Stockpile Settings:", "Assign Trade:", "World:", "World Param:",
+                    "Command Line:", "Noble List:", "Arena Weather:", "Building Items:", "Arena Tree:",
+                    "Image Creator:", "Legends:", "World Gen:", "Setup game:", "World Generation:", "Choose name:",
+                    "View item:", "Trainer:", "Order:"}
+
+
+def ignore_starts(string: str):
+    return any(string.startswith(start) for start in forbidden_starts)
+
+
 all_rules = [ignore_xml, ignore_square_brackets, ignore_paths, ignore_tags, ignore_filenames, ignore_gl,
-             ignore_underline_separated_words, ignore_camel_case, ignore_word_with_number]
+             ignore_underline_separated_words, ignore_camel_case, ignore_word_with_number, ignore_starts]
 
 
 def ignore_all(string):
