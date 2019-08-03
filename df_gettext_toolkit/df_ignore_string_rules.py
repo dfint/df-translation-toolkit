@@ -90,7 +90,8 @@ def ignore_underline_separated_words(string):
     return re.fullmatch(r"[A-Za-z]+_.*", string) is not None
 
 
-all_rules = [ignore_xml, ignore_square_brackets, ignore_paths, ignore_tags, ignore_filenames, ignore_gl]
+all_rules = [ignore_xml, ignore_square_brackets, ignore_paths, ignore_tags, ignore_filenames, ignore_gl,
+             ignore_underline_separated_words]
 
 
 def ignore_all(string):
