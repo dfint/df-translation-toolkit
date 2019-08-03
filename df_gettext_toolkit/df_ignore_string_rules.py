@@ -91,12 +91,14 @@ def ignore_underline_separated_words(string):
 
 
 def ignore_camel_case(string):
-    return re.fullmatch(r"([A-Z][a-z]+){2,}", string) is not None
+    return re.fullmatch(r"([A-Z][a-z]+){2}.*", string) is not None
 
 
 def test_ignore_camel_case():
     assert ignore_camel_case("InitializeConditionVariable") is True
     assert ignore_camel_case("Initialize") is False
+    assert ignore_camel_case("SleepConditionVariableCS") is True
+    assert ignore_camel_case("CAPS") is False
 
 
 all_rules = [ignore_xml, ignore_square_brackets, ignore_paths, ignore_tags, ignore_filenames, ignore_gl,
