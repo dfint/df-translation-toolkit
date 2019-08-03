@@ -21,7 +21,7 @@ square_brackets_exceptions = {"DONE", "MORE", "CAN'T WORK", "WITH YOU", "LIP", "
 
 
 def ignore_square_brackets(string):
-    if '[' not in string and ']' not in string:
+    if not any(char in string for char in '[]:'):
         return False
     string = string.replace(r'\t', '\t')
     parts = re.split(r'[\[:\]]', string)
@@ -45,6 +45,7 @@ def test_ignore_square_brackets():
     assert ignore_square_brackets(r"\t\t[SYN_INJECTED][SYN_CONTACT][SYN_INHALED][SYN_INGESTED]") is True
     assert ignore_square_brackets("[STATE_ADJ:ALL_SOLID:frozen ") is False
     assert ignore_square_brackets("[STATE_ADJ:ALL_SOLID:") is True
+    assert ignore_square_brackets(":BP:BY_CATEGORY:ALL:EYE") is True
 
 
 def ignore_paths(string):
@@ -130,6 +131,7 @@ def test_ignore_all():
     assert ignore_all('any text') is False
     assert ignore_all('Any text') is False
     assert ignore_all('Any text.') is False
+    assert ignore_all('Another string: just a test') is False
 
 
 if __name__ == '__main__':
