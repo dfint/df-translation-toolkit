@@ -110,7 +110,8 @@ forbidden_starts = {"String:", "Adventure:", "Hotkey:", "Main:", "Location:", "B
                     "Load Game:", "old save:", "Stockpile Settings:", "Assign Trade:", "World:", "World Param:",
                     "Command Line:", "Noble List:", "Arena Weather:", "Building Items:", "Arena Tree:",
                     "Image Creator:", "Legends:", "World Gen:", "Setup game:", "World Generation:", "Choose name:",
-                    "View item:", "Trainer:", "Order:"}
+                    "View item:", "Trainer:", "Order:", "Unitview,", "Building,", "Designate,", "Stockpile,", "Setup,",
+                    "Manager,", "Work Order,", "Unitjob,", "Secondary Option", "Unrecognized ", "Missing ", "unknown"}
 
 
 def ignore_starts(string: str):
