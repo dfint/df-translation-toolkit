@@ -28,7 +28,6 @@ def ignore_square_brackets(string):
 
 
 def test_ignore_square_brackets():
-    assert ignore_square_brackets('any string') is False
     assert ignore_square_brackets('We have many drinks to choose from.  [You receive a list.]') is False
     assert ignore_square_brackets('[B]') is True
     assert ignore_square_brackets('[PRO_SUB]') is True
@@ -56,7 +55,6 @@ def ignore_paths(string):
 
 
 def test_ignore_paths():
-    assert ignore_paths('any text') is False
     assert ignore_paths('/stdout.txt') is True
     assert ignore_paths('data/save/current') is True
     assert ignore_paths('data/init/interface.txt') is True
@@ -73,3 +71,15 @@ all_rules = [ignore_xml, ignore_square_brackets, ignore_paths]
 
 def ignore_all(string):
     return any(rule(string) for rule in all_rules)
+
+
+def test_ignore_all():
+    assert ignore_all('any text') is False
+    assert ignore_all('Any text') is False
+    assert ignore_all('Any text.') is False
+
+
+if __name__ == '__main__':
+    test_ignore_xml()
+    test_ignore_square_brackets()
+    test_ignore_paths()
