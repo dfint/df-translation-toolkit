@@ -73,7 +73,8 @@ def extract_translatables_from_raws(file):
                 keys.add(tuple(tag))
                 yield (context, bracket_tag(tag), i)
 
-re_leading_spaces = re.compile("^([^\[]*)\[")
+
+re_leading_spaces = re.compile(r"^([^\[]*)\[")
 
 
 def translate_raw_file(file, dictionary):
