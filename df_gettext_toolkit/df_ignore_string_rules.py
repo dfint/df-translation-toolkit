@@ -79,11 +79,15 @@ def ignore_filenames(string):
 
 
 def test_ignore_filenames():
-    assert ignore_filenames("-detailed.bmp") == True
+    assert ignore_filenames("-detailed.bmp") is True
 
 
 def ignore_gl(string):
-    return re.fullmatch(r"(w?gl[A-Z]|W?GL_)[\w]+", string)
+    return re.fullmatch(r"(w?gl[A-Z]|W?GL_)[\w]+", string) is not None
+
+
+def ignore_underline_separated_words(string):
+    return re.fullmatch(r"[A-Za-z]+_.*", string) is not None
 
 
 all_rules = [ignore_xml, ignore_square_brackets, ignore_paths, ignore_tags, ignore_filenames, ignore_gl]
