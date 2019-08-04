@@ -138,10 +138,16 @@ def save_po(pofile, template, dictionary):
             print('msgstr ""', file=pofile)
 
 
+default_pot_header = """
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+"""
+
+
 def save_pot(pofile, template):
-    print('msgid ""', file=pofile)
-    print('msgstr ""', file=pofile)
-    print('"Content-Type: text/plain; charset=UTF-8\\n"', file=pofile)
+    print(default_pot_header.lstrip(), file=pofile)
     for line in template:
         print('', file=pofile)
         print('msgid "%s"' % escape_string(line), file=pofile)
