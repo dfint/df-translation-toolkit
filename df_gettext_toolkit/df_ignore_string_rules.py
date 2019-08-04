@@ -134,7 +134,7 @@ def ignore_starts(string: str):
 
 blacklist = {
     "bad allocation", "bad array new length", "Out of memory - aborting", "Fatal Error", "nameless",
-    "string too long", "invalid string position", "wb"
+    "string too long", "invalid string position", "wb", "!ARG", "current"
 }
 
 
@@ -142,7 +142,7 @@ def ignore_by_blacklist(string):
     return string in blacklist
 
 
-blacklisted_words = {'error', 'overflow', 'token', 'null'}
+blacklisted_words = {'error', 'overflow', 'token', 'null', 'sdl'}
 
 
 def ignore_by_blacklisted_words(string):
