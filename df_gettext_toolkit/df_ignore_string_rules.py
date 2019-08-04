@@ -157,9 +157,3 @@ def test_ignore_all():
     assert ignore_all('Any text') is False
     assert ignore_all('Any text.') is False
     assert ignore_all('Another string: just a test') is False
-
-
-if __name__ == '__main__':
-    test_ignore_xml()
-    test_ignore_square_brackets()
-    test_ignore_paths()
