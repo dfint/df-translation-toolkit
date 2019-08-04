@@ -88,7 +88,11 @@ def ignore_gl(string):
 
 
 def ignore_underline_separated_words(string):
-    return re.fullmatch(r"[A-Za-z]+_.*", string) is not None
+    return re.fullmatch(r"[A-Za-z0-9]+_.*", string) is not None
+
+
+def test_ignore_underline_separated_words():
+    assert ignore_underline_separated_words("index1_11") is True
 
 
 def ignore_camel_case(string):
@@ -106,21 +110,34 @@ def ignore_word_with_number(string):
     return re.fullmatch(r"[A-Za-z]+\d+", string) is not None
 
 
-forbidden_starts = {"String:", "Adventure:", "Hotkey:", "Main:", "Location:", "Buildjob:", "Movie:", "Custom:",
-                    "Orders:", "Dwf Look:", "Arena Creature:", "Squad Schedule:", "Building List:", "Hot Keys:",
-                    "Load Game:", "old save:", "Stockpile Settings:", "Assign Trade:", "World:", "World Param:",
-                    "Command Line:", "Noble List:", "Arena Weather:", "Building Items:", "Arena Tree:",
-                    "Image Creator:", "Legends:", "World Gen:", "Setup game:", "World Generation:", "Choose name:",
-                    "View item:", "Trainer:", "Order:", "Unitview,", "Building,", "Designate,", "Stockpile,", "Setup,",
-                    "Manager,", "Work Order,", "Unitjob,", "Secondary Option", "Unrecognized ", "Missing ", "unknown"}
+forbidden_starts = {
+    "String:", "Adventure:", "Hotkey:", "Main:", "Location:", "Buildjob:", "Movie:", "Custom:", "Orders:", "Dwf Look:",
+    "Arena Creature:", "Squad Schedule:", "Building List:", "Hot Keys:", "Load Game:", "old save:",
+    "Stockpile Settings:", "Assign Trade:", "World:", "World Param:", "Command Line:", "Noble List:", "Arena Weather:",
+    "Building Items:", "Arena Tree:", "Image Creator:", "Legends:", "World Gen:", "Setup game:", "World Generation:",
+    "Choose name:", "View item:", "Trainer:", "Order:", "Unitview,", "Building,", "Designate,", "Stockpile,", "Setup,",
+    "Manager,", "Work Order,", "Unitjob,", "Secondary Option", "Unrecognized ", "Missing ", "unknown", "Option ",
+    "Numpad ", "Move view/cursor "
+}
 
 
 def ignore_starts(string: str):
     return any(string.startswith(start) for start in forbidden_starts)
 
 
+blacklist = {
+    "bad allocation", "bad array new length", "Out of memory - aborting", "Fatal Error", "nameless",
+    "string too long", "invalid string position"
+}
+
+
+def ignore_by_blacklist(string):
+    return string in blacklist
+
+
 all_rules = [ignore_xml, ignore_square_brackets, ignore_paths, ignore_tags, ignore_filenames, ignore_gl,
-             ignore_underline_separated_words, ignore_camel_case, ignore_word_with_number, ignore_starts]
+             ignore_underline_separated_words, ignore_camel_case, ignore_word_with_number, ignore_starts,
+             ignore_by_blacklist]
 
 
 def ignore_all(string):
