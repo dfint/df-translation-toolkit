@@ -117,7 +117,7 @@ forbidden_starts = {
     "Building Items:", "Arena Tree:", "Image Creator:", "Legends:", "World Gen:", "Setup game:", "World Generation:",
     "Choose name:", "View item:", "Trainer:", "Order:", "Unitview,", "Building,", "Designate,", "Stockpile,", "Setup,",
     "Manager,", "Work Order,", "Unitjob,", "Secondary Option", "Unrecognized ", "Missing ", "unknown", "Option ",
-    "Numpad ", "Move view/cursor "
+    "Numpad ", "Move view/cursor ", "invalid ", "incorrect ", "NULL ", "Nuked ", "Cage: ",
 }
 
 
