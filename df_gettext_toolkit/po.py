@@ -143,11 +143,11 @@ msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\\n"
 "Content-Transfer-Encoding: 8bit\\n"
-"""
+""".lstrip()
 
 
 def save_pot(pofile, template):
-    print(default_pot_header.lstrip(), file=pofile)
+    print(default_pot_header, file=pofile)
     for line in template:
         print('', file=pofile)
         print('msgid "%s"' % escape_string(line), file=pofile)
