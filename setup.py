@@ -8,4 +8,4 @@ setup(name='df_gettext_toolkit',
       author_email='insolor@gmail.com',
       # license='MIT',
       packages=find_packages(),
-      zip_safe=False)
+      zip_safe=False, install_requires=['click'])
