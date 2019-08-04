@@ -1,23 +1,27 @@
-import sys
+import click
 import os
+import sys
 
 from .parse_raws import extract_translatables_from_raws
 from .po import format_po
 
-if len(sys.argv)<2:
-    path = '.'
-else:
-    path = sys.argv[1]
 
-raws = filter(lambda x: not x.startswith('language_'), os.listdir(path))
+@click.command()
+@click.argument('pot_filename')
+@click.argument('path', default='.')
+def main(pot_filename, path):
+    raw_files = filter(lambda x: not x.startswith('language_'), os.listdir(path))
 
-potfilename = sys.argv[2]
-with open(potfilename, 'w', encoding='utf-8') as potfile:
-    for file_name in raws:
-        print(file_name, file=sys.stderr)
-        fullpath = os.path.join(path, file_name)
-        if os.path.isfile(fullpath) and file_name.endswith('.txt'):
-            with open(fullpath) as file:
-                for context, item, line_number in extract_translatables_from_raws(file):
-                    print('#: %s:%d' % (file_name, line_number), file=potfile)
-                    print(format_po(msgid=item, msgstr="", msgctxt=context), file=potfile)
+    with open(pot_filename, 'w', encoding='utf-8') as potfile:
+        for file_name in raw_files:
+            print(file_name, file=sys.stderr)
+            full_path = os.path.join(path, file_name)
+            if os.path.isfile(full_path) and file_name.endswith('.txt'):
+                with open(full_path) as file:
+                    for context, item, line_number in extract_translatables_from_raws(file):
+                        print('#: %s:%d' % (file_name, line_number), file=potfile)  # source file : line number
+                        print(format_po(msgid=item, msgstr="", msgctxt=context), file=potfile)
+
+
+if __name__ == '__main__':
+    main()
