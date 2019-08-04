@@ -3,7 +3,7 @@ import os
 import sys
 
 from .parse_raws import extract_translatables_from_raws
-from .po import format_po
+from .po import format_po, default_pot_header
 
 
 @click.command()
@@ -14,6 +14,7 @@ def main(pot_filename, path, source_encoding):
     raw_files = filter(lambda x: not x.startswith('language_'), os.listdir(path))
 
     with open(pot_filename, 'w', encoding='utf-8') as potfile:
+        print(default_pot_header, file=potfile)
         for file_name in sorted(raw_files):
             full_path = os.path.join(path, file_name)
             if os.path.isfile(full_path) and file_name.endswith('.txt'):
