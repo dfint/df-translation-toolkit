@@ -4,7 +4,8 @@ import shutil
 
 from .parse_raws import translate_raw_file
 from .po import load_po
-from .cleanup_string import cleanup
+from .fix_translated_strings import cleanup_string
+
 
 def translate_raws(pofilename, path, encoding, silent=False):
     with open(pofilename, 'r', encoding='utf-8') as pofile:
@@ -24,7 +25,7 @@ def translate_raws(pofilename, path, encoding, silent=False):
                 with open(raw_file, 'w', encoding=encoding) as dest:
                     yield file_name
                     for line in translate_raw_file(src, dictionary):
-                        line = cleanup(line)
+                        line = cleanup_string(line)
                         try:
                             print(line, file=dest)
                         except UnicodeEncodeError as e:
