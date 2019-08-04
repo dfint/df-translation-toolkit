@@ -143,17 +143,17 @@ def ignore_by_blacklisted_words(string):
     return any(word in words for word in blacklisted_words)
 
 
-all_rules = [ignore_xml, ignore_square_brackets, ignore_paths, ignore_tags, ignore_filenames, ignore_gl,
-             ignore_underline_separated_words, ignore_camel_case, ignore_word_with_number, ignore_starts,
-             ignore_by_blacklist, ignore_by_blacklisted_words]
+all_rules_list = [ignore_xml, ignore_square_brackets, ignore_paths, ignore_tags, ignore_filenames, ignore_gl,
+                  ignore_underline_separated_words, ignore_camel_case, ignore_word_with_number, ignore_starts,
+                  ignore_by_blacklist, ignore_by_blacklisted_words]
 
 
-def ignore_all(string):
-    return any(rule(string) for rule in all_rules)
+def all_ignore_rules(string):
+    return any(rule(string) for rule in all_rules_list)
 
 
-def test_ignore_all():
-    assert ignore_all('any text') is False
-    assert ignore_all('Any text') is False
-    assert ignore_all('Any text.') is False
-    assert ignore_all('Another string: just a test') is False
+def test_all_ignore_rules():
+    assert all_ignore_rules('any text') is False
+    assert all_ignore_rules('Any text') is False
+    assert all_ignore_rules('Any text.') is False
+    assert all_ignore_rules('Another string: just a test') is False
