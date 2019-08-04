@@ -21,10 +21,10 @@ def load_mo(mofile, encoding='utf-8'):
     mofile.seek(8)
     number_of_strings = read_uint(mofile)
     original_string_table_offset = read_uint(mofile)
-    traslation_string_table_offset = read_uint(mofile)
+    translation_string_table_offset = read_uint(mofile)
     for i in range(number_of_strings):
         original_string = load_string(mofile, original_string_table_offset + i * 8)
-        translation_string = load_string(mofile, traslation_string_table_offset + i * 8)
+        translation_string = load_string(mofile, translation_string_table_offset + i * 8)
         if '\x04' in original_string:
             context, original_string = original_string.split('\x04')
         else:
