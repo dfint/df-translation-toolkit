@@ -96,7 +96,7 @@ def test_ignore_underline_separated_words():
 
 
 def ignore_camel_case(string):
-    return re.fullmatch(r"([A-Z][a-z]+){2}.*", string) is not None
+    return re.fullmatch(r"[A-Z][a-z]+[A-Z].*", string) is not None
 
 
 def test_ignore_camel_case():
@@ -104,6 +104,7 @@ def test_ignore_camel_case():
     assert ignore_camel_case("Initialize") is False
     assert ignore_camel_case("SleepConditionVariableCS") is True
     assert ignore_camel_case("CAPS") is False
+    assert ignore_camel_case("RefusedID/") is True
 
 
 def ignore_word_with_number(string):
@@ -135,12 +136,12 @@ def ignore_by_blacklist(string):
     return string in blacklist
 
 
-blacklisted_words = {'error', 'Error'}
+blacklisted_words = {'error', 'overflow', 'token', 'null'}
 
 
 def ignore_by_blacklisted_words(string):
     words = re.findall(r'\w+', string)
-    return any(word in words for word in blacklisted_words)
+    return any(word.lower() in words for word in blacklisted_words)
 
 
 all_rules_list = [ignore_xml, ignore_square_brackets, ignore_paths, ignore_tags, ignore_filenames, ignore_gl,
