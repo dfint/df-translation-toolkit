@@ -49,6 +49,9 @@ def test_ignore_square_brackets():
 
 
 def ignore_paths(string):
+    if re.search(r'\.[a-z]{3}', string):
+        return True
+
     if '/' not in string or ' ' in string:
         return False
 
@@ -66,6 +69,8 @@ def test_ignore_paths():
     assert ignore_paths('Track/Ramp (NW)') is False
     assert ignore_paths('Unknown Body Group/Relation Token(s): ') is False
     assert ignore_paths('data/save/*.*') is True
+    assert ignore_paths('.bmp') is True
+    assert ignore_paths('grinding.') is False
 
 
 ignore_tags_exceptions = {'CLT'}
@@ -118,7 +123,8 @@ forbidden_starts = {
     "Building Items:", "Arena Tree:", "Image Creator:", "Legends:", "World Gen:", "Setup game:", "World Generation:",
     "Choose name:", "View item:", "Trainer:", "Order:", "Unitview,", "Building,", "Designate,", "Stockpile,", "Setup,",
     "Manager,", "Work Order,", "Unitjob,", "Secondary Option", "Unrecognized ", "Missing ", "unknown", "Option ",
-    "Numpad ", "Move view/cursor ", "invalid ", "incorrect ", "NULL ", "Nuked ", "Cage: ",
+    "Numpad ", "Move view/cursor ", "invalid ", "incorrect ", "NULL ", "Nuked ", "Cage: ", ": REQUIRED_", ": MANDATE_",
+    ": DEMAND_",
 }
 
 
@@ -128,7 +134,7 @@ def ignore_starts(string: str):
 
 blacklist = {
     "bad allocation", "bad array new length", "Out of memory - aborting", "Fatal Error", "nameless",
-    "string too long", "invalid string position"
+    "string too long", "invalid string position", "wb"
 }
 
 
@@ -140,8 +146,12 @@ blacklisted_words = {'error', 'overflow', 'token', 'null'}
 
 
 def ignore_by_blacklisted_words(string):
-    words = re.findall(r'\w+', string)
-    return any(word.lower() in words for word in blacklisted_words)
+    words = re.findall(r'\w+', string.lower())
+    return any(blacklisted in words for blacklisted in blacklisted_words)
+
+
+def test_ignore_by_blacklisted_words():
+    assert ignore_by_blacklisted_words("*** Error(s) finalizing the creature ") is True
 
 
 all_rules_list = [ignore_xml, ignore_square_brackets, ignore_paths, ignore_tags, ignore_filenames, ignore_gl,
