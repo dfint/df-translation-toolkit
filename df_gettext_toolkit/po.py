@@ -149,6 +149,4 @@ msgstr ""
 def save_pot(pofile, template):
     print(default_pot_header, file=pofile)
     for line in template:
-        print('', file=pofile)
-        print('msgid "%s"' % escape_string(line), file=pofile)
-        print('msgstr ""', file=pofile)
+        print(format_po(line), file=pofile)
