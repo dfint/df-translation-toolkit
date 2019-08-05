@@ -134,7 +134,10 @@ def ignore_starts(string: str):
 
 blacklist = {
     "bad allocation", "bad array new length", "Out of memory - aborting", "Fatal Error", "nameless",
-    "string too long", "invalid string position", "wb", "!ARG", "current"
+    "string too long", "invalid string position", "wb", "!ARG", "current",
+    'A!', 'A+', 'Br', 'Cf', 'D!', 'D+', 'Dr', 'Dw', 'Dz', 'D~', 'Exh', 'F!', 'F+', 'Gx', 'H!', 'H~', 'In', 'Lg', 'Na',
+    'Nm-', 'Ns', 'Of', 'Ovx', 'Pb!', 'Pb+', 'Pb~', 'Pn!', 'Pn+', 'Pn~', 'St', 'Sw!', 'Sw+', 'Sw~', 'Sx', 'S~', 'T!',
+    'Tir', 'Tn', 'T~', 'V', 'Wd', 'X!', 'X~'
 }
 
 
