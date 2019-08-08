@@ -147,6 +147,8 @@ blacklist = {
     "olookx", "olooky", "menuposition", "looklist", "unitprintstack", "title", "init", "mainview", "texture",
     "interactitem", "interactinvslot", "throwitem", "dunginv", "page", "oscrolly", "oscrollz", "updatelightstate",
     "handleannounce", "preserveannounce", "manucomp", "enabler",
+
+    "Empty biased index vector", "Unknown exception", "bad cast", "data",
 }
 
 
