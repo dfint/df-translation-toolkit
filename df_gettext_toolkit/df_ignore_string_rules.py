@@ -134,11 +134,9 @@ def ignore_starts(string: str):
 
 blacklist = {
     "bad allocation", "bad array new length", "Out of memory - aborting", "Fatal Error", "nameless",
-    "string too long", "invalid string position", "wb", "!ARG", "current",
+    "string too long", "invalid string position", "!ARG", "current",
 
-    'A!', 'A+', 'Br', 'Cf', 'D!', 'D+', 'Dr', 'Dw', 'Dz', 'D~', 'Exh', 'F!', 'F+', 'Gx', 'H!', 'H~', 'In', 'Lg', 'Na',
-    'Nm-', 'Ns', 'Of', 'Ovx', 'Pb!', 'Pb+', 'Pb~', 'Pn!', 'Pn+', 'Pn~', 'St', 'Sw!', 'Sw+', 'Sw~', 'Sx', 'S~', 'T!',
-    'Tir', 'Tn', 'T~', 'V', 'Wd', 'X!', 'X~',
+    'Exh', 'Ovx', 'Pb!', 'Pb+', 'Pb~', 'Pn!', 'Pn+', 'Pn~', 'Sw!', 'Sw+', 'Sw~', 'Tir',
 
     "scrollx", "scrolly", "buildreq", "jobvalue", "version", "gview", "assignbuildingjobs", "year", "assigndesjobs",
     "weathertimer", "season", "line", "linechar", "scrollz", "linelim", "gametype", "point", "gamemode", "cursor",
@@ -168,9 +166,21 @@ def test_ignore_by_blacklisted_words():
     assert ignore_by_blacklisted_words("*** Error(s) finalizing the creature ") is True
 
 
+allowed_short_words = {
+    'A', 'a', 'an', 'er', 'us', 'i', # sarcofag-us, sacrofag-i
+    'as', 'in', 'st', 'nd', 'rd', 'th', 'me', 'my', 'no', 'to', 'b.', 'd.',
+    'At', 'Up', 'On', 'of', 'at', 'by'
+    'He', 'We'
+}
+
+
+def ignore_short_words(string):
+    return len(string) <= 2 and string.strip() not in allowed_short_words
+
+
 all_rules_list = [ignore_xml, ignore_square_brackets, ignore_paths, ignore_tags, ignore_filenames, ignore_gl,
                   ignore_underline_separated_words, ignore_camel_case, ignore_word_with_number, ignore_starts,
-                  ignore_by_blacklist, ignore_by_blacklisted_words]
+                  ignore_by_blacklist, ignore_by_blacklisted_words, ignore_short_words]
 
 
 def all_ignore_rules(string):
