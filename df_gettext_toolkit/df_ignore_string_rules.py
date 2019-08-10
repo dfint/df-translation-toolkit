@@ -100,6 +100,15 @@ def test_ignore_underline_separated_words():
     assert ignore_underline_separated_words("index1_11") is True
 
 
+def ignore_dash_prepended_strings(string):
+    return re.fullmatch(r"-[a-z_]+-?", string) is not None
+
+
+def test_ignore_dash_prepended_strings():
+    assert ignore_dash_prepended_strings('-world_sites_and_pops') is True
+    assert ignore_dash_prepended_strings('-site_map-') is True
+
+
 def ignore_camel_case(string):
     return re.fullmatch(r"[A-Z][a-z]+[A-Z].*", string) is not None
 
