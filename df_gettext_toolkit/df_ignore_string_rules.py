@@ -193,7 +193,7 @@ def ignore_short_words(string):
 
 all_rules_list = [ignore_xml, ignore_square_brackets, ignore_paths, ignore_tags, ignore_filenames, ignore_gl,
                   ignore_underline_separated_words, ignore_camel_case, ignore_word_with_number, ignore_starts,
-                  ignore_by_blacklist, ignore_by_blacklisted_words, ignore_short_words]
+                  ignore_by_blacklist, ignore_by_blacklisted_words, ignore_short_words, ignore_dash_prepended_strings]
 
 
 def all_ignore_rules(string):
