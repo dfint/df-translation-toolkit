@@ -167,7 +167,7 @@ def test_ignore_by_blacklisted_words():
 
 
 allowed_short_words = {
-    'A', 'a', 'an', 'er', 'us', 'i', # sarcofag-us, sacrofag-i
+    'A', 'a', 'an', 'er', 'us', 'i',  # sarcofag-us, sacrofag-i
     'as', 'in', 'st', 'nd', 'rd', 'th', 'me', 'my', 'no', 'to', 'b.', 'd.',
     'At', 'Up', 'On', 'of', 'at', 'by'
     'He', 'We'
