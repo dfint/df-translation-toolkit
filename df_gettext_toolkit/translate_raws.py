@@ -7,8 +7,8 @@ from .po import load_po
 from .fix_translated_strings import cleanup_string
 
 
-def translate_raws(pofilename, path, encoding, silent=False):
-    with open(pofilename, 'r', encoding='utf-8') as pofile:
+def translate_raws(po_filename, path, encoding, silent=False):
+    with open(po_filename, 'r', encoding='utf-8') as pofile:
         dictionary = {(item['msgid'],item['msgctxt']): item['msgstr'] for item in load_po(pofile)}
     
     raws = filter(lambda x: not x.startswith('language_'), os.listdir(path))
@@ -36,12 +36,17 @@ def translate_raws(pofilename, path, encoding, silent=False):
                             
                             print(line, file=dest)
 
-if __name__ == "__main__":
-    if len(sys.argv)<4:
+
+def main():
+    if len(sys.argv) < 4:
         sys.exit()
-    
-    pofilename = sys.argv[1]
+
+    po_filename = sys.argv[1]
     path = sys.argv[2]
     encoding = sys.argv[3]
-    for filename in translate_raws(pofilename, path, encoding):
+    for filename in translate_raws(po_filename, path, encoding):
         print(filename, file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()

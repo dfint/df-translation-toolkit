@@ -3,38 +3,40 @@ import sys
 from .translate_raws import translate_raws
 from .translate_plain_text import translate_plain_text
 
-base_path = sys.argv[1]
-po_file_path = sys.argv[2]
-encoding = 'cp1251' if len(sys.argv) < 4 else sys.argv[3]
 
-prefix = '' if len(sys.argv) < 5 else sys.argv[4]
+if __name__ == '__main__':
+    base_path = sys.argv[1]
+    po_file_path = sys.argv[2]
+    encoding = 'cp1251' if len(sys.argv) < 4 else sys.argv[3]
 
-patterns = {
-    r'raw\objects': dict(
-        po_filename='raw-objects.po',
-        func=translate_raws,
-    ),
-    r'data_src': dict(
-        po_filename='uncompressed.po',
-        func=lambda *args: translate_plain_text(*args, join_paragraphs=True),
-    ),
-    r'data\speech': dict(
-        po_filename='speech.po',
-        func=lambda *args: translate_plain_text(*args, join_paragraphs=False),
-    ),
-    r'raw\objects\text': dict(
-        po_filename='text.po',
-        func=lambda *args: translate_plain_text(*args, join_paragraphs=False),
-    ),
-}
+    prefix = '' if len(sys.argv) < 5 else sys.argv[4]
 
-for cur_dir, _, files in os.walk(base_path):
-    for pattern in patterns:
-        if cur_dir.endswith(pattern):
-            print(cur_dir, file=sys.stderr)
-            print(file=sys.stderr)
-            po_filename = os.path.join(po_file_path, prefix+patterns[pattern]['po_filename'])
-            func = patterns[pattern]['func']
-            for filename in func(po_filename, cur_dir, encoding):
-                print(filename, file=sys.stderr)
-            print(file=sys.stderr)
+    patterns = {
+        r'raw\objects': dict(
+            po_filename='raw-objects.po',
+            func=translate_raws,
+        ),
+        r'data_src': dict(
+            po_filename='uncompressed.po',
+            func=lambda *args: translate_plain_text(*args, join_paragraphs=True),
+        ),
+        r'data\speech': dict(
+            po_filename='speech.po',
+            func=lambda *args: translate_plain_text(*args, join_paragraphs=False),
+        ),
+        r'raw\objects\text': dict(
+            po_filename='text.po',
+            func=lambda *args: translate_plain_text(*args, join_paragraphs=False),
+        ),
+    }
+
+    for cur_dir, _, files in os.walk(base_path):
+        for pattern in patterns:
+            if cur_dir.endswith(pattern):
+                print(cur_dir, file=sys.stderr)
+                print(file=sys.stderr)
+                po_filename = os.path.join(po_file_path, prefix+patterns[pattern]['po_filename'])
+                func = patterns[pattern]['func']
+                for filename in func(po_filename, cur_dir, encoding):
+                    print(filename, file=sys.stderr)
+                print(file=sys.stderr)

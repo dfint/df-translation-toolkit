@@ -71,7 +71,7 @@ def extract_translatables_from_raws(file):
                     tag = tag[:last]
                     tag.append('')  # Add an empty element to the tag to mark the tag as not completed
                 keys.add(tuple(tag))
-                yield (context, bracket_tag(tag), i)
+                yield context, bracket_tag(tag), i
 
 
 re_leading_spaces = re.compile(r"^([^\[]*)\[")
@@ -132,7 +132,9 @@ def skip_tags(s):
 
 
 def parse_plain_text_file(file, join_paragraphs=True):
-    is_translatable = lambda s: any(char.islower() for char in skip_tags(s))
+    def local_is_translatable(s):
+        return any(char.islower() for char in skip_tags(s))
+
     paragraph = ''
     if join_paragraphs:
         line = file.readline()  # The first line with the file name
@@ -140,7 +142,7 @@ def parse_plain_text_file(file, join_paragraphs=True):
     
     for line in file:
         if join_paragraphs:
-            if is_translatable(line):
+            if local_is_translatable(line):
                 if '~' in line or line[0] == '[' and not (paragraph and paragraph.rstrip()[-1].isalpha()):
                     if paragraph:
                         yield paragraph, True
@@ -159,7 +161,7 @@ def parse_plain_text_file(file, join_paragraphs=True):
                 
                 yield line, False  # Not translatable line
         else:
-            yield line, is_translatable(line)
+            yield line, local_is_translatable(line)
     
     if paragraph:
         yield paragraph, True

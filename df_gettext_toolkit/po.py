@@ -31,10 +31,10 @@ def escape_string(s):
             .replace('\"', r'\"')
 
 
-def load_po(pofile):
+def load_po(po_file):
     item = defaultdict(str)
     prev = None
-    for line in pofile:
+    for line in po_file:
         line = line.strip()
         if not line:
             if item:
@@ -93,22 +93,22 @@ def format_po(msgid, msgstr="", msgctxt=None):
     return s
 
 
-def save_po(pofile, template, dictionary):
-    print('msgid ""', file=pofile)
-    print('msgstr ""', file=pofile)
-    print('"Content-Type: text/plain; charset=UTF-8\\n"', file=pofile)
-    print('"Language: ru_RU\\n"', file=pofile)
+def save_po(po_file, template, dictionary):
+    print('msgid ""', file=po_file)
+    print('msgstr ""', file=po_file)
+    print('"Content-Type: text/plain; charset=UTF-8\\n"', file=po_file)
+    print('"Language: ru_RU\\n"', file=po_file)
     for text in template:
-        print('', file=pofile)
+        print('', file=po_file)
         if text in dictionary and len(dictionary[text]) > 1:
             for item in dictionary[text][1:]:
                 if len(item.strip()) > 0:
-                    print('#', item.strip(), file=pofile)  # translator comments
-        print('msgid "%s"' % escape_string(text), file=pofile)
+                    print('#', item.strip(), file=po_file)  # translator comments
+        print('msgid "%s"' % escape_string(text), file=po_file)
         if text in dictionary:
-            print('msgstr "%s"' % escape_string(dictionary[text][0]), file=pofile)
+            print('msgstr "%s"' % escape_string(dictionary[text][0]), file=po_file)
         else:
-            print('msgstr ""', file=pofile)
+            print('msgstr ""', file=po_file)
 
 
 default_pot_header = """
@@ -119,7 +119,7 @@ msgstr ""
 """.lstrip()
 
 
-def save_pot(pofile, template):
-    print(default_pot_header, file=pofile)
+def save_pot(po_file, template):
+    print(default_pot_header, file=po_file)
     for line in template:
-        print(format_po(line), file=pofile)
+        print(format_po(line), file=po_file)
