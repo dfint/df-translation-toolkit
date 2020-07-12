@@ -1,5 +1,6 @@
 import os
 import sys
+from operator import itemgetter
 from .parse_raws import parse_plain_text_file
 from .po import format_po
 
@@ -48,8 +49,8 @@ def main():
     join_paragraphs = '--split' not in sys.argv[1:]
 
     keys = set()
-    for cur_dir, _, files in os.walk(path):
-        for file_name in files:
+    for cur_dir, _, files in sorted(os.walk(path), key=itemgetter(0)):
+        for file_name in sorted(files):
             full_path = os.path.join(cur_dir, file_name)
             if os.path.isfile(full_path) and os.path.splitext(file_name)[1] == '.txt':
                 print(full_path, file=sys.stderr)

@@ -11,7 +11,7 @@ if __name__ == '__main__':
 
     print('Path:', path, file=sys.stderr)
 
-    for filename in os.listdir(path):
+    for filename in sorted(os.listdir(path)):
         print('File:', filename, file=sys.stderr)
         full_path = os.path.join(path, filename)
         if os.path.isfile(full_path) and os.path.splitext(filename)[1] == '.txt':
