@@ -135,33 +135,40 @@ def parse_plain_text_file(file, join_paragraphs=True):
     def local_is_translatable(s):
         return any(char.islower() for char in skip_tags(s))
 
+    start_line = 1
+
     paragraph = ''
     if join_paragraphs:
         line = file.readline()  # The first line with the file name
-        yield line, False
+        yield line, False, 1
+        start_line += 1
+
+    paragraph_start_line = start_line
     
-    for line in file:
+    for line_number, line in enumerate(file, start_line):
         if join_paragraphs:
             if local_is_translatable(line):
                 if '~' in line or line[0] == '[' and not (paragraph and paragraph.rstrip()[-1].isalpha()):
                     if paragraph:
-                        yield paragraph, True
+                        yield paragraph, True, paragraph_start_line
                         paragraph = ''
+                        paragraph_start_line = line_number
                     
                     if line.rstrip().endswith(']'):
-                        yield line, True
+                        yield line, True, line_number
                     else:
                         paragraph += line
                 else:
                     paragraph += line
             else:
                 if paragraph:
-                    yield paragraph, True
+                    yield paragraph, True, paragraph_start_line
                     paragraph = ''
+                    paragraph_start_line = line_number
                 
-                yield line, False  # Not translatable line
+                yield line, False, line_number  # Not translatable line
         else:
-            yield line, local_is_translatable(line)
+            yield line, local_is_translatable(line), line_number
     
     if paragraph:
-        yield paragraph, True
+        yield paragraph, True, paragraph_start_line

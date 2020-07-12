@@ -16,7 +16,7 @@ if __name__ == '__main__':
         full_path = os.path.join(path, filename)
         if os.path.isfile(full_path) and os.path.splitext(filename)[1] == '.txt':
             with open(full_path) as file:
-                for i, line in enumerate(file):
+                for i, line in enumerate(file, 1):
                     if line.rstrip('\n'):
                         print('#: %s:%d' % (filename, i))
                         print(format_po(msgid=line.rstrip('\n')))
