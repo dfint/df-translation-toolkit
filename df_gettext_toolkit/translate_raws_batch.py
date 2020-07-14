@@ -31,8 +31,10 @@ if __name__ == '__main__':
     }
 
     for cur_dir, _, files in os.walk(base_path):
+        print(cur_dir)
         for pattern in patterns:
-            if cur_dir.endswith(pattern):
+            if cur_dir.replace('/', '\\').endswith(pattern):
+                print(f"Matched {pattern} pattern")
                 print(cur_dir, file=sys.stderr)
                 print(file=sys.stderr)
                 po_filename = os.path.join(po_file_path, prefix+patterns[pattern]['po_filename'])
