@@ -21,7 +21,7 @@ def translate_raws(po_filename, path, encoding, silent=False):
             if not os.path.exists(bak_name):
                 shutil.copy(raw_file, bak_name)
             
-            with open(bak_name) as src:
+            with open(bak_name, encoding='cp437') as src:
                 with open(raw_file, 'w', encoding=encoding) as dest:
                     yield file_name
                     for line in translate_raw_file(src, dictionary):
