@@ -54,15 +54,7 @@ def ignore_dash_prepended_strings(string):
 
 
 def ignore_camel_case(string):
-    return re.fullmatch(r"[A-Z][a-z]+[A-Z].*", string) is not None
-
-
-def test_ignore_camel_case():
-    assert ignore_camel_case("InitializeConditionVariable") is True
-    assert ignore_camel_case("Initialize") is False
-    assert ignore_camel_case("SleepConditionVariableCS") is True
-    assert ignore_camel_case("CAPS") is False
-    assert ignore_camel_case("RefusedID/") is True
+    return re.search(r"[a-z]+[A-Z]", string) is not None
 
 
 def ignore_word_with_number(string):
@@ -100,7 +92,12 @@ blacklist = {
     "interactitem", "interactinvslot", "throwitem", "dunginv", "page", "oscrolly", "oscrollz", "updatelightstate",
     "handleannounce", "preserveannounce", "manucomp", "enabler",
 
-    "Empty biased index vector", "Unknown exception", "bad cast", "data",
+    "Empty biased index vector", "Unknown exception", "bad cast", "data", "region", "text", "raw",
+    
+    'Backspace', 'Enter', 'Up', 'Delete', 'Leftbracket', 'Backslash', 'Rightbracket', 'Caret', 'Underscore',
+    'Backquote', 'Rshift', 'Lshift', 'Rctrl', 'Lctrl', 'Ralt', 'Lalt', 'Rmeta', 'Lmeta', 'Numlock', 'Capslock',
+    'Scrollock', 'Down', 'Right', 'Insert', 'End', 'Page Up', 'Page Down', 'Euro', 'Undo', 'Lsuper', 'Rsuper',
+    'Print', 'Sysreq', 'Menu', 'Space'
 }
 
 

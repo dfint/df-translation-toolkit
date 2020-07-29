@@ -61,6 +61,15 @@ def test_ignore_by_blacklisted_words():
     assert ignore_by_blacklisted_words("*** Error(s) finalizing the creature ") is True
 
 
+def test_ignore_camel_case():
+    assert ignore_camel_case("InitializeConditionVariable") is True
+    assert ignore_camel_case("Initialize") is False
+    assert ignore_camel_case("SleepConditionVariableCS") is True
+    assert ignore_camel_case("CAPS") is False
+    assert ignore_camel_case("RefusedID/") is True
+    assert ignore_camel_case("plF") is True
+
+
 def test_all_ignore_rules():
     assert all_ignore_rules('any text') is False
     assert all_ignore_rules('Any text') is False
