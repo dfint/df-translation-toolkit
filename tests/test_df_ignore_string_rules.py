@@ -70,6 +70,11 @@ def test_ignore_camel_case():
     assert ignore_camel_case("plF") is True
 
 
+def test_ignore_by_blacklisted_substrings():
+    assert ignore_by_blacklisted_substrings('plotter (assassinate) placed out of bounds') is True
+    assert ignore_by_blacklisted_substrings('undefined local creature material set to default: ') is True
+
+
 def test_all_ignore_rules():
     assert all_ignore_rules('any text') is False
     assert all_ignore_rules('Any text') is False

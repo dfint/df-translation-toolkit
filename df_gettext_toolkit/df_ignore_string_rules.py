@@ -69,7 +69,7 @@ forbidden_starts = {
     "Choose name:", "View item:", "Trainer:", "Order:", "Unitview,", "Building,", "Designate,", "Stockpile,", "Setup,",
     "Manager,", "Work Order,", "Unitjob,", "Secondary Option", "Unrecognized ", "Missing ", "unknown", "Option ",
     "Numpad ", "Move view/cursor ", "invalid ", "incorrect ", "NULL ", "Nuked ", "Cage: ", ": REQUIRED_", ": MANDATE_",
-    ": DEMAND_",
+    ": DEMAND_", "DOUBLE TAGGED ITEM:", "Patched save:"
 }
 
 
@@ -77,7 +77,7 @@ def ignore_starts(string: str):
     return any(string.startswith(start) for start in forbidden_starts)
 
 
-blacklist = {
+blacklist_full_string = {
     "bad allocation", "bad array new length", "Out of memory - aborting", "Fatal Error", "nameless",
     "string too long", "invalid string position", "!ARG", "current",
 
@@ -92,20 +92,23 @@ blacklist = {
     "interactitem", "interactinvslot", "throwitem", "dunginv", "page", "oscrolly", "oscrollz", "updatelightstate",
     "handleannounce", "preserveannounce", "manucomp", "enabler",
 
-    "Empty biased index vector", "Unknown exception", "bad cast", "data", "region", "text", "raw",
+    "Empty biased index vector", "Unknown exception", "bad cast",
+    
+    "data", "region", "text", "raw", 'site-', 'feature-',
     
     'Backspace', 'Enter', 'Up', 'Delete', 'Leftbracket', 'Backslash', 'Rightbracket', 'Caret', 'Underscore',
     'Backquote', 'Rshift', 'Lshift', 'Rctrl', 'Lctrl', 'Ralt', 'Lalt', 'Rmeta', 'Lmeta', 'Numlock', 'Capslock',
     'Scrollock', 'Down', 'Right', 'Insert', 'End', 'Page Up', 'Page Down', 'Euro', 'Undo', 'Lsuper', 'Rsuper',
-    'Print', 'Sysreq', 'Menu', 'Space'
+    'Print', 'Sysreq', 'Menu', 'Space', 'Tab', 'Shift+', 'Ctrl+', 'Alt+', 'Question', 'Quotedbl', 'Hash', 'Ampersand',
+    'Quote', 'Leftparen', 'Rightparen', 'Left'
 }
 
 
-def ignore_by_blacklist(string):
-    return string in blacklist
+def ignore_by_blacklist_full_string(string):
+    return string in blacklist_full_string
 
 
-blacklisted_words = {'error', 'overflow', 'token', 'null', 'sdl'}
+blacklisted_words = {'error', 'overflow', 'token', 'null', 'sdl', 'REJECTION', 'font', 'Font'}
 
 
 def ignore_by_blacklisted_words(string):
@@ -128,9 +131,18 @@ def ignore_short_words(string):
     return len(string) <= 2 and string.strip() not in allowed_short_words
 
 
+blacklisted_substrings = {
+    'placed out of bounds', 'set to default', 'Patched save'
+}
+
+def ignore_by_blacklisted_substrings(string):
+    return any(substring in string for substring in blacklisted_substrings)
+
+
 all_rules_list = [ignore_xml, ignore_square_brackets, ignore_paths, ignore_tags, ignore_filenames, ignore_gl,
                   ignore_underline_separated_words, ignore_camel_case, ignore_word_with_number, ignore_starts,
-                  ignore_by_blacklist, ignore_by_blacklisted_words, ignore_short_words, ignore_dash_prepended_strings]
+                  ignore_by_blacklist_full_string, ignore_by_blacklisted_words, ignore_short_words, ignore_dash_prepended_strings,
+                  ignore_by_blacklisted_substrings]
 
 
 def all_ignore_rules(string):
