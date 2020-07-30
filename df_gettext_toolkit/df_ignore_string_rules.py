@@ -100,7 +100,12 @@ blacklist_full_string = {
     'Backquote', 'Rshift', 'Lshift', 'Rctrl', 'Lctrl', 'Ralt', 'Lalt', 'Rmeta', 'Lmeta', 'Numlock', 'Capslock',
     'Scrollock', 'Down', 'Right', 'Insert', 'End', 'Page Up', 'Page Down', 'Euro', 'Undo', 'Lsuper', 'Rsuper',
     'Print', 'Sysreq', 'Menu', 'Space', 'Tab', 'Shift+', 'Ctrl+', 'Alt+', 'Question', 'Quotedbl', 'Hash', 'Ampersand',
-    'Quote', 'Leftparen', 'Rightparen', 'Left'
+    'Quote', 'Leftparen', 'Rightparen', 'Left', "Colon", "Semicolon", "Less", "Equals", "Greater", "At", "Asterisk",
+    "Plus", "Comma", "Minus", "Period", "Slash", "Exclaim", "Dollar", "Mode", 
+    
+    "_DIV ", "End of macro",
+    
+    "2DASYNC", "2DHW", "2DSW"
 }
 
 
