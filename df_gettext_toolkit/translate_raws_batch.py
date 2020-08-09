@@ -1,16 +1,18 @@
 import os
 import sys
+
+import click
+
 from .translate_raws import translate_raws
 from .translate_plain_text import translate_plain_text
 
 
-if __name__ == '__main__':
-    base_path = sys.argv[1]
-    po_file_path = sys.argv[2]
-    encoding = 'cp1251' if len(sys.argv) < 4 else sys.argv[3]
-
-    prefix = '' if len(sys.argv) < 5 else sys.argv[4]
-
+@click.command()
+@click.argument('base_path')
+@click.argument('po_file_path')
+@click.option('--encoding', default='cp1251')
+@click.option('--prefix', default='')
+def main(base_path, po_file_path, encoding, prefix):
     patterns = {
         r'raw\objects': dict(
             po_filename='raw-objects.po',
