@@ -7,9 +7,9 @@ from .po import load_po
 from .fix_translated_strings import cleanup_string
 
 
-def translate_raws(po_filename, path, encoding, silent=False):
+def translate_raws(po_filename, path, encoding: str, silent=False):
     with open(po_filename, 'r', encoding='utf-8') as pofile:
-        dictionary = {(item['msgid'],item['msgctxt']): item['msgstr'] for item in load_po(pofile)}
+        dictionary = {(item['msgid'], item['msgctxt']): item['msgstr'] for item in load_po(pofile)}
     
     raws = filter(lambda x: not x.startswith('language_'), os.listdir(path))
     for file_name in raws:
@@ -31,7 +31,7 @@ def translate_raws(po_filename, path, encoding, silent=False):
                         except UnicodeEncodeError as e:
                             line = line.encode(encoding, errors='backslashreplace').decode(encoding)
                             print('Some characters of this line: %r '
-                                  'cannot be represented in cp%d. Using backslashreplace mode.' %
+                                  'cannot be represented in %s encoding. Using backslashreplace mode.' %
                                   (line, encoding), file=sys.stderr)
                             
                             print(line, file=dest)
