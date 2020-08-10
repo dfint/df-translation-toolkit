@@ -33,16 +33,21 @@ def main(base_path, po_file_path, encoding, prefix):
         ),
     }
 
-    for cur_dir in Path(base_path).glob("*"):
+    po_file_path = Path(po_file_path)
+
+    for cur_dir in Path(base_path).rglob("*"):
         if cur_dir.is_dir():
-            print(cur_dir)
             for pattern in patterns:
                 if cur_dir.match('*/' + pattern):
                     print(f"Matched {pattern} pattern")
                     print(cur_dir, file=sys.stderr)
                     print(file=sys.stderr)
-                    po_filename = Path.joinpath(po_file_path, prefix+patterns[pattern]['po_filename'])
+                    po_filename = po_file_path / (prefix + patterns[pattern]['po_filename'])
                     func = patterns[pattern]['func']
                     for filename in func(po_filename, cur_dir, encoding):
                         print(filename, file=sys.stderr)
                     print(file=sys.stderr)
+
+
+if __name__ == '__main__':
+    main()
