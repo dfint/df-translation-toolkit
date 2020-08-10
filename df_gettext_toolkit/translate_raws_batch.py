@@ -10,10 +10,11 @@ from .translate_plain_text import translate_plain_text
 
 @click.command()
 @click.argument('base_path')
-@click.argument('po_file_path')
+@click.argument('po_directory')
 @click.option('--encoding', default='cp1251')
-@click.option('--prefix', default='')
-def main(base_path, po_file_path, encoding, prefix):
+@click.option('--po_name_prefix', default='')
+@click.option('--po_name_postfix', default='')
+def main(base_path, po_directory, encoding, po_name_prefix, po_name_postfix):
     patterns = {
         'raw/objects': dict(
             po_filename='raw-objects.po',
@@ -33,7 +34,7 @@ def main(base_path, po_file_path, encoding, prefix):
         ),
     }
 
-    po_file_path = Path(po_file_path)
+    po_directory = Path(po_directory)
 
     for cur_dir in Path(base_path).rglob("*"):
         if cur_dir.is_dir():
@@ -42,9 +43,15 @@ def main(base_path, po_file_path, encoding, prefix):
                     print(f"Matched {pattern} pattern")
                     print(cur_dir, file=sys.stderr)
                     print(file=sys.stderr)
-                    po_filename = po_file_path / (prefix + patterns[pattern]['po_filename'])
+
+                    po_filename = po_name_prefix + patterns[pattern]['po_filename']
+                    if po_name_postfix:
+                        name, sep, ext = po_filename.partition('.')
+                        po_filename = name + po_name_postfix + sep + ext
+
+                    po_file_path = po_directory / po_filename
                     func = patterns[pattern]['func']
-                    for filename in func(po_filename, cur_dir, encoding):
+                    for filename in func(po_file_path, cur_dir, encoding):
                         print(filename, file=sys.stderr)
                     print(file=sys.stderr)
 
