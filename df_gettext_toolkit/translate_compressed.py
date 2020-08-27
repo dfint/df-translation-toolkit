@@ -18,6 +18,18 @@ def translate_compressed(po_filename, path, encoding):
             if not backup_file.exists():
                 shutil.copy(file, backup_file)
 
+            is_index_file = file.name == 'index'
+
             with open(backup_file, 'rb') as src:
-                with open(file, 'wb') as dest:
+                with open(file, 'w', encoding=encoding) as dest:
                     yield file.name
+
+                    lines = (line.decode('cp437') for line in decode_data(src, is_index_file))
+                    for text_block, is_translatable, _ in parse_plain_text_file(lines, True):
+                        if text_block in dictionary:
+                            translation = dictionary[text_block]
+                            if not translation:
+                                translation = text_block
+                        else:
+                            translation = text_block
+                        print(translation, file=dest)
