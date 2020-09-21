@@ -1,6 +1,9 @@
 from setuptools import setup, find_packages
 
-df_raw_decoder = 'df-raw-decoder @ https://github.com/dfint/df_raw_decoder/archive/master.zip'
+requirements = [
+      'click',
+      'df-raw-decoder @ https://github.com/dfint/df_raw_decoder/archive/master.zip'
+]
 
 setup(name='df_gettext_toolkit',
       version='0.1',
@@ -11,4 +14,4 @@ setup(name='df_gettext_toolkit',
       license='MIT',
       packages=find_packages(),
       zip_safe=False,
-      install_requires=['click', df_raw_decoder])
+      install_requires=requirements)
