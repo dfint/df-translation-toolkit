@@ -6,6 +6,7 @@ from .parse_raws import parse_plain_text_file
 from .po import load_po
 
 from df_raw_decoder import decode_data
+from df_raw_decoder import encode_data
 
 
 def translate_compressed(po_filename, path, encoding):
@@ -24,6 +25,8 @@ def translate_compressed(po_filename, path, encoding):
                 with open(file, 'w', encoding=encoding) as dest:
                     yield file.name
 
+                    translations = []
+
                     lines = (line.decode('cp437') for line in decode_data(src, is_index_file))
                     for text_block, is_translatable, _ in parse_plain_text_file(lines, True):
                         if text_block in dictionary:
@@ -32,4 +35,6 @@ def translate_compressed(po_filename, path, encoding):
                                 translation = text_block
                         else:
                             translation = text_block
-                        print(translation, file=dest)
+                        translations.append(translation.encode('cp437'))
+
+                    print(encode_data(translations, is_index_file), file=dest)
