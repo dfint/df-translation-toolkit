@@ -35,6 +35,6 @@ def translate_compressed(po_filename, path, encoding):
                                 translation = text_block
                         else:
                             translation = text_block
-                        translations.append(translation.encode('cp437'))
+                        translations.append(translation.encode(encoding))
 
                     print(encode_data(translations, is_index_file), file=dest)
