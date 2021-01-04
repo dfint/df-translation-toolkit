@@ -20,9 +20,12 @@ def translate_compressed(po_filename, path, encoding):
                 shutil.copy(file, backup_file)
 
             is_index_file = file.name == 'index'
+            # Fix crash game due to changes in index file
+            if is_index_file:
+                continue
 
             with open(backup_file, 'rb') as src:
-                with open(file, 'w', encoding=encoding) as dest:
+                with open(file, 'wb') as dest:
                     yield file.name
 
                     translations = []
@@ -37,4 +40,4 @@ def translate_compressed(po_filename, path, encoding):
                             translation = text_block
                         translations.append(translation.encode(encoding))
 
-                    print(encode_data(translations, is_index_file), file=dest)
+                    dest.write(encode_data(translations, is_index_file))
