@@ -140,6 +140,7 @@ blacklisted_substrings = {
     'placed out of bounds', 'set to default', 'Patched save'
 }
 
+
 def ignore_by_blacklisted_substrings(string):
     return any(substring in string for substring in blacklisted_substrings)
 

@@ -1,10 +1,6 @@
 from collections import defaultdict
 
 
-def read_uint(file_object):
-    return int.from_bytes(file_object.read(4), byteorder='little')
-
-
 def strip_once(s, chars=' '):
     if s and s[0] in chars:
         s = s[1:]

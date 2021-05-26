@@ -1,7 +1,9 @@
 import sys
 from collections import defaultdict, Counter
 
-from df_gettext_toolkit import read_uint
+
+def read_uint(file_object):
+    return int.from_bytes(file_object.read(4), byteorder='little')
 
 
 def load_mo(mo_file, encoding='utf-8'):
