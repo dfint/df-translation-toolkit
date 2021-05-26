@@ -14,5 +14,8 @@ def fix_spaces(original, translation):
 
 
 def cleanup_string(s):
-    """Cleanup a string from unusual unicode characters (quotes, dashes etc.)"""
-    return s.translate({0xfeff: None, 0x2019: "'", 0x201d: '"', 0x2013: '-'})
+    """
+    Cleanup a string from unusual unicode characters (quotes, dashes etc.)
+    TODO: Make this mapping customizable
+    """
+    return s.translate({0xfeff: None, 0x2019: "'", 0x201d: '"', 0x2014: '-', 0x200b: None})
