@@ -1,7 +1,6 @@
-import shutil
-
 from pathlib import Path
 
+from .backup import backup
 from .parse_raws import parse_plain_text_file
 from .po import load_po
 
@@ -15,29 +14,26 @@ def translate_compressed(po_filename, path, encoding):
 
     for file in Path(path).rglob('*'):
         if file.is_file() and file.suffix == '':
-            backup_file = file.with_suffix('.bak')
-            if not backup_file.exists():
-                shutil.copy(file, backup_file)
-
             is_index_file = file.name == 'index'
             # Fix crash game due to changes in index file
             if is_index_file:
                 continue
 
-            with open(backup_file, 'rb') as src:
-                with open(file, 'wb') as dest:
-                    yield file.name
+            with backup(file) as backup_file:
+                with open(backup_file, 'rb') as src:
+                    with open(file, 'wb') as dest:
+                        yield file.name
 
-                    translations = []
+                        translations = []
 
-                    lines = (line.decode('cp437') for line in decode_data(src, is_index_file))
-                    for text_block, is_translatable, _ in parse_plain_text_file(lines, True):
-                        if text_block in dictionary:
-                            translation = dictionary[text_block]
-                            if not translation:
+                        lines = (line.decode('cp437') for line in decode_data(src, is_index_file))
+                        for text_block, is_translatable, _ in parse_plain_text_file(lines, True):
+                            if text_block in dictionary:
+                                translation = dictionary[text_block]
+                                if not translation:
+                                    translation = text_block
+                            else:
                                 translation = text_block
-                        else:
-                            translation = text_block
-                        translations.append(translation.encode(encoding))
+                            translations.append(translation.encode(encoding))
 
-                    dest.write(encode_data(translations, is_index_file))
+                        dest.write(encode_data(translations, is_index_file))

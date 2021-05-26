@@ -1,10 +1,10 @@
 import sys
-import shutil
 
 from pathlib import Path
 
 from .parse_raws import parse_plain_text_file
 from .po import load_po
+from .backup import backup
 
 
 def translate_plain_text(po_filename, path, encoding, join_paragraphs=True):
@@ -13,24 +13,19 @@ def translate_plain_text(po_filename, path, encoding, join_paragraphs=True):
         
     for path in Path(path).rglob("*.txt"):
         if path.is_file():
-            bak_name = path.with_suffix('.bak')
-            dest_name = path
-
-            if not bak_name.exists():
-                shutil.copy(dest_name, bak_name)
-
-            with open(bak_name) as src:
-                with open(dest_name, 'w', encoding=encoding) as dest:
-                    yield path.name
-                    for text_block, is_translatable, _ in parse_plain_text_file(src, join_paragraphs):
-                        text_block = text_block.rstrip('\n')
-                        if text_block in dictionary:
-                            translation = dictionary[text_block]
-                            if not translation:
+            with backup(path) as backup_file:
+                with open(backup_file) as src:
+                    with open(path, 'w', encoding=encoding) as dest:
+                        yield path.name
+                        for text_block, is_translatable, _ in parse_plain_text_file(src, join_paragraphs):
+                            text_block = text_block.rstrip('\n')
+                            if text_block in dictionary:
+                                translation = dictionary[text_block]
+                                if not translation:
+                                    translation = text_block
+                            else:
                                 translation = text_block
-                        else:
-                            translation = text_block
-                        print(translation, file=dest)
+                            print(translation, file=dest)
 
 
 def main():
