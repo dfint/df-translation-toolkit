@@ -1,20 +1,13 @@
 import sys
-
 from pathlib import Path
 
-import click
+import typer
 
-from .translate_raws import translate_raws
 from .translate_plain_text import translate_plain_text
+from .translate_raws import translate_raws
 
 
-@click.command()
-@click.argument('base_path')
-@click.argument('po_directory')
-@click.option('--encoding', default='cp1251')
-@click.option('--po_name_prefix', default='')
-@click.option('--po_name_postfix', default='')
-def main(base_path, po_directory, encoding, po_name_prefix, po_name_postfix):
+def main(base_path: str, po_directory: str, encoding: str, po_name_prefix: str = '', po_name_postfix: str = ''):
     patterns = {
         'raw/objects': dict(
             po_filename='raw-objects.po',
@@ -57,4 +50,4 @@ def main(base_path, po_directory, encoding, po_name_prefix, po_name_postfix):
 
 
 if __name__ == '__main__':
-    main()
+    typer.run(main)

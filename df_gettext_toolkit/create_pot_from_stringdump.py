@@ -1,14 +1,10 @@
-﻿import click
+﻿import typer
 
-from .po import save_pot
 from .df_ignore_string_rules import all_ignore_rules
+from .po import save_pot
 
 
-@click.command()
-@click.argument('source_file')
-@click.argument('destination_file')
-@click.option('--no-ignore', default=False)
-def main(source_file, destination_file, no_ignore=False):
+def main(source_file: str, destination_file: str, no_ignore=False):
     with open(source_file) as string_dump:
         template = (line.rstrip('\n') for line in string_dump)
         ignore_rules = (lambda s: False) if no_ignore else all_ignore_rules
@@ -18,4 +14,4 @@ def main(source_file, destination_file, no_ignore=False):
 
 
 if __name__ == '__main__':
-    main()
+    typer.run(main)

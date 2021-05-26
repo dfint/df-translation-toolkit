@@ -1,16 +1,13 @@
-import click
 import os
 import sys
+
+import typer
 
 from .parse_raws import extract_translatables_from_raws
 from .po import format_po, default_pot_header
 
 
-@click.command()
-@click.argument('pot_filename')
-@click.argument('path', default='.')
-@click.argument('source_encoding', default='cp437')
-def main(pot_filename, path, source_encoding):
+def main(pot_filename, path: str = '.', source_encoding: str = 'cp437'):
     raw_files = filter(lambda x: not x.startswith('language_'), os.listdir(path))
 
     with open(pot_filename, 'w', encoding='utf-8') as pot_file:
@@ -26,4 +23,4 @@ def main(pot_filename, path, source_encoding):
 
 
 if __name__ == '__main__':
-    main()
+    typer.run(main)
