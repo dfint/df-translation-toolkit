@@ -1,6 +1,9 @@
 import sys
 
 from pathlib import Path
+from typing import Optional
+
+import typer
 
 from .parse_raws import parse_plain_text_file
 from .po import load_po
@@ -10,7 +13,7 @@ from .backup import backup
 def translate_plain_text(po_filename, path, encoding, join_paragraphs=True):
     with open(po_filename, 'r', encoding='utf-8') as pofile:
         dictionary = {item['msgid']: item['msgstr'] for item in load_po(pofile)}
-        
+
     for path in Path(path).rglob("*.txt"):
         if path.is_file():
             with backup(path) as backup_file:
@@ -28,19 +31,11 @@ def translate_plain_text(po_filename, path, encoding, join_paragraphs=True):
                             print(translation, file=dest)
 
 
-def main():
-    po_filename = sys.argv[1]
-
-    if len(sys.argv) > 2:
-        path = sys.argv[2]
-    else:
-        path = '.'
-
-    join_paragraphs = '--split' not in sys.argv[1:]
-
-    for filename in translate_plain_text(po_filename, path, 'cp1251', join_paragraphs):
+def main(po_filename: str, path: str = '.', encoding: Optional[str] = None, split: bool = False):
+    join_paragraphs = not split
+    for filename in translate_plain_text(po_filename, path, encoding, join_paragraphs):
         print(filename, file=sys.stderr)
 
 
 if __name__ == "__main__":
-    main()
+    typer.run(main)

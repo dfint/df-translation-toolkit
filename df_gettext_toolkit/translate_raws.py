@@ -2,13 +2,15 @@ import sys
 
 from pathlib import Path
 
+import typer
+
 from .backup import backup
 from .parse_raws import translate_raw_file
 from .po import load_po
 from .fix_translated_strings import cleanup_string
 
 
-def translate_raws(po_filename, path, encoding: str, silent=False):
+def translate_raws(po_filename, path, encoding: str):
     with open(po_filename, 'r', encoding='utf-8') as pofile:
         dictionary = {(item['msgid'], item['msgctxt']): item['msgstr'] for item in load_po(pofile)}
 
@@ -31,16 +33,10 @@ def translate_raws(po_filename, path, encoding: str, silent=False):
                                 print(line, file=dest)
 
 
-def main():
-    if len(sys.argv) < 4:
-        sys.exit()
-
-    po_filename = sys.argv[1]
-    path = sys.argv[2]
-    encoding = sys.argv[3]
+def main(po_filename: str, path: str, encoding: str):
     for filename in translate_raws(po_filename, path, encoding):
         print(filename, file=sys.stderr)
 
 
 if __name__ == "__main__":
-    main()
+    typer.run(main)

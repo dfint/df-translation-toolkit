@@ -1,14 +1,12 @@
 import os
 import sys
+
+import typer
+
 from .po import format_po
 
 
-if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        path = sys.argv[1]
-    else:
-        path = '.'
-
+def main(path: str = '.'):
     print('Path:', path, file=sys.stderr)
 
     for filename in sorted(os.listdir(path)):
@@ -20,3 +18,7 @@ if __name__ == '__main__':
                     if line.rstrip('\n'):
                         print('#: %s:%d' % (filename, i))
                         print(format_po(msgid=line.rstrip('\n')))
+
+
+if __name__ == '__main__':
+    typer.run(main)

@@ -2,6 +2,7 @@ from setuptools import setup, find_packages
 
 requirements = [
       'click',
+      'typer',
       'df-raw-decoder @ https://github.com/dfint/df_raw_decoder/archive/master.zip'
 ]
 

@@ -1,5 +1,6 @@
-import sys
 from collections import defaultdict, Counter
+
+import typer
 
 
 def read_uint(file_object):
@@ -36,18 +37,17 @@ def load_mo(mo_file, encoding='utf-8'):
 def show_mo_content(filename: str):
     trans = defaultdict(Counter)
 
-    if len(sys.argv) > 1:
-        with open(filename, 'rb') as mo_file:
-            for item in load_mo(mo_file):
-                if item['msgid']:
-                    trans[item['msgid']][item['msgstr']] += 1
+    with open(filename, 'rb') as mo_file:
+        for item in load_mo(mo_file):
+            if item['msgid']:
+                trans[item['msgid']][item['msgstr']] += 1
 
-        for key in sorted(trans, key=lambda x: -(len(trans[x])*1000+sum(trans[x].values()))):
-            print('msgid: ', key)
-            print('msgstrs: ', end='')
-            print(trans[key])
-            print()
+    for key in sorted(trans, key=lambda x: -(len(trans[x])*1000+sum(trans[x].values()))):
+        print('msgid: ', key)
+        print('msgstrs: ', end='')
+        print(trans[key])
+        print()
 
 
 if __name__ == '__main__':
-    show_mo_content(sys.argv[1])
+    typer.run(show_mo_content)

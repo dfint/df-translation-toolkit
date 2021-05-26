@@ -1,6 +1,9 @@
 import os
 import sys
 from operator import itemgetter
+
+import typer
+
 from .parse_raws import parse_plain_text_file
 from .po import format_po
 
@@ -40,13 +43,8 @@ def parse_file(file, join_paragraphs=True):
         yield prev_lines
 
 
-def main():
-    if len(sys.argv) > 1:
-        path = sys.argv[1]
-    else:
-        path = '.'
-
-    join_paragraphs = '--split' not in sys.argv[1:]
+def main(path: str = '.', split: bool = False):
+    join_paragraphs = not split
 
     keys = set()
     for cur_dir, _, files in sorted(os.walk(path), key=itemgetter(0)):
@@ -67,4 +65,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    typer.run(main)
