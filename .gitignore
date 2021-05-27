@@ -1,8 +1,9 @@
 .idea
 .pytest_cache
 venv
-*.pyc
 *.egg-info
+*.pyc
 *.po
 *.pot
 *.mo
+*.csv
