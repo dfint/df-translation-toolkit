@@ -6,7 +6,7 @@ from collections import OrderedDict
 import typer
 
 from .po import load_po, escape_string
-from fix_translated_strings import cleanup_string
+from .fix_translated_strings import cleanup_string
 
 
 def main(input_file: str, output_file: str, encoding: str = 'utf-8'):
