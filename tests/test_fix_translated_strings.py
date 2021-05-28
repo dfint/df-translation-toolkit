@@ -1,7 +1,7 @@
 import pytest
 
-from df_gettext_toolkit.fix_translated_strings import cleanup_string, fix_leading_spaces, fix_trailing_spaces, \
-    fix_spaces
+from df_gettext_toolkit.fix_translated_strings import cleanup_string
+from df_gettext_toolkit.fix_translated_strings import fix_leading_spaces, fix_trailing_spaces, fix_spaces
 
 
 @pytest.mark.parametrize(
