@@ -1,6 +1,7 @@
 import pytest
 
-from df_gettext_toolkit.fix_translated_strings import cleanup_string, fix_leading_spaces, fix_trailing_spaces
+from df_gettext_toolkit.fix_translated_strings import cleanup_string, fix_leading_spaces, fix_trailing_spaces, \
+    fix_spaces
 
 
 @pytest.mark.parametrize(
@@ -40,3 +41,13 @@ def test_fix_leading_spaces(text, translation, fixed):
 )
 def test_fix_trailing_spaces(text, translation, fixed):
     assert fix_trailing_spaces(text, translation, set()) == fixed
+
+
+@pytest.mark.parametrize(
+    "text,translation,fixed",
+    [
+        (" embraces ", "obdivuje", " obdivuje "),
+    ]
+)
+def test_fix_spaces(text, translation, fixed):
+    assert fix_spaces(text, translation) == fixed
