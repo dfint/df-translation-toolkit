@@ -7,7 +7,7 @@ requirements = [
 ]
 
 setup(name='df_gettext_toolkit',
-      version='0.1',
+      version='0.1.1',
       # description='',
       url='https://github.com/dfint/df-gettext-toolkit',
       author='insolor',
