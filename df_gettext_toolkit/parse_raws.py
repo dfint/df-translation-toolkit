@@ -49,9 +49,9 @@ def bracket_tag(tag):
 def last_suitable(s, func):
     for i in range(len(s)-1, 0, -1):
         if func(s[i]):
-            return i+1  # if the last element is sutable, then return len(s), so that s[:i] gives full list
+            return i+1  # if the last element is suitable, then return len(s), so that s[:i] gives full list
     else:
-        return 0  # if there aren't sutable elements, then return 0, so that s[:i] gives empty list
+        return 0  # if there aren't suitable elements, then return 0, so that s[:i] gives empty list
 
 
 def extract_translatables_from_raws(file):
