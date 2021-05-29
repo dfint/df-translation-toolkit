@@ -1,5 +1,6 @@
-import os
 import sys
+from collections import Iterator
+from pathlib import Path
 
 import typer
 
@@ -7,19 +8,22 @@ from .parse_raws import extract_translatables_from_raws
 from .parse_po import format_po, default_header
 
 
+def create_pot_file(pot_file, raw_files: Iterator[Path], source_encoding):
+    print(default_header, file=pot_file)
+    for file_name in raw_files:
+        if file_name.is_file():
+            print(file_name.name, file=sys.stderr)
+            with open(file_name, encoding=source_encoding) as file:
+                for context, item, line_number in extract_translatables_from_raws(file):
+                    print('#: %s:%d' % (file_name.name, line_number), file=pot_file)  # source file : line number
+                    print(format_po(msgid=item, msgstr="", msgctxt=context), file=pot_file)
+
+
 def main(pot_filename, path: str = '.', source_encoding: str = 'cp437'):
-    raw_files = filter(lambda x: not x.startswith('language_'), os.listdir(path))
+    raw_files = (file for file in Path(path).glob("*.txt") if not file.name.startswith("language_"))
 
     with open(pot_filename, 'w', encoding='utf-8') as pot_file:
-        print(default_header, file=pot_file)
-        for file_name in sorted(raw_files):
-            full_path = os.path.join(path, file_name)
-            if os.path.isfile(full_path) and file_name.endswith('.txt'):
-                print(file_name, file=sys.stderr)
-                with open(full_path, encoding=source_encoding) as file:
-                    for context, item, line_number in extract_translatables_from_raws(file):
-                        print('#: %s:%d' % (file_name, line_number), file=pot_file)  # source file : line number
-                        print(format_po(msgid=item, msgstr="", msgctxt=context), file=pot_file)
+        create_pot_file(pot_file, sorted(raw_files), source_encoding)
 
 
 if __name__ == '__main__':
