@@ -5,7 +5,7 @@ from typing import Optional
 
 import typer
 
-from .parse_raws import parse_plain_text_file
+from .parse_plain_text import parse_plain_text_file
 from .parse_po import load_po
 from .backup import backup
 

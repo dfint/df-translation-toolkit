@@ -4,7 +4,7 @@ from operator import itemgetter
 
 import typer
 
-from .parse_raws import parse_plain_text_file
+from .parse_plain_text import parse_plain_text_file
 from .parse_po import format_po
 
 

@@ -1,28 +1,11 @@
-import re
-from typing import Iterable, Tuple
+from typing import Generator, List
 
 
-def load_dsv(file, delimiter='|'):
-    for line in file:
-        if '|' in line:
-            parts = line.split(delimiter)
-            yield parts
-
-
-def load_trans(file):
-    return {line[1]: line[2:] for line in load_dsv(file)}
-
-
-def load_string_dump(file):
-    return (line[:2] for line in load_dsv(file))
-
-
-def split_tag(s):
+def split_tag(s: str) -> List[str]:
     return s.strip('[]').split(':')
 
 
-# Working with raws
-def tags(s):
+def iterate_tags(s: str) -> Generator[List[str]]:
     tag_start = None
     for i, char in enumerate(s):
         if tag_start is None:
@@ -42,7 +25,7 @@ def is_translatable(s):
     return s in translatable_tags or any('a' <= char <= 'z' for char in s)
 
 
-def bracket_tag(tag):
+def join_tag(tag):
     return "[%s]" % ':'.join(tag)
 
 
@@ -59,23 +42,22 @@ def extract_translatables_from_raws(file):
     context = None
     keys = set()
     for i, line in enumerate(file, 1):
-        for tag in tags(line):
-            if tag[0] == 'OBJECT':
-                obj = tag[1]
-            elif obj and (tag[0] == obj or (obj in {'ITEM', 'BUILDING'} and tag[0].startswith(obj)) or
-                          obj.endswith('_' + tag[0])):
-                context = ':'.join(tag)  # don't enclose context string into brackets - transifex dislike this
+        for tag_parts in iterate_tags(line):
+            if tag_parts[0] == 'OBJECT':
+                obj = tag_parts[1]
+            elif obj and (tag_parts[0] == obj or (obj in {'ITEM', 'BUILDING'} and tag_parts[0].startswith(obj)) or
+                          obj.endswith('_' + tag_parts[0])):
+                context = ':'.join(tag_parts)  # don't enclose context string into brackets - transifex dislikes this
                 keys.clear()
-            elif 'TILE' not in tag[0] and any(is_translatable(s) for s in tag[1:]) and tuple(tag) not in keys:
-                if not is_translatable(tag[-1]):
-                    last = last_suitable(tag, is_translatable)
-                    tag = tag[:last]
-                    tag.append('')  # Add an empty element to the tag to mark the tag as not completed
-                keys.add(tuple(tag))
-                yield context, bracket_tag(tag), i
-
-
-re_leading_spaces = re.compile(r"^([^\[]*)\[")
+            elif ('TILE' not in tag_parts[0] and
+                  any(is_translatable(s) for s in tag_parts[1:]) and
+                  tuple(tag_parts) not in keys):
+                if not is_translatable(tag_parts[-1]):
+                    last = last_suitable(tag_parts, is_translatable)
+                    tag_parts = tag_parts[:last]
+                    tag_parts.append('')  # Add an empty element to the tag to mark the tag as not completed
+                keys.add(tuple(tag_parts))
+                yield context, join_tag(tag_parts), i
 
 
 def translate_raw_file(file, dictionary):
@@ -83,97 +65,39 @@ def translate_raw_file(file, dictionary):
     context = None
     for line in file:
         if '[' in line:
-            result = re_leading_spaces.search(line)
-            s = result.group(1)
-            for tag in tags(line):
-                if tag[0] == 'OBJECT':
-                    obj = tag[1]
-                elif obj and (tag[0] == obj or (obj in {'ITEM', 'BUILDING'} and tag[0].startswith(obj)) or
-                              obj.endswith('_' + tag[0])):
-                    context = ':'.join(tag)
+            modified_line = line.partition('[')[0]
+            for tag_parts in iterate_tags(line):
+                if tag_parts[0] == 'OBJECT':
+                    obj = tag_parts[1]
+                elif obj and (tag_parts[0] == obj or
+                              (obj in {'ITEM', 'BUILDING'} and tag_parts[0].startswith(obj)) or
+                              obj.endswith('_' + tag_parts[0])):
+                    context = ':'.join(tag_parts)
                 
-                br_tag = bracket_tag(tag)
-                if any(is_translatable(s) for s in tag[1:]):
-                    key = (br_tag, context)
+                tag = join_tag(tag_parts)
+                if any(is_translatable(s) for s in tag_parts[1:]):
+                    key = (tag, context)
                     if key in dictionary:
-                        br_tag = dictionary[key]
-                    elif (br_tag, None) in dictionary:
-                        br_tag = dictionary[(br_tag, None)]
-                    elif not is_translatable(tag[-1]):
-                        last = last_suitable(tag, is_translatable)
-                        new_tag = tag[:last+1]
+                        tag = dictionary[key]
+                    elif (tag, None) in dictionary:
+                        tag = dictionary[(tag, None)]
+                    elif not is_translatable(tag_parts[-1]):
+                        last = last_suitable(tag_parts, is_translatable)
+                        new_tag = tag_parts[:last+1]
                         new_tag[-1] = ''
-                        br_tag = bracket_tag(new_tag)
-                        key = (br_tag, context)
+                        tag = join_tag(new_tag)
+                        key = (tag, context)
                         new_tag = None
                         if key in dictionary:
                             new_tag = split_tag(dictionary[key])
-                        elif (br_tag, None) in dictionary:
-                            new_tag = split_tag(dictionary[(br_tag, None)])
+                        elif (tag, None) in dictionary:
+                            new_tag = split_tag(dictionary[(tag, None)])
                         
                         if new_tag:
-                            tag[:len(new_tag)-1] = new_tag[:-1]
-                            br_tag = bracket_tag(tag)
+                            tag_parts[:len(new_tag)-1] = new_tag[:-1]
+                            tag = join_tag(tag_parts)
                 
-                s += br_tag
-            yield s
+                modified_line += tag
+            yield modified_line
         else:
             yield line.rstrip()
-
-
-def skip_tags(s):
-    opened = 0
-    for char in s:
-        if char == '[':
-            opened += 1
-        elif char == ']':
-            opened -= 1
-        elif opened == 0:
-            yield char
-
-
-def parse_plain_text_file(lines: Iterable[str], join_paragraphs=True, start_line=1)\
-        -> Iterable[Tuple[str, bool, int]]:
-    def local_is_translatable(s):
-        return any(char.islower() for char in skip_tags(s))
-
-    lines = iter(lines)
-
-    paragraph = ''
-
-    # FIXME: join_paragraphs must only affect on paragraph joining, not line skipping
-    # so the first line must be skipped before the text is fed to the function
-    if join_paragraphs:
-        line = next(lines)  # The first line contains file name, skip it
-        yield line, False, 1
-        start_line += 1
-
-    paragraph_start_line = start_line
-    
-    for line_number, line in enumerate(lines, start_line):
-        if join_paragraphs:
-            if local_is_translatable(line):
-                if '~' in line or line[0] == '[' and not (paragraph and paragraph.rstrip()[-1].isalpha()):
-                    if paragraph:
-                        yield paragraph, True, paragraph_start_line
-                        paragraph = ''
-                        paragraph_start_line = line_number
-                    
-                    if line.rstrip().endswith(']'):
-                        yield line, True, line_number
-                    else:
-                        paragraph += line
-                else:
-                    paragraph += line
-            else:
-                if paragraph:
-                    yield paragraph, True, paragraph_start_line
-                    paragraph = ''
-                    paragraph_start_line = line_number
-                
-                yield line, False, line_number  # Not translatable line
-        else:
-            yield line, local_is_translatable(line), line_number
-    
-    if paragraph:
-        yield paragraph, True, paragraph_start_line

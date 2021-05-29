@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from .backup import backup
-from .parse_raws import parse_plain_text_file
+from .parse_plain_text import parse_plain_text_file
 from .parse_po import load_po
 
 from df_raw_decoder import decode_data
