@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import Mapping, Iterator
 
 
 def strip_once(s, chars=' '):
@@ -56,8 +57,9 @@ def load_po(po_file):
             key, value = line.split(maxsplit=1)
             item[key] = unescape_string(strip_once(value, '"'))
             prev = key
-    
-    yield item
+
+    if item:
+        yield item
 
 
 def get_metadata(entry):
@@ -95,33 +97,22 @@ def format_po(msgid, msgstr="", msgctxt=None):
     return s
 
 
-def save_po(po_file, template, dictionary):
-    print('msgid ""', file=po_file)
-    print('msgstr ""', file=po_file)
-    print('"Content-Type: text/plain; charset=UTF-8\\n"', file=po_file)
-    print('"Language: ru_RU\\n"', file=po_file)
-    for text in template:
-        print('', file=po_file)
-        if text in dictionary and len(dictionary[text]) > 1:
-            for item in dictionary[text][1:]:
-                if len(item.strip()) > 0:
-                    print('#', item.strip(), file=po_file)  # translator comments
-        print('msgid "%s"' % escape_string(text), file=po_file)
-        if text in dictionary:
-            print('msgstr "%s"' % escape_string(dictionary[text][0]), file=po_file)
-        else:
-            print('msgstr ""', file=po_file)
-
-
-default_pot_header = """
+default_header = """
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\\n"
 "Content-Transfer-Encoding: 8bit\\n"
-""".lstrip()
+""".strip()
+
+
+def save_po(po_file, template: Iterator[str], dictionary: Mapping[str, str]):
+    print(default_header, file=po_file)
+    print(file=po_file)
+    for text in template:
+        print(format_po(msgid=text, msgstr=dictionary.get(text, "")), file=po_file)
 
 
 def save_pot(po_file, template):
-    print(default_pot_header, file=po_file)
+    print(default_header, file=po_file, end="\n\n")
     for line in template:
-        print(format_po(line), file=po_file)
+        print(format_po(msgid=line), file=po_file)

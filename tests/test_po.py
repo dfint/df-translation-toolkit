@@ -1,6 +1,7 @@
 from io import StringIO
+from typing import List, Tuple
 
-from df_gettext_toolkit.parse_po import escape_string, unescape_string, strip_once, format_po, load_po
+from df_gettext_toolkit.parse_po import escape_string, unescape_string, strip_once, format_po, load_po, save_po
 
 
 def test_escape_string():
@@ -21,12 +22,15 @@ def test_strip_once():
 
 
 def test_load_po():
-    entries = [
+    entries: List[Tuple[str, str]] = [
         ('asddf', 'qwert'),
         ('xcvf', 'fghrth'),
         ('cvbeb', 'jtyjkty')
     ]
-    prepared = [dict(msgid=text, msgstr=translation) for text, translation in entries]
-    po_text = '\n\n'.join(format_po(**item) for item in prepared)
-    file = StringIO(po_text)
-    assert list(load_po(file)) == prepared
+    template = (item[0] for item in entries)
+    file = StringIO()
+    save_po(file, template, dict(entries))
+    file.seek(0)
+
+    result = list(load_po(file))[1:]  # the first entry is metadata
+    assert result == [dict(msgid=text, msgstr=translation) for text, translation in entries]

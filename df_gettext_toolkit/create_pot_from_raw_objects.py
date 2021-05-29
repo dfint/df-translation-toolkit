@@ -4,14 +4,14 @@ import sys
 import typer
 
 from .parse_raws import extract_translatables_from_raws
-from .parse_po import format_po, default_pot_header
+from .parse_po import format_po, default_header
 
 
 def main(pot_filename, path: str = '.', source_encoding: str = 'cp437'):
     raw_files = filter(lambda x: not x.startswith('language_'), os.listdir(path))
 
     with open(pot_filename, 'w', encoding='utf-8') as pot_file:
-        print(default_pot_header, file=pot_file)
+        print(default_header, file=pot_file)
         for file_name in sorted(raw_files):
             full_path = os.path.join(path, file_name)
             if os.path.isfile(full_path) and file_name.endswith('.txt'):
