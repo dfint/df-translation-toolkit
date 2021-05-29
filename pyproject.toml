@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "df-gettext-toolkit"
+version = "0.1.1"
+description = "Toolset to convert text extracted from DF to gettext format and aback"
+authors = ["insolor <insolor@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+typer = "^0.3.2"
+Unidecode = "^1.2.0"
+df_raw_decoder = { url = 'https://github.com/dfint/df_raw_decoder/archive/master.zip' }
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.4"
+pytest-cov = "^2.12.0"
+flake8 = "^3.9.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

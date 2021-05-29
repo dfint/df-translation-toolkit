@@ -3,6 +3,7 @@
 venv
 .venv
 *.egg-info
+dist
 *.pyc
 *.po
 *.pot
