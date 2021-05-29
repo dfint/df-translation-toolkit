@@ -4,8 +4,8 @@ from collections import OrderedDict
 
 import typer
 
-from .parse_po import load_po, escape_string
 from .fix_translated_strings import cleanup_string, fix_spaces
+from .parse_po import load_po, escape_string
 
 
 def main(input_file: str, output_file: str, encoding: str = 'utf-8'):
@@ -24,7 +24,7 @@ def main(input_file: str, output_file: str, encoding: str = 'utf-8'):
             translation = dictionary[original_string]
             if original_string and translation and translation != original_string:
                 translation = fix_spaces(original_string, translation, exclusions_leading, exclusions_trailing)
-                writer.writerow([escape_string(original_string), cleanup_string(escape_string(translation))])
+                writer.writerow([escape_string(original_string), escape_string(cleanup_string(translation))])
 
 
 if __name__ == '__main__':
