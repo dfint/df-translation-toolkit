@@ -1,13 +1,34 @@
 import sys
-
+from collections import Mapping
 from pathlib import Path
 
 import typer
 
 from .backup import backup
-from .parse_raws import translate_raw_file
-from .parse_po import load_po
 from .fix_translated_strings import cleanup_string
+from .parse_po import load_po
+from .parse_raws import translate_raw_file
+
+
+def translate_single_raw_file(source_file_path: Path,
+                              destination_file_path: Path,
+                              dictionary: Mapping[str, str],
+                              encoding: str):
+
+    with open(source_file_path, encoding='cp437') as src:
+        with open(destination_file_path, 'w', encoding=encoding) as dest:
+            yield destination_file_path.name
+            for line in translate_raw_file(src, dictionary):
+                line = cleanup_string(line)
+                try:
+                    print(line, file=dest)
+                except UnicodeEncodeError:
+                    line = line.encode(encoding, errors='backslashreplace').decode(encoding)
+                    print('Some characters of this line: %r '
+                          'cannot be represented in %s encoding. Using backslashreplace mode.' %
+                          (line, encoding), file=sys.stderr)
+
+                    print(line, file=dest)
 
 
 def translate_raws(po_filename, path, encoding: str):
@@ -17,20 +38,7 @@ def translate_raws(po_filename, path, encoding: str):
     for file_path in Path(path).glob("*.txt"):
         if file_path.is_file() and not file_path.name.startswith('language_'):
             with backup(file_path) as bak_name:
-                with open(bak_name, encoding='cp437') as src:
-                    with open(file_path, 'w', encoding=encoding) as dest:
-                        yield file_path.name
-                        for line in translate_raw_file(src, dictionary):
-                            line = cleanup_string(line)
-                            try:
-                                print(line, file=dest)
-                            except UnicodeEncodeError:
-                                line = line.encode(encoding, errors='backslashreplace').decode(encoding)
-                                print('Some characters of this line: %r '
-                                      'cannot be represented in %s encoding. Using backslashreplace mode.' %
-                                      (line, encoding), file=sys.stderr)
-
-                                print(line, file=dest)
+                yield from translate_single_raw_file(bak_name, file_path, dictionary, encoding)
 
 
 def main(po_filename: str, path: str, encoding: str):

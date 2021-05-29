@@ -1,11 +1,37 @@
+from collections import Mapping
 from pathlib import Path
+
+from df_raw_decoder import decode_data
+from df_raw_decoder import encode_data
 
 from .backup import backup
 from .parse_plain_text import parse_plain_text_file
 from .parse_po import load_po
 
-from df_raw_decoder import decode_data
-from df_raw_decoder import encode_data
+
+def translate_compressed_file(source_file_path: Path,
+                              destination_file_path: Path,
+                              dictionary: Mapping[str, str],
+                              encoding: str,
+                              is_index_file: bool):
+
+    with open(source_file_path, 'rb') as src:
+        with open(destination_file_path, 'wb') as dest:
+            yield destination_file_path.name
+
+            translations = []
+
+            lines = (line.decode('cp437') for line in decode_data(src, is_index_file))
+            for text_block, is_translatable, _ in parse_plain_text_file(lines, True):
+                if text_block in dictionary:
+                    translation = dictionary[text_block]
+                    if not translation:
+                        translation = text_block
+                else:
+                    translation = text_block
+                translations.append(translation.encode(encoding))
+
+            dest.write(encode_data(translations, is_index_file))
 
 
 def translate_compressed(po_filename, path, encoding):
@@ -20,20 +46,4 @@ def translate_compressed(po_filename, path, encoding):
                 continue
 
             with backup(file) as backup_file:
-                with open(backup_file, 'rb') as src:
-                    with open(file, 'wb') as dest:
-                        yield file.name
-
-                        translations = []
-
-                        lines = (line.decode('cp437') for line in decode_data(src, is_index_file))
-                        for text_block, is_translatable, _ in parse_plain_text_file(lines, True):
-                            if text_block in dictionary:
-                                translation = dictionary[text_block]
-                                if not translation:
-                                    translation = text_block
-                            else:
-                                translation = text_block
-                            translations.append(translation.encode(encoding))
-
-                        dest.write(encode_data(translations, is_index_file))
+                translate_compressed_file(backup_file, file, dictionary, encoding, is_index_file)
