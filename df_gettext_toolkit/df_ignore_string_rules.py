@@ -101,7 +101,7 @@ blacklist_full_string = {
     'Scrollock', 'Down', 'Right', 'Insert', 'End', 'Page Up', 'Page Down', 'Euro', 'Undo', 'Lsuper', 'Rsuper',
     'Print', 'Sysreq', 'Menu', 'Space', 'Tab', 'Shift+', 'Ctrl+', 'Alt+', 'Question', 'Quotedbl', 'Hash', 'Ampersand',
     'Quote', 'Leftparen', 'Rightparen', 'Left', "Colon", "Semicolon", "Less", "Equals", "Greater", "At", "Asterisk",
-    "Plus", "Comma", "Minus", "Period", "Slash", "Exclaim", "Dollar", "Mode", 
+    "Plus", "Comma", "Minus", "Period", "Slash", "Exclaim", "Dollar", "Mode",
     
     "_DIV ", "End of macro",
     
@@ -147,8 +147,8 @@ def ignore_by_blacklisted_substrings(string):
 
 all_rules_list = [ignore_xml, ignore_square_brackets, ignore_paths, ignore_tags, ignore_filenames, ignore_gl,
                   ignore_underline_separated_words, ignore_camel_case, ignore_word_with_number, ignore_starts,
-                  ignore_by_blacklist_full_string, ignore_by_blacklisted_words, ignore_short_words, ignore_dash_prepended_strings,
-                  ignore_by_blacklisted_substrings]
+                  ignore_by_blacklist_full_string, ignore_by_blacklisted_words, ignore_short_words,
+                  ignore_dash_prepended_strings, ignore_by_blacklisted_substrings]
 
 
 def all_ignore_rules(string):

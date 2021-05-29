@@ -24,7 +24,7 @@ def translate_raws(po_filename, path, encoding: str):
                             line = cleanup_string(line)
                             try:
                                 print(line, file=dest)
-                            except UnicodeEncodeError as e:
+                            except UnicodeEncodeError:
                                 line = line.encode(encoding, errors='backslashreplace').decode(encoding)
                                 print('Some characters of this line: %r '
                                       'cannot be represented in %s encoding. Using backslashreplace mode.' %
