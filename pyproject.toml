@@ -10,6 +10,7 @@ python = "^3.6"
 typer = "^0.3.2"
 Unidecode = "^1.2.0"
 df_raw_decoder = { url = 'https://github.com/dfint/df_raw_decoder/archive/master.zip' }
+pytest-mock = "^3.6.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.4"
