@@ -1,11 +1,11 @@
-from typing import Generator, List
+from typing import List, Iterator
 
 
 def split_tag(s: str) -> List[str]:
     return s.strip('[]').split(':')
 
 
-def iterate_tags(s: str) -> Generator[List[str]]:
+def iterate_tags(s: str) -> Iterator[List[str]]:
     tag_start = None
     for i, char in enumerate(s):
         if tag_start is None:
