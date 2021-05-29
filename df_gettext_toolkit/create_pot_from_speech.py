@@ -3,7 +3,7 @@ import sys
 
 import typer
 
-from .po import format_po
+from .parse_po import format_po
 
 
 def main(path: str = '.'):

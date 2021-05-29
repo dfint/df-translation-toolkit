@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 import typer
 
-from .po import load_po, escape_string
+from .parse_po import load_po, escape_string
 from .fix_translated_strings import cleanup_string, fix_spaces
 
 

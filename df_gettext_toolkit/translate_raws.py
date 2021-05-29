@@ -6,7 +6,7 @@ import typer
 
 from .backup import backup
 from .parse_raws import translate_raw_file
-from .po import load_po
+from .parse_po import load_po
 from .fix_translated_strings import cleanup_string
 
 

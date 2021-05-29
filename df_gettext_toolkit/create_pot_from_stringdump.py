@@ -1,7 +1,7 @@
 ﻿import typer
 
 from .df_ignore_string_rules import all_ignore_rules
-from .po import save_pot
+from .parse_po import save_pot
 
 
 def main(source_file: str, destination_file: str, no_ignore=False):

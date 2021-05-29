@@ -1,6 +1,6 @@
 from io import StringIO
 
-from df_gettext_toolkit.po import escape_string, unescape_string, strip_once, format_po, load_po
+from df_gettext_toolkit.parse_po import escape_string, unescape_string, strip_once, format_po, load_po
 
 
 def test_escape_string():

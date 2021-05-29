@@ -5,7 +5,7 @@ from operator import itemgetter
 import typer
 
 from .parse_raws import parse_plain_text_file
-from .po import format_po
+from .parse_po import format_po
 
 
 def skip_tags(s):

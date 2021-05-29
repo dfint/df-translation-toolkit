@@ -4,7 +4,7 @@ import sys
 import typer
 
 from .parse_raws import extract_translatables_from_raws
-from .po import format_po, default_pot_header
+from .parse_po import format_po, default_pot_header
 
 
 def main(pot_filename, path: str = '.', source_encoding: str = 'cp437'):
