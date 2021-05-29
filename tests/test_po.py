@@ -1,4 +1,6 @@
-from df_gettext_toolkit.po import escape_string, unescape_string, strip_once
+from io import StringIO
+
+from df_gettext_toolkit.po import escape_string, unescape_string, strip_once, format_po, load_po
 
 
 def test_escape_string():
@@ -16,3 +18,15 @@ def test_escape_unescape():
 
 def test_strip_once():
     assert strip_once('"""', '"') == '"'
+
+
+def test_load_po():
+    entries = [
+        ('asddf', 'qwert'),
+        ('xcvf', 'fghrth'),
+        ('cvbeb', 'jtyjkty')
+    ]
+    prepared = [dict(msgid=text, msgstr=translation) for text, translation in entries]
+    po_text = '\n\n'.join(format_po(**item) for item in prepared)
+    file = StringIO(po_text)
+    assert list(load_po(file)) == prepared
