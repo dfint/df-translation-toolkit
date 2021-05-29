@@ -9,22 +9,28 @@ def strip_once(s, chars=' '):
     return s
 
 
+_replace_table = [
+    ('\\', r'\\'),
+    ('\t', r'\t'),
+    ('\r', r'\r'),
+    ('\n', r'\n'),
+    ('\"', r'\"'),
+]
+
+_unescape_translation_table = {escaped: unescaped for unescaped, escaped in _replace_table}
+
+
 def unescape_string(s):
-    return s\
-           .replace(r'\\', '\\')\
-           .replace(r'\t', '\t')\
-           .replace(r'\r', '\r')\
-           .replace(r'\n', '\n')\
-           .replace(r'\"', '\"')
+    for original, replacement in _unescape_translation_table.items():
+        s = s.replace(original, replacement)
+    return s
+
+
+_escape_translation_table = str.maketrans(dict(_replace_table))
 
 
 def escape_string(s):
-    return s\
-            .replace('\\', r'\\')\
-            .replace('\t', r'\t')\
-            .replace('\r', r'\r')\
-            .replace('\n', r'\n')\
-            .replace('\"', r'\"')
+    return s.translate(_escape_translation_table)
 
 
 def load_po(po_file):
