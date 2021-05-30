@@ -8,41 +8,6 @@ from .parse_plain_text import parse_plain_text_file
 from .parse_po import format_po
 
 
-def skip_tags(s):
-    opened = 0
-    for char in s:
-        if char == '[':
-            opened += 1
-        elif char == ']':
-            opened -= 1
-        elif opened == 0:
-            yield char
-
-
-def parse_file(file, join_paragraphs=True):
-    _ = file.readline()  # skip first line
-    prev_lines = ''
-    for line in file:
-        if any(char.islower() for char in skip_tags(line)):
-            if not join_paragraphs or '~' in line or line[0] == '[' and \
-                    not (prev_lines and prev_lines.rstrip()[-1].isalpha()):
-                if prev_lines:
-                    yield prev_lines
-                    prev_lines = ''
-                    
-                if line.endswith(']\n') or line[-1] == ']':
-                    yield line
-                else:
-                    prev_lines += line
-            else:
-                prev_lines += line
-        elif prev_lines:
-            yield prev_lines
-            prev_lines = ''
-    if prev_lines:
-        yield prev_lines
-
-
 def main(path: str = '.', split: bool = False):
     join_paragraphs = not split
 
