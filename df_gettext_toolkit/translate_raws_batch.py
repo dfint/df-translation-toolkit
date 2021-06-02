@@ -37,13 +37,13 @@ def main(base_path: str, po_directory: str, encoding: str, po_name_prefix: str =
                     print(cur_dir, file=sys.stderr)
                     print(file=sys.stderr)
 
-                    po_filename = po_name_prefix + patterns[pattern]['po_filename']
-                    if po_name_postfix:
-                        name, sep, ext = po_filename.partition('.')
-                        po_filename = name + po_name_postfix + sep + ext
+                    match = patterns[pattern]
+
+                    po_filename = Path(match['po_filename'])
+                    po_filename = po_filename.with_name(po_name_prefix + po_filename.name + po_name_postfix)
 
                     po_file_path = po_directory / po_filename
-                    func = patterns[pattern]['func']
+                    func = match['func']
                     for filename in func(po_file_path, cur_dir, encoding):
                         print(filename, file=sys.stderr)
                     print(file=sys.stderr)
