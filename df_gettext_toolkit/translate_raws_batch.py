@@ -6,27 +6,27 @@ import typer
 from .translate_plain_text import translate_plain_text
 from .translate_raws import translate_raws
 
+patterns = {
+    'raw/objects': dict(
+        po_filename='raw-objects.po',
+        func=translate_raws,
+    ),
+    'data_src': dict(
+        po_filename='uncompressed.po',
+        func=lambda *args: translate_plain_text(*args, join_paragraphs=True),
+    ),
+    'data/speech': dict(
+        po_filename='speech.po',
+        func=lambda *args: translate_plain_text(*args, join_paragraphs=False),
+    ),
+    'raw/objects/text': dict(
+        po_filename='text.po',
+        func=lambda *args: translate_plain_text(*args, join_paragraphs=False),
+    ),
+}
+
 
 def main(base_path: str, po_directory: str, encoding: str, po_name_prefix: str = '', po_name_postfix: str = ''):
-    patterns = {
-        'raw/objects': dict(
-            po_filename='raw-objects.po',
-            func=translate_raws,
-        ),
-        'data_src': dict(
-            po_filename='uncompressed.po',
-            func=lambda *args: translate_plain_text(*args, join_paragraphs=True),
-        ),
-        'data/speech': dict(
-            po_filename='speech.po',
-            func=lambda *args: translate_plain_text(*args, join_paragraphs=False),
-        ),
-        'raw/objects/text': dict(
-            po_filename='text.po',
-            func=lambda *args: translate_plain_text(*args, join_paragraphs=False),
-        ),
-    }
-
     po_directory = Path(po_directory)
 
     for cur_dir in Path(base_path).rglob("*"):
