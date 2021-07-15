@@ -1,6 +1,8 @@
+import io
+
 import pytest
 
-from df_gettext_toolkit.parse_raws import extract_translatables_from_raws
+from df_gettext_toolkit.parse_raws import extract_translatables_from_raws, translate_raw_file
 
 
 @pytest.mark.parametrize(
@@ -60,3 +62,41 @@ from df_gettext_toolkit.parse_raws import extract_translatables_from_raws
 )
 def test_extract_translatables_from_raws(content, result):
     assert list(extract_translatables_from_raws(content)) == result
+
+
+@pytest.mark.parametrize(
+    "content,dictionary,result", [
+        (
+                """
+    item_weapon
+        [OBJECT:ITEM]
+            [ITEM_WEAPON:ITEM_WEAPON_WHIP]
+                [NAME:whip:whips]
+                    [SIZE:100]
+                    [SKILL:WHIP]
+                    [TWO_HANDED:27500]
+                    [MINIMUM_SIZE:22500]
+                    Some comment
+                    [MATERIAL_SIZE:1]  trailing comments are trimmed
+            [ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:5000]""",
+                {
+                    ("[NAME:whip:whips]", "ITEM_WEAPON:ITEM_WEAPON_WHIP"): "[NAME:pihw:spihw]",
+                    ("[ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:]", None): "[ATTACK:BLUNT:1:10:Lash:Lashes:NO_SUB:]"
+                },
+                """
+    item_weapon
+        [OBJECT:ITEM]
+            [ITEM_WEAPON:ITEM_WEAPON_WHIP]
+                [NAME:pihw:spihw]
+                    [SIZE:100]
+                    [SKILL:WHIP]
+                    [TWO_HANDED:27500]
+                    [MINIMUM_SIZE:22500]
+                    Some comment
+                    [MATERIAL_SIZE:1]
+            [ATTACK:BLUNT:1:10:Lash:Lashes:NO_SUB:5000]""",
+        )
+    ]
+)
+def test_translate_raw_file(content, dictionary, result):
+    assert list(translate_raw_file(io.StringIO(content), dictionary)) == result.splitlines()
