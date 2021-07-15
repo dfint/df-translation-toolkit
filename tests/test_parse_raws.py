@@ -67,34 +67,32 @@ def test_extract_translatables_from_raws(content, result):
 @pytest.mark.parametrize(
     "content,dictionary,result", [
         (
-                """
-    item_weapon
-        [OBJECT:ITEM]
-            [ITEM_WEAPON:ITEM_WEAPON_WHIP]
-                [NAME:whip:whips]
-                    [SIZE:100]
-                    [SKILL:WHIP]
-                    [TWO_HANDED:27500]
-                    [MINIMUM_SIZE:22500]
-                    Some comment
-                    [MATERIAL_SIZE:1]  trailing comments are trimmed
-            [ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:5000]""",
+                "item_weapon\n"
+                "    [OBJECT:ITEM]\n"
+                "        [ITEM_WEAPON:ITEM_WEAPON_WHIP]\n"
+                "            [NAME:whip:whips]\n"
+                "                [SIZE:100]\n"
+                "                [SKILL:WHIP]\n"
+                "                [TWO_HANDED:27500]\n"
+                "                [MINIMUM_SIZE:22500]\n"
+                "                Some comment\n"
+                "                [MATERIAL_SIZE:1]  trailing comments are trimmed\n"
+                "        [ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:5000]",
                 {
                     ("[NAME:whip:whips]", "ITEM_WEAPON:ITEM_WEAPON_WHIP"): "[NAME:pihw:spihw]",
                     ("[ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:]", None): "[ATTACK:BLUNT:1:10:Lash:Lashes:NO_SUB:]"
                 },
-                """
-    item_weapon
-        [OBJECT:ITEM]
-            [ITEM_WEAPON:ITEM_WEAPON_WHIP]
-                [NAME:pihw:spihw]
-                    [SIZE:100]
-                    [SKILL:WHIP]
-                    [TWO_HANDED:27500]
-                    [MINIMUM_SIZE:22500]
-                    Some comment
-                    [MATERIAL_SIZE:1]
-            [ATTACK:BLUNT:1:10:Lash:Lashes:NO_SUB:5000]""",
+                "item_weapon\n"
+                "    [OBJECT:ITEM]\n"
+                "        [ITEM_WEAPON:ITEM_WEAPON_WHIP]\n"
+                "            [NAME:pihw:spihw]\n"
+                "                [SIZE:100]\n"
+                "                [SKILL:WHIP]\n"
+                "                [TWO_HANDED:27500]\n"
+                "                [MINIMUM_SIZE:22500]\n"
+                "                Some comment\n"
+                "                [MATERIAL_SIZE:1]\n"
+                "        [ATTACK:BLUNT:1:10:Lash:Lashes:NO_SUB:5000]",
         )
     ]
 )
