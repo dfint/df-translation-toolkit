@@ -1,4 +1,4 @@
-from typing import List, Iterator
+from typing import List, Iterator, Iterable
 
 
 def split_tag(s: str) -> List[str]:
@@ -37,7 +37,7 @@ def last_suitable(s, func):
         return 0  # if there aren't suitable elements, then return 0, so that s[:i] gives empty list
 
 
-def extract_translatables_from_raws(file):
+def extract_translatables_from_raws(file: Iterable[str]):
     obj = None
     context = None
     keys = set()
