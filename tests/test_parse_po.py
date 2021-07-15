@@ -1,7 +1,7 @@
 from io import StringIO
 from typing import List, Tuple
 
-from df_gettext_toolkit.parse_po import escape_string, unescape_string, strip_once, format_po, load_po, save_po
+from df_gettext_toolkit.parse_po import escape_string, unescape_string, strip_once, load_po, save_po
 
 
 def test_escape_string():
