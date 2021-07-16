@@ -1,6 +1,6 @@
-from collections import defaultdict, Counter
-
 import typer
+
+from .parse_po import format_po
 
 MO_MAGIC = b'\xde\x12\x04\x95'
 
@@ -39,18 +39,9 @@ def load_mo(mo_file, encoding='utf-8'):
 
 
 def show_mo_content(filename: str):
-    trans = defaultdict(Counter)
-
     with open(filename, 'rb') as mo_file:
         for item in load_mo(mo_file):
-            if item['msgid']:
-                trans[item['msgid']][item['msgstr']] += 1
-
-    for key in sorted(trans, key=lambda x: (len(trans[x]), sum(trans[x].values())), reverse=True):
-        print('msgid: ', key)
-        print('msgstrs: ', end='')
-        print(trans[key])
-        print()
+            print(format_po(**item), end='\n\n')
 
 
 if __name__ == '__main__':
