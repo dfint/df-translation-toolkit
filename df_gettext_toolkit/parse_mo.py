@@ -30,11 +30,12 @@ def load_mo(mo_file, encoding='utf-8'):
     for i in range(number_of_strings):
         original_string = load_string(mo_file, original_string_table_offset + i * 8).decode(encoding)
         translation_string = load_string(mo_file, translation_string_table_offset + i * 8).decode(encoding)
-        if '\x04' in original_string:
-            context, original_string = original_string.split('\x04')
+
+        context, _, original_string = original_string.rpartition('\x04')
+        if context:
+            yield dict(msgctxt=context, msgid=original_string, msgstr=translation_string)
         else:
-            context = None
-        yield dict(msgctxt=context, msgid=original_string, msgstr=translation_string)
+            yield dict(msgid=original_string, msgstr=translation_string)
 
 
 def show_mo_content(filename: str):
