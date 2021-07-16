@@ -46,7 +46,7 @@ def show_mo_content(filename: str):
             if item['msgid']:
                 trans[item['msgid']][item['msgstr']] += 1
 
-    for key in sorted(trans, key=lambda x: -(len(trans[x])*1000+sum(trans[x].values()))):
+    for key in sorted(trans, key=lambda x: (len(trans[x]), sum(trans[x].values())), reverse=True):
         print('msgid: ', key)
         print('msgstrs: ', end='')
         print(trans[key])
