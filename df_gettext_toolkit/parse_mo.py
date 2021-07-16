@@ -2,22 +2,25 @@ from collections import defaultdict, Counter
 
 import typer
 
+MO_MAGIC = b'\xde\x12\x04\x95'
+
 
 def read_uint(file_object):
     return int.from_bytes(file_object.read(4), byteorder='little')
 
 
-def load_mo(mo_file, encoding='utf-8'):
-    def load_string(file_object, offset):
-        file_object.seek(offset)
-        string_size = read_uint(file_object)
-        string_offset = read_uint(file_object)
-        file_object.seek(string_offset)
-        return file_object.read(string_size).decode(encoding)
+def load_string(file_object, offset) -> bytes:
+    file_object.seek(offset)
+    string_size = read_uint(file_object)
+    string_offset = read_uint(file_object)
+    file_object.seek(string_offset)
+    return file_object.read(string_size)
 
+
+def load_mo(mo_file, encoding='utf-8'):
     mo_file.seek(0)
     magic_number = mo_file.read(4)
-    if magic_number != b'\xde\x12\x04\x95':
+    if magic_number != MO_MAGIC:
         raise ValueError("Wrong mo-file format")
 
     mo_file.seek(8)
@@ -25,8 +28,8 @@ def load_mo(mo_file, encoding='utf-8'):
     original_string_table_offset = read_uint(mo_file)
     translation_string_table_offset = read_uint(mo_file)
     for i in range(number_of_strings):
-        original_string = load_string(mo_file, original_string_table_offset + i * 8)
-        translation_string = load_string(mo_file, translation_string_table_offset + i * 8)
+        original_string = load_string(mo_file, original_string_table_offset + i * 8).decode(encoding)
+        translation_string = load_string(mo_file, translation_string_table_offset + i * 8).decode(encoding)
         if '\x04' in original_string:
             context, original_string = original_string.split('\x04')
         else:
