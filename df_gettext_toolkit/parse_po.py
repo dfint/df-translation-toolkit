@@ -62,7 +62,7 @@ def load_po(po_file):
         yield item
 
 
-def get_metadata(entry):
+def get_metadata(entry) -> Mapping[str, str]:
     def get_metadata_str(s):
         return dict(item.split(': ', maxsplit=1) for item in s.splitlines())
     

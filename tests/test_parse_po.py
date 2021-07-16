@@ -1,7 +1,7 @@
 from io import StringIO
 from typing import List, Tuple
 
-from df_gettext_toolkit.parse_po import escape_string, unescape_string, strip_once, load_po, save_po
+from df_gettext_toolkit.parse_po import escape_string, unescape_string, strip_once, load_po, save_po, PoReader
 
 
 def test_escape_string():
@@ -34,3 +34,24 @@ def test_load_po():
 
     result = list(load_po(file))[1:]  # the first entry is metadata
     assert result == [dict(msgid=text, msgstr=translation) for text, translation in entries]
+
+
+def test_po_reader():
+    po_content = """msgid ""
+        msgstr ""
+        "Project-Id-Version: Dwarf Fortress\\n"
+        "PO-Revision-Date: 2019-11-20 10:25+0000\\n"
+        "Content-Type: text/plain; charset=UTF-8\\n"
+        "Content-Transfer-Encoding: 8bit\\n"
+        "Language: ru\\n"
+        """
+
+    file = StringIO(po_content)
+    po = PoReader(file)
+    assert po.meta == {
+        "Project-Id-Version": "Dwarf Fortress",
+        "PO-Revision-Date": "2019-11-20 10:25+0000",
+        "Content-Type": "text/plain; charset=UTF-8",
+        "Content-Transfer-Encoding": "8bit",
+        "Language": "ru"
+    }
