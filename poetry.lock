@@ -215,17 +215,6 @@ pytest = ">=5.0"
 dev = ["pre-commit", "tox", "pytest-asyncio"]
 
 [[package]]
-name = "python-trim"
-version = "0.1.0rc0"
-description = "An implementation of trim_indent and trim_margin functions in Python, similar to trimIndent and trimMargin methods from Kotlin."
-category = "dev"
-optional = false
-python-versions = ">=3.6,<4.0"
-
-[package.source]
-type = "url"
-url = 'https://github.com/insolor/python-trim/releases/download/0.1.0-pre/python_trim-0.1.0rc0-py3-none-any.whl'
-[[package]]
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
@@ -281,7 +270,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "4e873ea16277f895d31a0a149f387181963575eda2fdc2c4a21729c19144435e"
+content-hash = "b65d63fd60befe26d74a678d824cc0e8b2f415cee29269fc2470d72c277ead5f"
 
 [metadata.files]
 atomicwrites = [
@@ -407,7 +396,6 @@ pytest-mock = [
     {file = "pytest-mock-3.6.1.tar.gz", hash = "sha256:40217a058c52a63f1042f0784f62009e976ba824c418cced42e88d5f40ab0e62"},
     {file = "pytest_mock-3.6.1-py3-none-any.whl", hash = "sha256:30c2f2cc9759e76eee674b81ea28c9f0b94f8f0445a1b87762cadf774f0df7e3"},
 ]
-python-trim = []
 toml = [
     {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},
     {file = "toml-0.10.2.tar.gz", hash = "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"},

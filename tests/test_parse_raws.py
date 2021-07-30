@@ -1,7 +1,7 @@
 import io
+from inspect import cleandoc as trim_indent
 
 import pytest
-from python_trim import trim_indent
 
 from df_gettext_toolkit.parse_raws import extract_translatables_from_raws, translate_raw_file
 
