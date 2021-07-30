@@ -1,6 +1,7 @@
 import io
 
 import pytest
+from python_trim import trim_indent
 
 from df_gettext_toolkit.parse_raws import extract_translatables_from_raws, translate_raw_file
 
@@ -9,7 +10,7 @@ from df_gettext_toolkit.parse_raws import extract_translatables_from_raws, trans
     "content,result",
     [
         (
-                """
+                trim_indent("""
                 creature_birds - file title is ignored
                 [OBJECT:CREATURE]
                 [CREATURE:BIRD_BLUEJAY] - context will be changed to CREATURE:BIRD_BLUEJAY
@@ -27,21 +28,22 @@ from df_gettext_toolkit.parse_raws import extract_translatables_from_raws, trans
                 [GENERAL_CHILD_NAME:cardinal hatchling:cardinal hatchlings]
                 [CREATURE_TILE:144][COLOR:4:0:1]
                 [PETVALUE:30][NATURAL][PET]
-                """.splitlines(),
+                """).splitlines(),
                 [('CREATURE:BIRD_BLUEJAY',
                   '[DESCRIPTION:A small blue-crested bird living in temperate woodlands, known for its harsh chirps.]',
-                  5),
-                 ('CREATURE:BIRD_BLUEJAY', '[NAME:blue jay:blue jays:blue jay]', 6),
-                 ('CREATURE:BIRD_BLUEJAY', '[CASTE_NAME:blue jay:blue jays:blue jay]', 7),
-                 ('CREATURE:BIRD_BLUEJAY', '[GENERAL_CHILD_NAME:blue jay hatchling:blue jay hatchlings]', 8),
+                  4),
+                 ('CREATURE:BIRD_BLUEJAY', '[NAME:blue jay:blue jays:blue jay]', 5),
+                 ('CREATURE:BIRD_BLUEJAY', '[CASTE_NAME:blue jay:blue jays:blue jay]', 6),
+                 ('CREATURE:BIRD_BLUEJAY', '[GENERAL_CHILD_NAME:blue jay hatchling:blue jay hatchlings]', 7),
                  ('CREATURE:BIRD_CARDINAL',
-                  '[DESCRIPTION:A small bright red bird with a distinctive crest, found in '  'temperate forests.]',
-                  13), ('CREATURE:BIRD_CARDINAL', '[NAME:cardinal:cardinals:cardinal]', 14),
-                 ('CREATURE:BIRD_CARDINAL', '[CASTE_NAME:cardinal:cardinals:cardinal]', 15),
-                 ('CREATURE:BIRD_CARDINAL', '[GENERAL_CHILD_NAME:cardinal hatchling:cardinal hatchlings]', 16)]
+                  '[DESCRIPTION:A small bright red bird with a distinctive crest, found in temperate forests.]',
+                  12),
+                 ('CREATURE:BIRD_CARDINAL', '[NAME:cardinal:cardinals:cardinal]', 13),
+                 ('CREATURE:BIRD_CARDINAL', '[CASTE_NAME:cardinal:cardinals:cardinal]', 14),
+                 ('CREATURE:BIRD_CARDINAL', '[GENERAL_CHILD_NAME:cardinal hatchling:cardinal hatchlings]', 15)]
         ),
         (
-                """
+                trim_indent("""
                 item_weapon
                 [OBJECT:ITEM]
                 [ITEM_WEAPON:ITEM_WEAPON_WHIP]
@@ -54,9 +56,9 @@ from df_gettext_toolkit.parse_raws import extract_translatables_from_raws, trans
                 [ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:5000] - 5000 is not translatable 
                     [ATTACK_PREPARE_AND_RECOVER:4:4]
                     [ATTACK_FLAG_BAD_MULTIATTACK]
-                """.splitlines(),
-                [('ITEM_WEAPON:ITEM_WEAPON_WHIP', '[NAME:whip:whips]', 5),
-                 ('ITEM_WEAPON:ITEM_WEAPON_WHIP', '[ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:]', 11)]
+                """).splitlines(),
+                [('ITEM_WEAPON:ITEM_WEAPON_WHIP', '[NAME:whip:whips]', 4),
+                 ('ITEM_WEAPON:ITEM_WEAPON_WHIP', '[ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:]', 10)]
         )
     ]
 )
@@ -67,34 +69,34 @@ def test_extract_translatables_from_raws(content, result):
 @pytest.mark.parametrize(
     "content,dictionary,result", [
         (
-                """
-    item_weapon
-        [OBJECT:ITEM]
-            [ITEM_WEAPON:ITEM_WEAPON_WHIP]
-                [NAME:whip:whips]
-                    [SIZE:100]
-                    [SKILL:WHIP]
-                    [TWO_HANDED:27500]
-                    [MINIMUM_SIZE:22500]
-                    Some comment
-                    [MATERIAL_SIZE:1]  trailing comments are trimmed
-            [ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:5000]""",
+                trim_indent("""
+                    item_weapon
+                        [OBJECT:ITEM]
+                            [ITEM_WEAPON:ITEM_WEAPON_WHIP]
+                                [NAME:whip:whips]
+                                    [SIZE:100]
+                                    [SKILL:WHIP]
+                                    [TWO_HANDED:27500]
+                                    [MINIMUM_SIZE:22500]
+                                    Some comment
+                                    [MATERIAL_SIZE:1]  trailing comments are trimmed
+                            [ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:5000]"""),
                 {
                     ("[NAME:whip:whips]", "ITEM_WEAPON:ITEM_WEAPON_WHIP"): "[NAME:pihw:spihw]",
                     ("[ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:]", None): "[ATTACK:BLUNT:1:10:Lash:Lashes:NO_SUB:]"
                 },
-                """
-    item_weapon
-        [OBJECT:ITEM]
-            [ITEM_WEAPON:ITEM_WEAPON_WHIP]
-                [NAME:pihw:spihw]
-                    [SIZE:100]
-                    [SKILL:WHIP]
-                    [TWO_HANDED:27500]
-                    [MINIMUM_SIZE:22500]
-                    Some comment
-                    [MATERIAL_SIZE:1]
-            [ATTACK:BLUNT:1:10:Lash:Lashes:NO_SUB:5000]""",
+                trim_indent("""
+                item_weapon
+                    [OBJECT:ITEM]
+                        [ITEM_WEAPON:ITEM_WEAPON_WHIP]
+                            [NAME:pihw:spihw]
+                                [SIZE:100]
+                                [SKILL:WHIP]
+                                [TWO_HANDED:27500]
+                                [MINIMUM_SIZE:22500]
+                                Some comment
+                                [MATERIAL_SIZE:1]
+                        [ATTACK:BLUNT:1:10:Lash:Lashes:NO_SUB:5000]"""),
         )
     ]
 )
