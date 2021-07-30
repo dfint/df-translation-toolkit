@@ -86,17 +86,17 @@ def test_extract_translatables_from_raws(content, result):
                     ("[ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:]", None): "[ATTACK:BLUNT:1:10:Lash:Lashes:NO_SUB:]"
                 },
                 trim_indent("""
-                item_weapon
-                    [OBJECT:ITEM]
-                        [ITEM_WEAPON:ITEM_WEAPON_WHIP]
-                            [NAME:pihw:spihw]
-                                [SIZE:100]
-                                [SKILL:WHIP]
-                                [TWO_HANDED:27500]
-                                [MINIMUM_SIZE:22500]
-                                Some comment
-                                [MATERIAL_SIZE:1]
-                        [ATTACK:BLUNT:1:10:Lash:Lashes:NO_SUB:5000]"""),
+                    item_weapon
+                        [OBJECT:ITEM]
+                            [ITEM_WEAPON:ITEM_WEAPON_WHIP]
+                                [NAME:pihw:spihw]
+                                    [SIZE:100]
+                                    [SKILL:WHIP]
+                                    [TWO_HANDED:27500]
+                                    [MINIMUM_SIZE:22500]
+                                    Some comment
+                                    [MATERIAL_SIZE:1]
+                            [ATTACK:BLUNT:1:10:Lash:Lashes:NO_SUB:5000]"""),
         )
     ]
 )
