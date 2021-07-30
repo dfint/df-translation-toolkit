@@ -30,17 +30,15 @@ from df_gettext_toolkit.parse_raws import extract_translatables_from_raws, trans
                 [PETVALUE:30][NATURAL][PET]
                 """).splitlines(),
                 [('CREATURE:BIRD_BLUEJAY',
-                  '[DESCRIPTION:A small blue-crested bird living in temperate woodlands, known for its harsh chirps.]',
-                  4),
-                 ('CREATURE:BIRD_BLUEJAY', '[NAME:blue jay:blue jays:blue jay]', 5),
-                 ('CREATURE:BIRD_BLUEJAY', '[CASTE_NAME:blue jay:blue jays:blue jay]', 6),
-                 ('CREATURE:BIRD_BLUEJAY', '[GENERAL_CHILD_NAME:blue jay hatchling:blue jay hatchlings]', 7),
+                  '[DESCRIPTION:A small blue-crested bird living in temperate woodlands, known for its harsh chirps.]'),
+                 ('CREATURE:BIRD_BLUEJAY', '[NAME:blue jay:blue jays:blue jay]'),
+                 ('CREATURE:BIRD_BLUEJAY', '[CASTE_NAME:blue jay:blue jays:blue jay]'),
+                 ('CREATURE:BIRD_BLUEJAY', '[GENERAL_CHILD_NAME:blue jay hatchling:blue jay hatchlings]'),
                  ('CREATURE:BIRD_CARDINAL',
-                  '[DESCRIPTION:A small bright red bird with a distinctive crest, found in temperate forests.]',
-                  12),
-                 ('CREATURE:BIRD_CARDINAL', '[NAME:cardinal:cardinals:cardinal]', 13),
-                 ('CREATURE:BIRD_CARDINAL', '[CASTE_NAME:cardinal:cardinals:cardinal]', 14),
-                 ('CREATURE:BIRD_CARDINAL', '[GENERAL_CHILD_NAME:cardinal hatchling:cardinal hatchlings]', 15)]
+                  '[DESCRIPTION:A small bright red bird with a distinctive crest, found in temperate forests.]'),
+                 ('CREATURE:BIRD_CARDINAL', '[NAME:cardinal:cardinals:cardinal]'),
+                 ('CREATURE:BIRD_CARDINAL', '[CASTE_NAME:cardinal:cardinals:cardinal]'),
+                 ('CREATURE:BIRD_CARDINAL', '[GENERAL_CHILD_NAME:cardinal hatchling:cardinal hatchlings]')]
         ),
         (
                 trim_indent("""
@@ -57,13 +55,15 @@ from df_gettext_toolkit.parse_raws import extract_translatables_from_raws, trans
                     [ATTACK_PREPARE_AND_RECOVER:4:4]
                     [ATTACK_FLAG_BAD_MULTIATTACK]
                 """).splitlines(),
-                [('ITEM_WEAPON:ITEM_WEAPON_WHIP', '[NAME:whip:whips]', 4),
-                 ('ITEM_WEAPON:ITEM_WEAPON_WHIP', '[ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:]', 10)]
+                [('ITEM_WEAPON:ITEM_WEAPON_WHIP', '[NAME:whip:whips]'),
+                 ('ITEM_WEAPON:ITEM_WEAPON_WHIP', '[ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:]')]
         )
     ]
 )
 def test_extract_translatables_from_raws(content, result):
-    assert list(extract_translatables_from_raws(content)) == result
+    actual_result = extract_translatables_from_raws(content)
+    result_without_name_numbers = list(map(lambda row: row[:2], actual_result))
+    assert result_without_name_numbers == result
 
 
 @pytest.mark.parametrize(
