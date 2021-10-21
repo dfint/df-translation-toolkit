@@ -23,6 +23,7 @@ def test_strip_once():
 
 def test_load_po():
     data = """
+    # Some comment
     #: body_default.txt:7
     msgctxt "BODY:BASIC_1PARTBODY"
     msgid "[BP:UB:body:bodies]"
@@ -30,6 +31,7 @@ def test_load_po():
     """
 
     expected = {
+        "#": "Some comment\n",
         "#:": "body_default.txt:7",
         "msgctxt": "BODY:BASIC_1PARTBODY",
         "msgid": "[BP:UB:body:bodies]",
