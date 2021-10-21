@@ -1,5 +1,5 @@
-from collections import Mapping
 from pathlib import Path
+from typing import Mapping
 
 from df_raw_decoder import decode_data
 from df_raw_decoder import encode_data

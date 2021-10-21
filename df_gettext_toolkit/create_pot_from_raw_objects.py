@@ -1,11 +1,11 @@
 import sys
-from collections import Iterator
 from pathlib import Path
+from typing import Iterator
 
 import typer
 
-from .parse_raws import extract_translatables_from_raws
 from .parse_po import format_po, default_header
+from .parse_raws import extract_translatables_from_raws
 
 
 def create_pot_file(pot_file, raw_files: Iterator[Path], source_encoding):

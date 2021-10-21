@@ -1,6 +1,6 @@
 import sys
-from collections import Mapping
 from pathlib import Path
+from typing import Mapping
 
 import typer
 
