@@ -46,4 +46,4 @@ def translate_compressed(po_filename, path, encoding):
                 continue
 
             with backup(file) as backup_file:
-                translate_compressed_file(backup_file, file, dictionary, encoding, is_index_file)
+                yield from translate_compressed_file(backup_file, file, dictionary, encoding, is_index_file)
