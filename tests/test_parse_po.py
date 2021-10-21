@@ -22,6 +22,26 @@ def test_strip_once():
 
 
 def test_load_po():
+    data = """
+    #: body_default.txt:7
+    msgctxt "BODY:BASIC_1PARTBODY"
+    msgid "[BP:UB:body:bodies]"
+    msgstr "[BP:UB:тело:тела]"
+    """
+
+    expected = {
+        "#:": "body_default.txt:7",
+        "msgctxt": "BODY:BASIC_1PARTBODY",
+        "msgid": "[BP:UB:body:bodies]",
+        "msgstr": "[BP:UB:тело:тела]"
+    }
+
+    file = StringIO(data)
+    result = next(load_po(file))
+    assert result == expected
+
+
+def test_save_load_po():
     entries: List[Tuple[str, str]] = [
         ('asddf', 'qwert'),
         ('xcvf', 'fghrth'),
