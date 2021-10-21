@@ -39,7 +39,7 @@ def translate_compressed(po_filename, path, encoding):
         dictionary = {item['msgid']: item['msgstr'] for item in load_po(pofile)}
 
     for file in Path(path).rglob('*'):
-        if file.is_file() and file.suffix == '':
+        if file.is_file() and '.' not in file.name:
             is_index_file = file.name == 'index'
             # Fix crash game due to changes in index file
             if is_index_file:
