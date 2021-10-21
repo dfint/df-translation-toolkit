@@ -54,7 +54,13 @@ def test_fix_trailing_spaces(text, translation, fixed):
     "text,translation,fixed",
     [
         (" embraces ", "obdivuje", " obdivuje "),
+        ("test", "", ""),
+        (" test", "", " "),
+        ("test ", "", " "),
+        (" test ", "", " "),
+        ("", "", ""),
+        (" ", "", " "),
     ],
 )
 def test_fix_spaces(text, translation, fixed):
-    assert fix_spaces(text, translation) == fixed
+    assert fix_spaces(text, translation) == fixed, (text, translation, fixed)

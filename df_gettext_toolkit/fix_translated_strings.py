@@ -7,19 +7,21 @@ def fix_leading_spaces(original_string: str, translation: str, exclusions: set):
     if original_string in exclusions:
         return translation
 
-    if (original_string[0] == ' ' and
-            translation[0] != ' ' and
-            translation[0] != ','):
+    if (original_string.startswith(' ')
+            and not translation.startswith(' ')
+            and not translation.startswith(',')):
         translation = ' ' + translation
 
-    if original_string[0] != ' ' and translation[0] == ' ':
+    if not original_string.startswith(' ') and translation.startswith(' '):
         translation = translation.lstrip()
 
     return translation
 
 
 def fix_trailing_spaces(original_string: str, translation: str, exclusions: set):
-    if original_string not in exclusions and original_string[-1] == ' ' and translation[-1] != ' ':
+    if (original_string not in exclusions
+            and original_string.endswith(' ')
+            and not translation.endswith(' ')):
         translation += ' '
 
     return translation
