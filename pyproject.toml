@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "df-gettext-toolkit"
-version = "0.2.3"
+version = "0.2.4"
 description = "Toolset to convert text extracted from DF to gettext format and aback"
 authors = ["insolor <insolor@gmail.com>", "aNNiPAk <annipak@yandex.ru>"]
 license = "MIT"
@@ -9,7 +9,7 @@ license = "MIT"
 python = "^3.6"
 typer = "^0.3.2"
 Unidecode = "^1.2.0"
-df_raw_decoder = { url = 'https://github.com/dfint/df_raw_decoder/archive/master.zip' }
+df_raw_decoder = { url = 'https://github.com/dfint/df_raw_decoder/releases/download/1.0.0/df_raw_decoder-1.0.0-py3-none-any.whl' }
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.4"
