@@ -7,11 +7,11 @@ from .parse_plain_text import parse_plain_text_file
 from .parse_po import format_po
 
 
-def main(path: str = '.', split: bool = False):
+def main(path: Path, split: bool = False):
     join_paragraphs = not split
 
     keys = set()
-    for file_path in sorted(Path(path).rglob("*.txt")):
+    for file_path in sorted(path.rglob("*.txt")):
         if file_path.is_file():
             print(file_path, file=sys.stderr)
             with open(file_path) as file:

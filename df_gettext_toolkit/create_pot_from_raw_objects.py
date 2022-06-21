@@ -19,11 +19,9 @@ def create_pot_file(pot_file, raw_files: Iterator[Path], source_encoding):
                     print(format_po(msgid=item, msgstr="", msgctxt=context), file=pot_file)
 
 
-def main(pot_filename, path: str = '.', source_encoding: str = 'cp437'):
-    raw_files = (file for file in Path(path).glob("*.txt") if not file.name.startswith("language_"))
-
-    with open(pot_filename, 'w', encoding='utf-8') as pot_file:
-        create_pot_file(pot_file, sorted(raw_files), source_encoding)
+def main(pot_file: typer.FileTextWrite, raws_path: Path, source_encoding: str = 'cp437'):
+    raw_files = (file for file in raws_path.glob("*.txt") if not file.name.startswith("language_"))
+    create_pot_file(pot_file, sorted(raw_files), source_encoding)
 
 
 if __name__ == '__main__':

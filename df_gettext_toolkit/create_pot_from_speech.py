@@ -6,10 +6,10 @@ import typer
 from .parse_po import format_po
 
 
-def main(path: str = '.'):
+def main(path: Path):
     print('Path:', path, file=sys.stderr)
 
-    for file_path in sorted(Path(path).glob("*.txt")):
+    for file_path in sorted(path.glob("*.txt")):
         if file_path.is_file():
             print('File:', file_path.name, file=sys.stderr)
             with open(file_path) as file:
