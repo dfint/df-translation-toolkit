@@ -71,16 +71,26 @@ def test_ignore_underline_separated_words():
     assert rules.ignore_underline_separated_words("index1_11") is True
 
 
-def test_ignore_dash_prepended_strings():
-    assert rules.ignore_dash_prepended_strings("-world_sites_and_pops") is True
-    assert rules.ignore_dash_prepended_strings("-site_map-") is True
+
+@pytest.mark.parametrize(
+    "string, ignore",
+    [
+        ("-world_sites_and_pops", True),
+        ("-site_map-", True),
+    ]
+)
+def test_ignore_dash_prepended_strings(string, ignore):
+    assert rules.ignore_dash_prepended_strings(string) is ignore
 
 
-def test_ignore_by_blacklisted_words():
-    assert (
-        rules.ignore_by_blacklisted_words("*** Error(s) finalizing the creature ")
-        is True
-    )
+@pytest.mark.parametrize(
+    "string, ignore",
+    [
+        ("*** Error(s) finalizing the creature ", True),
+    ]
+)
+def test_ignore_by_blacklisted_words(string, ignore):
+    assert rules.ignore_by_blacklisted_words(string) is ignore
 
 
 @pytest.mark.parametrize(
@@ -98,23 +108,25 @@ def test_ignore_camel_case(string, ignore):
     assert rules.ignore_camel_case(string) is ignore
 
 
-def test_ignore_by_blacklisted_substrings():
-    assert (
-        rules.ignore_by_blacklisted_substrings(
-            "plotter (assassinate) placed out of bounds"
-        )
-        is True
-    )
-    assert (
-        rules.ignore_by_blacklisted_substrings(
-            "undefined local creature material set to default: "
-        )
-        is True
-    )
+@pytest.mark.parametrize(
+    "string, ignore",
+    [
+        ("plotter (assassinate) placed out of bounds", True),
+        ("undefined local creature material set to default: ", True)
+    ]
+)
+def test_ignore_by_blacklisted_substrings(string, ignore):
+    assert rules.ignore_by_blacklisted_substrings(string) is ignore
 
 
-def test_all_ignore_rules():
-    assert rules.all_ignore_rules("any text") is False
-    assert rules.all_ignore_rules("Any text") is False
-    assert rules.all_ignore_rules("Any text.") is False
-    assert rules.all_ignore_rules("Another string: just a tests") is False
+@pytest.mark.parametrize(
+    "string, ignore",
+    [
+        ("any text", False),
+        ("Any text", False),
+        ("Any text.", False),
+        ("Another string: just a test", False),
+    ]
+)
+def test_all_ignore_rules(string, ignore):
+    assert rules.all_ignore_rules(string) is ignore
