@@ -53,7 +53,7 @@ def ignore_dash_prepended_strings(string):
     return re.fullmatch(r"-[a-z_]+-?", string) is not None
 
 
-def ignore_camel_case(string):
+def ignore_mixed_case(string):
     return re.search(r"[a-z]+[A-Z]", string) is not None
 
 
@@ -146,7 +146,7 @@ def ignore_by_blacklisted_substrings(string):
 
 
 all_rules_list = [ignore_xml, ignore_square_brackets, ignore_paths, ignore_tags, ignore_filenames, ignore_gl,
-                  ignore_underline_separated_words, ignore_camel_case, ignore_word_with_number, ignore_starts,
+                  ignore_underline_separated_words, ignore_mixed_case, ignore_word_with_number, ignore_starts,
                   ignore_by_blacklist_full_string, ignore_by_blacklisted_words, ignore_short_words,
                   ignore_dash_prepended_strings, ignore_by_blacklisted_substrings]
 
