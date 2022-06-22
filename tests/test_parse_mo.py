@@ -9,10 +9,10 @@ def test_load_mo():
     d = {
         "Word1": "Translation1",
         "Word2": "Translation2",
-        "LongWord": "LongTranslation"
+        "LongWord": "LongTranslation",
     }
     mo_file = create_mo(d)
-    assert {item['msgid']: item['msgstr'] for item in load_mo(mo_file)} == d
+    assert {item["msgid"]: item["msgstr"] for item in load_mo(mo_file)} == d
 
 
 def test_wrong_mo_signature():

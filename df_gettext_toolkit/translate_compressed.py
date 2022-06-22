@@ -9,19 +9,21 @@ from .parse_plain_text import parse_plain_text_file
 from .parse_po import load_po
 
 
-def translate_compressed_file(source_file_path: Path,
-                              destination_file_path: Path,
-                              dictionary: Mapping[str, str],
-                              encoding: str,
-                              is_index_file: bool):
+def translate_compressed_file(
+    source_file_path: Path,
+    destination_file_path: Path,
+    dictionary: Mapping[str, str],
+    encoding: str,
+    is_index_file: bool,
+):
 
-    with open(source_file_path, 'rb') as src:
-        with open(destination_file_path, 'wb') as dest:
+    with open(source_file_path, "rb") as src:
+        with open(destination_file_path, "wb") as dest:
             yield destination_file_path.name
 
             translations = []
 
-            lines = (line.decode('cp437') for line in decode_data(src, is_index_file))
+            lines = (line.decode("cp437") for line in decode_data(src, is_index_file))
             for text_block, is_translatable, _ in parse_plain_text_file(lines, True):
                 if text_block in dictionary:
                     translation = dictionary[text_block]
@@ -35,12 +37,12 @@ def translate_compressed_file(source_file_path: Path,
 
 
 def translate_compressed(po_filename, path, encoding):
-    with open(po_filename, 'r', encoding='utf-8') as pofile:
-        dictionary = {item['msgid']: item['msgstr'] for item in load_po(pofile)}
+    with open(po_filename, "r", encoding="utf-8") as pofile:
+        dictionary = {item["msgid"]: item["msgstr"] for item in load_po(pofile)}
 
-    for file in Path(path).rglob('*'):
-        if file.is_file() and '.' not in file.name:
-            is_index_file = file.name == 'index'
+    for file in Path(path).rglob("*"):
+        if file.is_file() and "." not in file.name:
+            is_index_file = file.name == "index"
             # Fix crash game due to changes in index file
             if is_index_file:
                 continue

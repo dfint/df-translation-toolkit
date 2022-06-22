@@ -2,7 +2,7 @@ from collections import defaultdict
 from typing import Mapping, Iterator
 
 
-def strip_once(s, chars=' '):
+def strip_once(s, chars=" "):
     if s and s[0] in chars:
         s = s[1:]
     if s and s[-1] in chars:
@@ -11,11 +11,11 @@ def strip_once(s, chars=' '):
 
 
 _replace_table = [
-    ('\\', r'\\'),
-    ('\t', r'\t'),
-    ('\r', r'\r'),
-    ('\n', r'\n'),
-    ('\"', r'\"'),
+    ("\\", r"\\"),
+    ("\t", r"\t"),
+    ("\r", r"\r"),
+    ("\n", r"\n"),
+    ('"', r"\""),
 ]
 
 _unescape_translation_table = {escaped: unescaped for unescaped, escaped in _replace_table}
@@ -44,11 +44,11 @@ def load_po(po_file):
                 yield item
                 item = defaultdict(str)
                 prev = None
-        elif line.startswith('#'):
-            key, _, value = line.partition(' ')
+        elif line.startswith("#"):
+            key, _, value = line.partition(" ")
             item[key] += value
-            if key == '#':
-                item[key] += '\n'
+            if key == "#":
+                item[key] += "\n"
         elif line.startswith('"'):
             assert prev is not None
             item[prev] += unescape_string(strip_once(line, '"'))
@@ -64,12 +64,12 @@ def load_po(po_file):
 
 def get_metadata(entry) -> Mapping[str, str]:
     def get_metadata_str(s):
-        return dict(item.split(': ', maxsplit=1) for item in s.splitlines())
-    
+        return dict(item.split(": ", maxsplit=1) for item in s.splitlines())
+
     if isinstance(entry, str):
         return get_metadata_str(entry)
-    elif isinstance(entry, dict) and 'msgstr' in entry:
-        return get_metadata_str(entry['msgstr'])
+    elif isinstance(entry, dict) and "msgstr" in entry:
+        return get_metadata_str(entry["msgstr"])
 
 
 class PoReader:
@@ -77,23 +77,23 @@ class PoReader:
         file_object.seek(0)
         self._iterator = load_po(file_object)
         first_entry = next(self._iterator)
-        assert first_entry['msgid'] == '', 'No metadata entry in the po file'
+        assert first_entry["msgid"] == "", "No metadata entry in the po file"
         self.meta = get_metadata(first_entry)
-    
+
     def __iter__(self):
         return self._iterator
 
 
 def format_lines(s):
-    return '\n'.join('"%s"' % escape_string(x) for x in s.splitlines(keepends=True)) or '""'
+    return "\n".join('"%s"' % escape_string(x) for x in s.splitlines(keepends=True)) or '""'
 
 
 def format_po(msgid, msgstr="", msgctxt=None):
     s = ""
     if msgctxt:
-        s += 'msgctxt %s\n' % format_lines(msgctxt)
-    s += 'msgid %s\n' % format_lines(msgid)
-    s += 'msgstr %s\n' % format_lines(msgstr)
+        s += "msgctxt %s\n" % format_lines(msgctxt)
+    s += "msgid %s\n" % format_lines(msgid)
+    s += "msgstr %s\n" % format_lines(msgstr)
     return s
 
 

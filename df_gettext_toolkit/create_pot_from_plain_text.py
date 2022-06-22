@@ -18,12 +18,12 @@ def main(path: Path, split: bool = False):
                 for text_block, is_translatable, line_number in parse_plain_text_file(file, join_paragraphs):
                     if is_translatable:
                         if text_block in keys:
-                            print('Key already exists:', repr(text_block), file=sys.stderr)
+                            print("Key already exists:", repr(text_block), file=sys.stderr)
                         else:
                             keys.add(text_block)
-                            print('#: %s:%d' % (file_path.name, line_number))
-                            print(format_po(msgid=text_block.rstrip('\n')))
+                            print("#: %s:%d" % (file_path.name, line_number))
+                            print(format_po(msgid=text_block.rstrip("\n")))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     typer.run(main)

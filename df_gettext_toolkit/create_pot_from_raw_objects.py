@@ -15,14 +15,14 @@ def create_pot_file(pot_file, raw_files: Iterator[Path], source_encoding):
             print(file_name.name, file=sys.stderr)
             with open(file_name, encoding=source_encoding) as file:
                 for context, item, line_number in extract_translatables_from_raws(file):
-                    print('#: %s:%d' % (file_name.name, line_number), file=pot_file)  # source file : line number
+                    print("#: %s:%d" % (file_name.name, line_number), file=pot_file)  # source file : line number
                     print(format_po(msgid=item, msgstr="", msgctxt=context), file=pot_file)
 
 
-def main(pot_file: typer.FileTextWrite, raws_path: Path, source_encoding: str = 'cp437'):
+def main(pot_file: typer.FileTextWrite, raws_path: Path, source_encoding: str = "cp437"):
     raw_files = (file for file in raws_path.glob("*.txt") if not file.name.startswith("language_"))
     create_pot_file(pot_file, sorted(raw_files), source_encoding)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     typer.run(main)

@@ -12,24 +12,42 @@ import df_gettext_toolkit.df_ignore_string_rules as rules
         (rules.ignore_xml, "/<local_id>", True),
         (rules.ignore_xml, "<type>mead hall</type>", True),
         (rules.ignore_xml, "<no uniforms>", False),
-
-        (rules.ignore_square_brackets, "We have many drinks to choose from.  [You receive a list.]", False),
+        (
+            rules.ignore_square_brackets,
+            "We have many drinks to choose from.  [You receive a list.]",
+            False,
+        ),
         (rules.ignore_square_brackets, "[B]", True),
         (rules.ignore_square_brackets, "[PRO_SUB]", True),
-        (rules.ignore_square_brackets, "  [You receive a detailed description.]", False),
+        (
+            rules.ignore_square_brackets,
+            "  [You receive a detailed description.]",
+            False,
+        ),
         (rules.ignore_square_brackets, "[CREATURE:", True),
         (rules.ignore_square_brackets, "[C:4:0:1]", True),
-        (rules.ignore_square_brackets, " [C:7:0:1]and is [C:3:0:0]oblivious to reality", False),
+        (
+            rules.ignore_square_brackets,
+            " [C:7:0:1]and is [C:3:0:0]oblivious to reality",
+            False,
+        ),
         (rules.ignore_square_brackets, " [DONE]", False),
         (rules.ignore_square_brackets, " [MORE]", False),
         (rules.ignore_square_brackets, " [WITH YOU]", False),
         (rules.ignore_square_brackets, "([LIP])", False),
-        (rules.ignore_square_brackets, r"\t\t[SYN_AFFECTED_CLASS:GENERAL_POISON]", True),
-        (rules.ignore_square_brackets, r"\t\t[SYN_INJECTED][SYN_CONTACT][SYN_INHALED][SYN_INGESTED]", True),
+        (
+            rules.ignore_square_brackets,
+            r"\t\t[SYN_AFFECTED_CLASS:GENERAL_POISON]",
+            True,
+        ),
+        (
+            rules.ignore_square_brackets,
+            r"\t\t[SYN_INJECTED][SYN_CONTACT][SYN_INHALED][SYN_INGESTED]",
+            True,
+        ),
         (rules.ignore_square_brackets, "[STATE_ADJ:ALL_SOLID:frozen ", False),
         (rules.ignore_square_brackets, "[STATE_ADJ:ALL_SOLID:", True),
         (rules.ignore_square_brackets, ":BP:BY_CATEGORY:ALL:EYE", True),
-
         (rules.ignore_paths, "/stdout.txt", True),
         (rules.ignore_paths, "data/save/current", True),
         (rules.ignore_paths, "data/init/interface.txt", True),
@@ -41,31 +59,40 @@ import df_gettext_toolkit.df_ignore_string_rules as rules
         (rules.ignore_paths, "data/save/*.*", True),
         (rules.ignore_paths, ".bmp", True),
         (rules.ignore_paths, "grinding.", False),
-
         (rules.ignore_filenames, "-detailed.bmp", True),
-
         (rules.ignore_underline_separated_words, "index1_11", True),
-
         (rules.ignore_dash_prepended_strings, "-world_sites_and_pops", True),
         (rules.ignore_dash_prepended_strings, "-site_map-", True),
-
-        (rules.ignore_by_blacklisted_words, "*** Error(s) finalizing the creature ", True),
-
+        (
+            rules.ignore_by_blacklisted_words,
+            "*** Error(s) finalizing the creature ",
+            True,
+        ),
         (rules.ignore_mixed_case, "InitializeConditionVariable", True),
         (rules.ignore_mixed_case, "Initialize", False),
         (rules.ignore_mixed_case, "SleepConditionVariableCS", True),
         (rules.ignore_mixed_case, "CAPS", False),
         (rules.ignore_mixed_case, "RefusedID/", True),
         (rules.ignore_mixed_case, "plF", True),
-
-        (rules.ignore_by_blacklisted_substrings, "plotter (assassinate) placed out of bounds", True),
-        (rules.ignore_by_blacklisted_substrings, "undefined local creature material set to default: ", True),
-
+        (
+            rules.ignore_by_blacklisted_substrings,
+            "plotter (assassinate) placed out of bounds",
+            True,
+        ),
+        (
+            rules.ignore_by_blacklisted_substrings,
+            "undefined local creature material set to default: ",
+            True,
+        ),
         (rules.all_ignore_rules, "any text", False),
         (rules.all_ignore_rules, "Any text", False),
         (rules.all_ignore_rules, "Any text.", False),
         (rules.all_ignore_rules, "Another string: just a test", False),
-        (rules.all_ignore_rules, "i", True),  # Translation of this will replace a key name in the building menu (up/down staircase)
+        (
+            rules.all_ignore_rules,
+            "i",
+            True,
+        ),  # Translation of this will replace a key name in the building menu (up/down staircase)
     ],
 )
 def test_ignore_rules(rule, string, ignore):

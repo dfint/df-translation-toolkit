@@ -1,19 +1,26 @@
 from io import StringIO
 from typing import List, Tuple
 
-from df_gettext_toolkit.parse_po import escape_string, unescape_string, strip_once, load_po, save_po, PoReader
+from df_gettext_toolkit.parse_po import (
+    escape_string,
+    unescape_string,
+    strip_once,
+    load_po,
+    save_po,
+    PoReader,
+)
 
 
 def test_escape_string():
-    assert escape_string("\r\n\"\\\t\r") == r"\r\n\"\\\t\r"
+    assert escape_string('\r\n"\\\t\r') == r"\r\n\"\\\t\r"
 
 
 def test_unescape_string():
-    assert unescape_string(r"\r\n\"\\\t\r") == "\r\n\"\\\t\r"
+    assert unescape_string(r"\r\n\"\\\t\r") == '\r\n"\\\t\r'
 
 
 def test_escape_unescape():
-    s = "\r\n\"\\\t\r"
+    s = '\r\n"\\\t\r'
     assert unescape_string(escape_string(s)) == s
 
 
@@ -35,7 +42,7 @@ def test_load_po():
         "#:": "body_default.txt:7",
         "msgctxt": "BODY:BASIC_1PARTBODY",
         "msgid": "[BP:UB:body:bodies]",
-        "msgstr": "[BP:UB:тело:тела]"
+        "msgstr": "[BP:UB:тело:тела]",
     }
 
     file = StringIO(data)
@@ -45,9 +52,9 @@ def test_load_po():
 
 def test_save_load_po():
     entries: List[Tuple[str, str]] = [
-        ('asddf', 'qwert'),
-        ('xcvf', 'fghrth'),
-        ('cvbeb', 'jtyjkty')
+        ("asddf", "qwert"),
+        ("xcvf", "fghrth"),
+        ("cvbeb", "jtyjkty"),
     ]
     template = (item[0] for item in entries)
     file = StringIO()
@@ -75,5 +82,5 @@ def test_po_reader():
         "PO-Revision-Date": "2019-11-20 10:25+0000",
         "Content-Type": "text/plain; charset=UTF-8",
         "Content-Transfer-Encoding": "8bit",
-        "Language": "ru"
+        "Language": "ru",
     }

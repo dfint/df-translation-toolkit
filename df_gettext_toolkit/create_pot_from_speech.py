@@ -7,17 +7,17 @@ from .parse_po import format_po
 
 
 def main(path: Path):
-    print('Path:', path, file=sys.stderr)
+    print("Path:", path, file=sys.stderr)
 
     for file_path in sorted(path.glob("*.txt")):
         if file_path.is_file():
-            print('File:', file_path.name, file=sys.stderr)
+            print("File:", file_path.name, file=sys.stderr)
             with open(file_path) as file:
                 for i, line in enumerate(file, 1):
-                    if line.rstrip('\n'):
-                        print('#: %s:%d' % (file_path.name, i))
-                        print(format_po(msgid=line.rstrip('\n')))
+                    if line.rstrip("\n"):
+                        print("#: %s:%d" % (file_path.name, i))
+                        print(format_po(msgid=line.rstrip("\n")))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     typer.run(main)
