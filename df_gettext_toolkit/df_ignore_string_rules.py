@@ -1,7 +1,26 @@
 import re
+from typing import Callable, List
 from .parse_raws import is_translatable
 
 
+class IgnoringRuleRegistry:
+    all_rules: List[Callable[[str], bool]]
+
+    def __init__(self):
+        self.all_rules = []
+
+    def register(self, function: Callable[[str], bool]) -> Callable[[str], bool]:
+        self.all_rules.append(function)
+        return function
+    
+    def check_ignore(self, string: str) -> bool:
+        return any(rule(string) for rule in self.all_rules)
+
+
+rules = IgnoringRuleRegistry()
+
+
+@rules.register
 def ignore_xml(string):
     result = re.search(r"""<(\?xml .*|[\w/]+)>""", string)
     return result is not None
@@ -11,6 +30,7 @@ square_brackets_exceptions = {"DONE", "MORE", "CAN'T WORK", "WITH YOU", "LIP", "
                               "TRADING", "PENDING"}
 
 
+@rules.register
 def ignore_square_brackets(string):
     if not any(char in string for char in '[]:'):
         return False
@@ -19,6 +39,7 @@ def ignore_square_brackets(string):
     return not any(is_translatable(part) or part in square_brackets_exceptions for part in parts)
 
 
+@rules.register
 def ignore_paths(string):
     if re.search(r'\.[a-z]{3}', string):
         return True
@@ -33,30 +54,37 @@ def ignore_paths(string):
 ignore_tags_exceptions = {'CLT'}
 
 
+@rules.register
 def ignore_tags(string):
     return len(string) > 2 and string not in ignore_tags_exceptions and re.fullmatch('[A-Z_]+', string)
 
 
+@rules.register
 def ignore_filenames(string):
     return re.fullmatch(r".+\.[\w]{3}", string) is not None
 
 
+@rules.register
 def ignore_gl(string):
     return re.fullmatch(r"(w?gl[A-Z]|W?GL_)[\w]+", string) is not None
 
 
+@rules.register
 def ignore_underline_separated_words(string):
     return re.fullmatch(r"[A-Za-z0-9]+_.*", string) is not None
 
 
+@rules.register
 def ignore_dash_prepended_strings(string):
     return re.fullmatch(r"-[a-z_]+-?", string) is not None
 
 
+@rules.register
 def ignore_mixed_case(string):
     return re.search(r"[a-z]+[A-Z]", string) is not None
 
 
+@rules.register
 def ignore_word_with_number(string):
     return re.fullmatch(r"[A-Za-z]+\d+", string) is not None
 
@@ -73,6 +101,7 @@ forbidden_starts = {
 }
 
 
+@rules.register
 def ignore_starts(string: str):
     return any(string.startswith(start) for start in forbidden_starts)
 
@@ -109,6 +138,7 @@ blacklist_full_string = {
 }
 
 
+@rules.register
 def ignore_by_blacklist_full_string(string):
     return string in blacklist_full_string
 
@@ -116,6 +146,7 @@ def ignore_by_blacklist_full_string(string):
 blacklisted_words = {'error', 'overflow', 'token', 'null', 'sdl', 'REJECTION', 'font', 'Font'}
 
 
+@rules.register
 def ignore_by_blacklisted_words(string):
     words = re.findall(r'\w+', string.lower())
     return any(blacklisted in words for blacklisted in blacklisted_words)
@@ -132,6 +163,7 @@ allowed_short_words = {
 }
 
 
+@rules.register
 def ignore_short_words(string):
     return len(string) <= 2 and string.strip() not in allowed_short_words
 
@@ -141,15 +173,10 @@ blacklisted_substrings = {
 }
 
 
+@rules.register
 def ignore_by_blacklisted_substrings(string):
     return any(substring in string for substring in blacklisted_substrings)
 
 
-all_rules_list = [ignore_xml, ignore_square_brackets, ignore_paths, ignore_tags, ignore_filenames, ignore_gl,
-                  ignore_underline_separated_words, ignore_mixed_case, ignore_word_with_number, ignore_starts,
-                  ignore_by_blacklist_full_string, ignore_by_blacklisted_words, ignore_short_words,
-                  ignore_dash_prepended_strings, ignore_by_blacklisted_substrings]
-
-
 def all_ignore_rules(string):
-    return any(rule(string) for rule in all_rules_list)
+    return rules.check_ignore(string)
