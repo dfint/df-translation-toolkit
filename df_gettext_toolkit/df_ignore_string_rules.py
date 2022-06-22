@@ -111,7 +111,7 @@ blacklist_full_string = {
     "string too long", "invalid string position", "!ARG", "current",
 
     'Exh', 'Ovx', 'Pb!', 'Pb+', 'Pb~', 'Pn!', 'Pn+', 'Pn~', 'Sw!', 'Sw+', 'Sw~', 'Tir', 'Nm-',
-    'Bl+', 'B!~', 'B!+', 'Pz+', 'Fnt', 'Pal', 'Bl~', 'Nm~', 'Nm+', 'Slg', 'Pz~',
+    'Bl+', 'B!~', 'B!+', 'Pz+', 'Fnt', 'Pal', 'Bl~', 'Nm~', 'Nm+', 'Slg', 'Pz~', "i",
 
     "scrollx", "scrolly", "buildreq", "jobvalue", "version", "gview", "assignbuildingjobs", "year", "assigndesjobs",
     "weathertimer", "season", "line", "linechar", "scrollz", "linelim", "gametype", "point", "gamemode", "cursor",
