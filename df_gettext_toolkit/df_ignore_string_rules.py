@@ -111,7 +111,7 @@ blacklist_full_string = {
     "string too long", "invalid string position", "!ARG", "current",
 
     'Exh', 'Ovx', 'Pb!', 'Pb+', 'Pb~', 'Pn!', 'Pn+', 'Pn~', 'Sw!', 'Sw+', 'Sw~', 'Tir', 'Nm-',
-    'Bl+', 'B!~', 'B!+', 'Pz+', 'Fnt', 'Pal', 'Bl~', 'Nm~', 'Nm+', 'Slg', 'Pz~', "i",
+    'Bl+', 'B!~', 'B!+', 'Pz+', 'Fnt', 'Pal', 'Bl~', 'Nm~', 'Nm+', 'Slg', 'Pz~',
 
     "scrollx", "scrolly", "buildreq", "jobvalue", "version", "gview", "assignbuildingjobs", "year", "assigndesjobs",
     "weathertimer", "season", "line", "linechar", "scrollz", "linelim", "gametype", "point", "gamemode", "cursor",
@@ -153,7 +153,7 @@ def ignore_by_blacklisted_words(string):
 
 
 allowed_short_words = {
-    'A', 'a', 'an', 'er', 'us', 'i',  # sarcofag-us, sacrofag-i
+    'A', 'a', 'an', 'er', 'us',  # sarcofag-us
     'as', 'in', 'st', 'is', "'s", 's', 'es',
     'nd', 'rd', 'th', 'me', 'my', 'no', 'to', 'b.', 'd.',
     'At', 'Up', 'On', 'of', 'at', 'by', 'on',
