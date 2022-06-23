@@ -1,3 +1,4 @@
+import io
 import sys
 from pathlib import Path
 from typing import Iterator
@@ -8,7 +9,7 @@ from .parse_po import format_po, default_header
 from .parse_raws import extract_translatables_from_raws
 
 
-def create_pot_file(pot_file, raw_files: Iterator[Path], source_encoding):
+def create_pot_file(pot_file: io.TextIOWrapper, raw_files: Iterator[Path], source_encoding: str):
     print(default_header, file=pot_file)
     for file_name in raw_files:
         if file_name.is_file():
