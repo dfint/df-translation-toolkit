@@ -364,7 +364,6 @@ def ignore_by_blacklisted_words(string):
 
 allowed_short_words = {
     "A",
-    "a",
     "an",
     "er",
     "us",  # sarcofag-us
