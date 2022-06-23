@@ -79,15 +79,15 @@ toml = ["tomli"]
 
 [[package]]
 name = "df-raw-decoder"
-version = "1.0.0"
+version = "1.1.0"
 description = "Encoding and decoding of compressed raw files of Dwarf Fortress"
 category = "main"
 optional = false
-python-versions = ">=3.6,<4.0"
+python-versions = ">=3.7,<4.0"
 
 [package.source]
 type = "url"
-url = 'https://github.com/dfint/df_raw_decoder/releases/download/1.0.0/df_raw_decoder-1.0.0-py3-none-any.whl'
+url = 'https://github.com/dfint/df_raw_decoder/releases/download/1.1.0/df_raw_decoder-1.1.0-py3-none-any.whl'
 [[package]]
 name = "flake8"
 version = "4.0.1"
@@ -338,7 +338,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "de6322ae0035c147b16cf36b39ecfca5e89c742f5f7b96766abf255119dcbe6a"
+content-hash = "848406f54c394a4d802b26bc65ab12d9e213ab38afd29b084546bc2224d87082"
 
 [metadata.files]
 atomicwrites = [
