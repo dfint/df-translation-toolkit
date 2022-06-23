@@ -3,7 +3,7 @@ from typing import List, Mapping, Tuple
 
 import typer
 
-from .parse_po import format_po
+from .parse_po import format_po_item
 
 MO_MAGIC = b"\xde\x12\x04\x95"
 
@@ -44,7 +44,7 @@ def load_mo(mo_file, encoding="utf-8"):
 def show_mo_content(filename: str):
     with open(filename, "rb") as mo_file:
         for item in load_mo(mo_file):
-            print(format_po(**item), end="\n\n")
+            print(format_po_item(**item), end="\n\n")
 
 
 def write_uint(file_object: BytesIO, d: int):

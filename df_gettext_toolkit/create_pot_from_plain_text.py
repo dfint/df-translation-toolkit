@@ -4,7 +4,7 @@ from pathlib import Path
 import typer
 
 from .parse_plain_text import parse_plain_text_file
-from .parse_po import format_po
+from .parse_po import format_po_item
 
 
 def main(path: Path, split: bool = False):
@@ -22,7 +22,7 @@ def main(path: Path, split: bool = False):
                         else:
                             keys.add(text_block)
                             print(
-                                format_po(
+                                format_po_item(
                                     msgid=text_block.rstrip("\n"),
                                     file_name=file_path.name,
                                     line_number=line_number,

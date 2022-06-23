@@ -5,7 +5,7 @@ from typing import Iterator
 
 import typer
 
-from .parse_po import format_po, default_header
+from .parse_po import format_po_item, default_header
 from .parse_raws import extract_translatables_from_raws
 
 
@@ -17,7 +17,7 @@ def create_pot_file(pot_file: io.TextIOWrapper, raw_files: Iterator[Path], sourc
             with open(file_name, encoding=source_encoding) as file:
                 for context, item, line_number in extract_translatables_from_raws(file):
                     print(
-                        format_po(msgid=item, msgctxt=context, file_name=file_name.name, line_number=line_number),
+                        format_po_item(msgid=item, msgctxt=context, file_name=file_name.name, line_number=line_number),
                         end="\n\n",
                         file=pot_file,
                     )

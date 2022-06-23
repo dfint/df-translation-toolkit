@@ -3,7 +3,7 @@ from pathlib import Path
 
 import typer
 
-from .parse_po import format_po
+from .parse_po import format_po_item
 
 
 def main(path: Path):
@@ -16,7 +16,7 @@ def main(path: Path):
                 for i, line in enumerate(file, 1):
                     if line.rstrip("\n"):
                         print(
-                            format_po(msgid=line.rstrip("\n"), file_name=file_path.name, line_number=i),
+                            format_po_item(msgid=line.rstrip("\n"), file_name=file_path.name, line_number=i),
                             end="\n\n",
                         )
 

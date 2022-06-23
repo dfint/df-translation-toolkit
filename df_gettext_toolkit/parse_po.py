@@ -88,9 +88,10 @@ def format_lines(line: str):
     return "\n".join(f'"{escape_string(x)}"' for x in line.splitlines(keepends=True)) or '""'
 
 
-def format_po(msgid: str, msgstr: str = "", msgctxt: str = None, file_name: str = None, line_number: int = None):
+def format_po_item(msgid: str, msgstr: str = "", msgctxt: str = None, file_name: str = None, line_number: int = None):
     lines = list()
-    lines.append(f"#: {file_name}:{line_number:d}")
+    if file_name:
+        lines.append(f"#: {file_name}:{line_number:d}")
 
     if msgctxt:
         lines.append(f"msgctxt {format_lines(msgctxt)}")
@@ -112,10 +113,10 @@ def save_po(po_file, template: Iterator[str], dictionary: Mapping[str, str]):
     print(default_header, file=po_file)
     print(file=po_file)
     for text in template:
-        print(format_po(msgid=text, msgstr=dictionary.get(text, "")), file=po_file, end="\n\n")
+        print(format_po_item(msgid=text, msgstr=dictionary.get(text, "")), file=po_file, end="\n\n")
 
 
 def save_pot(po_file, template):
     print(default_header, file=po_file, end="\n\n")
     for line in template:
-        print(format_po(msgid=line), file=po_file, end="\n\n")
+        print(format_po_item(msgid=line), file=po_file, end="\n\n")
