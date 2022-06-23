@@ -15,8 +15,10 @@ def main(path: Path):
             with open(file_path) as file:
                 for i, line in enumerate(file, 1):
                     if line.rstrip("\n"):
-                        print("#: %s:%d" % (file_path.name, i))
-                        print(format_po(msgid=line.rstrip("\n")))
+                        print(
+                            format_po(msgid=line.rstrip("\n"), file_name=file_path.name, line_number=i),
+                            end="\n\n",
+                        )
 
 
 if __name__ == "__main__":

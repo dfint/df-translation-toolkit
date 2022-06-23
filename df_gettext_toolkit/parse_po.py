@@ -84,17 +84,20 @@ class PoReader:
         return self._iterator
 
 
-def format_lines(s):
-    return "\n".join('"%s"' % escape_string(x) for x in s.splitlines(keepends=True)) or '""'
+def format_lines(line: str):
+    return "\n".join(f'"{escape_string(x)}"' for x in line.splitlines(keepends=True)) or '""'
 
 
-def format_po(msgid, msgstr="", msgctxt=None):
-    s = ""
+def format_po(msgid: str, msgstr: str = "", msgctxt: str = None, file_name: str = None, line_number: int = None):
+    lines = list()
+    lines.append(f"#: {file_name}:{line_number:d}")
+
     if msgctxt:
-        s += "msgctxt %s\n" % format_lines(msgctxt)
-    s += "msgid %s\n" % format_lines(msgid)
-    s += "msgstr %s\n" % format_lines(msgstr)
-    return s
+        lines.append(f"msgctxt {format_lines(msgctxt)}")
+
+    lines.append(f"msgid {format_lines(msgid)}")
+    lines.append(f"msgstr {format_lines(msgstr)}")
+    return "\n".join(lines)
 
 
 default_header = """
@@ -109,10 +112,10 @@ def save_po(po_file, template: Iterator[str], dictionary: Mapping[str, str]):
     print(default_header, file=po_file)
     print(file=po_file)
     for text in template:
-        print(format_po(msgid=text, msgstr=dictionary.get(text, "")), file=po_file)
+        print(format_po(msgid=text, msgstr=dictionary.get(text, "")), file=po_file, end="\n\n")
 
 
 def save_pot(po_file, template):
     print(default_header, file=po_file, end="\n\n")
     for line in template:
-        print(format_po(msgid=line), file=po_file)
+        print(format_po(msgid=line), file=po_file, end="\n\n")

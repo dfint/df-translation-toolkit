@@ -88,10 +88,11 @@ import df_gettext_toolkit.df_ignore_string_rules as rules
         (rules.all_ignore_rules, "Any text", False),
         (rules.all_ignore_rules, "Any text.", False),
         (rules.all_ignore_rules, "Another string: just a test", False),
-
         # Translation of these will replace key names
         (rules.all_ignore_rules, "i", True),
         (rules.all_ignore_rules, "a", True),
+
+        (rules.dont_ignore, "", False)
     ],
 )
 def test_ignore_rules(rule, string, ignore):

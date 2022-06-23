@@ -22,7 +22,7 @@ rules = IgnoringRuleRegistry()
 
 
 @rules.register
-def ignore_xml(string):
+def ignore_xml(string: str) -> bool:
     result = re.search(r"""<(\?xml .*|[\w/]+)>""", string)
     return result is not None
 
@@ -42,7 +42,7 @@ square_brackets_exceptions = {
 
 
 @rules.register
-def ignore_square_brackets(string):
+def ignore_square_brackets(string: str) -> bool:
     if not any(char in string for char in "[]:"):
         return False
     string = string.replace(r"\t", "\t")
@@ -51,7 +51,7 @@ def ignore_square_brackets(string):
 
 
 @rules.register
-def ignore_paths(string):
+def ignore_paths(string: str) -> bool:
     if re.search(r"\.[a-z]{3}", string):
         return True
 
@@ -66,37 +66,37 @@ ignore_tags_exceptions = {"CLT"}
 
 
 @rules.register
-def ignore_tags(string):
+def ignore_tags(string: str) -> bool:
     return len(string) > 2 and string not in ignore_tags_exceptions and re.fullmatch("[A-Z_]+", string)
 
 
 @rules.register
-def ignore_filenames(string):
+def ignore_filenames(string: str) -> bool:
     return re.fullmatch(r".+\.[\w]{3}", string) is not None
 
 
 @rules.register
-def ignore_gl(string):
+def ignore_gl(string: str) -> bool:
     return re.fullmatch(r"(w?gl[A-Z]|W?GL_)[\w]+", string) is not None
 
 
 @rules.register
-def ignore_underline_separated_words(string):
+def ignore_underline_separated_words(string: str) -> bool:
     return re.fullmatch(r"[A-Za-z0-9]+_.*", string) is not None
 
 
 @rules.register
-def ignore_dash_prepended_strings(string):
+def ignore_dash_prepended_strings(string: str) -> bool:
     return re.fullmatch(r"-[a-z_]+-?", string) is not None
 
 
 @rules.register
-def ignore_mixed_case(string):
+def ignore_mixed_case(string: str) -> bool:
     return re.search(r"[a-z]+[A-Z]", string) is not None
 
 
 @rules.register
-def ignore_word_with_number(string):
+def ignore_word_with_number(string: str) -> bool:
     return re.fullmatch(r"[A-Za-z]+\d+", string) is not None
 
 
@@ -164,7 +164,7 @@ forbidden_starts = {
 
 
 @rules.register
-def ignore_starts(string: str):
+def ignore_starts(string: str) -> bool:
     return any(string.startswith(start) for start in forbidden_starts)
 
 
@@ -340,7 +340,7 @@ blacklist_full_string = {
 
 
 @rules.register
-def ignore_by_blacklist_full_string(string):
+def ignore_by_blacklist_full_string(string: str) -> bool:
     return string in blacklist_full_string
 
 
@@ -357,7 +357,7 @@ blacklisted_words = {
 
 
 @rules.register
-def ignore_by_blacklisted_words(string):
+def ignore_by_blacklisted_words(string: str) -> bool:
     words = re.findall(r"\w+", string.lower())
     return any(blacklisted in words for blacklisted in blacklisted_words)
 
@@ -402,7 +402,7 @@ allowed_short_words = {
 
 
 @rules.register
-def ignore_short_words(string):
+def ignore_short_words(string: str) -> bool:
     return len(string) <= 2 and string.strip() not in allowed_short_words
 
 
@@ -410,9 +410,13 @@ blacklisted_substrings = {"placed out of bounds", "set to default", "Patched sav
 
 
 @rules.register
-def ignore_by_blacklisted_substrings(string):
+def ignore_by_blacklisted_substrings(string: str) -> bool:
     return any(substring in string for substring in blacklisted_substrings)
 
 
-def all_ignore_rules(string):
+def all_ignore_rules(string: str) -> bool:
     return rules.check_ignore(string)
+
+
+def dont_ignore(_string) -> bool:
+    return False

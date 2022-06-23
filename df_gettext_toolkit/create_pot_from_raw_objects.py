@@ -16,8 +16,11 @@ def create_pot_file(pot_file: io.TextIOWrapper, raw_files: Iterator[Path], sourc
             print(file_name.name, file=sys.stderr)
             with open(file_name, encoding=source_encoding) as file:
                 for context, item, line_number in extract_translatables_from_raws(file):
-                    print("#: %s:%d" % (file_name.name, line_number), file=pot_file)  # source file : line number
-                    print(format_po(msgid=item, msgstr="", msgctxt=context), file=pot_file)
+                    print(
+                        format_po(msgid=item, msgctxt=context, file_name=file_name.name, line_number=line_number),
+                        end="\n\n",
+                        file=pot_file,
+                    )
 
 
 def main(pot_file: typer.FileTextWrite, raws_path: Path, source_encoding: str = "cp437"):

@@ -21,8 +21,14 @@ def main(path: Path, split: bool = False):
                             print("Key already exists:", repr(text_block), file=sys.stderr)
                         else:
                             keys.add(text_block)
-                            print("#: %s:%d" % (file_path.name, line_number))
-                            print(format_po(msgid=text_block.rstrip("\n")))
+                            print(
+                                format_po(
+                                    msgid=text_block.rstrip("\n"),
+                                    file_name=file_path.name,
+                                    line_number=line_number,
+                                ),
+                                end="\n\n",
+                            )
 
 
 if __name__ == "__main__":
