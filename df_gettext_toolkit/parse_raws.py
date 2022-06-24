@@ -1,4 +1,4 @@
-from typing import Iterable, Iterator, List, Mapping, Tuple, Optional
+from typing import Iterable, Iterator, List, Mapping, Tuple, Optional, Sequence, Callable
 
 from df_gettext_toolkit.common import PoItem
 
@@ -23,17 +23,17 @@ def iterate_tags(s: str) -> Iterator[List[str]]:
 translatable_tags = {"SINGULAR", "PLURAL", "STP", "NO_SUB", "NP", "NA"}
 
 
-def is_translatable(s):
-    return s in translatable_tags or any("a" <= char <= "z" for char in s)
+def is_translatable(string: str) -> bool:
+    return string in translatable_tags or any("a" <= char <= "z" for char in string)
 
 
-def join_tag(tag):
-    return "[%s]" % ":".join(tag)
+def join_tag(tag: Iterable[str]) -> str:
+    return "[{}]".format(':'.join(tag))
 
 
-def last_suitable(s, func):
-    for i in range(len(s) - 1, 0, -1):
-        if func(s[i]):
+def last_suitable(parts: Sequence[str], func: Callable[[str], bool]) -> int:
+    for i in range(len(parts) - 1, 0, -1):
+        if func(parts[i]):
             return i + 1  # if the last element is suitable, then return len(s), so that s[:i] gives full list
     else:
         return 0  # if there aren't suitable elements, then return 0, so that s[:i] gives empty list
