@@ -1,8 +1,7 @@
 from pathlib import Path
 from typing import Mapping
 
-from df_raw_decoder import decode_data
-from df_raw_decoder import encode_data
+from df_raw_decoder import decode_data, encode_data
 
 from .backup import backup
 from .parse_plain_text import parse_plain_text_file

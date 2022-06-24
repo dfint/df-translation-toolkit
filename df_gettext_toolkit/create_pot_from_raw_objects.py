@@ -5,7 +5,7 @@ from typing import Iterator
 
 import typer
 
-from .parse_po import format_po_item, default_header
+from .parse_po import default_header, format_po_item
 from .parse_raws import extract_translatables_from_raws
 
 

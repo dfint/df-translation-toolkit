@@ -1,4 +1,4 @@
-from typing import List, Iterator, Iterable
+from typing import Iterable, Iterator, List
 
 
 def split_tag(s: str) -> List[str]:

@@ -2,14 +2,17 @@ import io
 from io import StringIO
 from typing import List, Tuple
 
+from base.base import strip_margin
+
 from df_gettext_toolkit.parse_po import (
-    escape_string,
-    unescape_string,
-    strip_once,
-    load_po,
-    save_po,
     PoReader,
-    parse_metadata_string, parse_metadata,
+    escape_string,
+    load_po,
+    parse_metadata,
+    parse_metadata_string,
+    save_po,
+    strip_once,
+    unescape_string,
 )
 
 
@@ -31,13 +34,15 @@ def test_strip_once():
 
 
 def test_load_po():
-    data = """
-    # Some comment
-    #: body_default.txt:7
-    msgctxt "BODY:BASIC_1PARTBODY"
-    msgid "[BP:UB:body:bodies]"
-    msgstr "[BP:UB:тело:тела]"
+    data = strip_margin(
+        """
+        |# Some comment
+        |#: body_default.txt:7
+        |msgctxt "BODY:BASIC_1PARTBODY"
+        |msgid "[BP:UB:body:bodies]"
+        |msgstr "[BP:UB:тело:тела]"
     """
+    )
 
     expected = {
         "#": "Some comment\n",
@@ -47,8 +52,7 @@ def test_load_po():
         "msgstr": "[BP:UB:тело:тела]",
     }
 
-    file = StringIO(data)
-    result = next(load_po(file))
+    result = next(load_po(StringIO(data)))
     assert result == expected
 
 
@@ -67,18 +71,51 @@ def test_save_load_po():
     assert result == [dict(msgid=text, msgstr=translation) for text, translation in entries]
 
 
-def test_po_reader():
-    po_content = """msgid ""
-        msgstr ""
-        "Project-Id-Version: Dwarf Fortress\\n"
-        "PO-Revision-Date: 2019-11-20 10:25+0000\\n"
-        "Content-Type: text/plain; charset=UTF-8\\n"
-        "Content-Transfer-Encoding: 8bit\\n"
-        "Language: ru\\n"
-        """
+def test_parse_metadata_string():
+    metadata_string = "Content-Type: text/plain; charset=UTF-8\n" "Content-Transfer-Encoding: 8bit\n"
+    assert parse_metadata_string(metadata_string) == {
+        "Content-Type": "text/plain; charset=UTF-8",
+        "Content-Transfer-Encoding": "8bit",
+    }
 
-    file = StringIO(po_content)
-    po = PoReader(file)
+
+def test_parse_metadata():
+    header = strip_margin(
+        r"""
+        |msgid ""
+        |msgstr ""
+        |"Content-Type: text/plain; charset=UTF-8\n"
+        |"Content-Transfer-Encoding: 8bit\n"
+    """
+    ).strip()
+
+    metadata = next(load_po(io.StringIO(header)))
+    assert parse_metadata(metadata) == {
+        "Content-Type": "text/plain; charset=UTF-8",
+        "Content-Transfer-Encoding": "8bit",
+    }
+
+
+def test_po_reader():
+    po_content = strip_margin(
+        r"""
+        |msgid ""
+        |msgstr ""
+        |"Project-Id-Version: Dwarf Fortress\n"
+        |"PO-Revision-Date: 2019-11-20 10:25+0000\n"
+        |"Content-Type: text/plain; charset=UTF-8\n"
+        |"Content-Transfer-Encoding: 8bit\n"
+        |"Language: ru\n"
+        |
+        |# Some comment
+        |#: body_default.txt:7
+        |msgctxt "BODY:BASIC_1PARTBODY"
+        |msgid "[BP:UB:body:bodies]"
+        |msgstr "[BP:UB:тело:тела]"
+    """
+    )
+
+    po = PoReader(StringIO(po_content))
     assert po.meta == {
         "Project-Id-Version": "Dwarf Fortress",
         "PO-Revision-Date": "2019-11-20 10:25+0000",
@@ -87,28 +124,10 @@ def test_po_reader():
         "Language": "ru",
     }
 
-
-def test_parse_metadata_string():
-    metadata_string = (
-        "Content-Type: text/plain; charset=UTF-8\n"
-        "Content-Transfer-Encoding: 8bit\n"
-    )
-    assert parse_metadata_string(metadata_string) == {
-        "Content-Type": "text/plain; charset=UTF-8",
-        "Content-Transfer-Encoding": "8bit",
-    }
-
-
-def test_parse_metadata():
-    header = (
-        'msgid ""\n'
-        'msgstr ""\n'
-        '"Content-Type: text/plain; charset=UTF-8\\n"\n'
-        '"Content-Transfer-Encoding: 8bit\\n"\n'
-    )
-
-    metadata = next(load_po(io.StringIO(header)))
-    assert parse_metadata(metadata) == {
-        "Content-Type": "text/plain; charset=UTF-8",
-        "Content-Transfer-Encoding": "8bit",
+    assert next(po) == {
+        "#": "Some comment\n",
+        "#:": "body_default.txt:7",
+        "msgctxt": "BODY:BASIC_1PARTBODY",
+        "msgid": "[BP:UB:body:bodies]",
+        "msgstr": "[BP:UB:тело:тела]",
     }

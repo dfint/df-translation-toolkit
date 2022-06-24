@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-from typing import Optional, Mapping
+from typing import Mapping, Optional
 
 import typer
 

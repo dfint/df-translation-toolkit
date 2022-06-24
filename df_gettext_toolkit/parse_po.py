@@ -1,6 +1,6 @@
 import io
 from collections import defaultdict
-from typing import Mapping, Iterator, Optional
+from typing import Iterator, Mapping, Optional
 
 
 def strip_once(s, chars=" "):
@@ -35,7 +35,7 @@ def escape_string(s):
     return s.translate(_escape_translation_table)
 
 
-def load_po(po_file: io.TextIOWrapper) -> Iterator[dict]:
+def load_po(po_file: Iterator[str]) -> Iterator[dict]:
     item = defaultdict(str)
     prev = None
     for line in po_file:
@@ -72,7 +72,9 @@ def parse_metadata(entry: dict) -> Optional[Mapping[str, str]]:
         return parse_metadata_string(entry["msgstr"])
 
 
-class PoReader:
+class PoReader(Iterator):
+    _reader: Iterator[dict]
+
     def __init__(self, file_object: io.TextIOWrapper):
         file_object.seek(0)
         self._reader = load_po(file_object)
@@ -80,8 +82,11 @@ class PoReader:
         assert first_entry["msgid"] == "", "No metadata entry in the po file"
         self.meta = parse_metadata(first_entry)
 
-    def __iter__(self) -> Iterator[dict]:
-        return self._reader
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        return next(self._reader)
 
 
 def format_lines(line: str) -> str:
