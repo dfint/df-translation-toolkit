@@ -37,21 +37,22 @@ def escape_string(s):
     return s.translate(_escape_translation_table)
 
 
-def load_po(po_file: Iterator[str]) -> Iterator[dict]:
+def load_po(po_file: Iterator[str]) -> Iterator[TranslationItem]:
     item = defaultdict(str)
     prev = None
     for line in po_file:
         line = line.strip()
         if not line:
             if item:
-                yield item
+                yield TranslationItem(text=item["msgid"], translation=item.get("msgstr"), context=item.get("msgctxt"))
                 item = defaultdict(str)
                 prev = None
         elif line.startswith("#"):
-            key, _, value = line.partition(" ")
-            item[key] += value
-            if key == "#":
-                item[key] += "\n"
+            # key, _, value = line.partition(" ")
+            # item[key] += value
+            # if key == "#":
+            #     item[key] += "\n"
+            pass  # ignore comments
         elif line.startswith('"'):
             assert prev is not None
             item[prev] += unescape_string(strip_once(line, '"'))
@@ -62,32 +63,32 @@ def load_po(po_file: Iterator[str]) -> Iterator[dict]:
             prev = key
 
     if item:
-        yield item
+        yield TranslationItem(text=item["msgid"], translation=item.get("msgstr"), context=item.get("msgctxt"))
 
 
 def parse_metadata_string(string: str) -> dict:
     return dict(item.partition(": ")[::2] for item in string.splitlines())
 
 
-def parse_metadata(entry: dict) -> Optional[Mapping[str, str]]:
-    if "msgstr" in entry:
-        return parse_metadata_string(entry["msgstr"])
+def parse_metadata(entry: TranslationItem) -> Optional[Mapping[str, str]]:
+    if entry.translation:
+        return parse_metadata_string(entry.translation)
 
 
 class PoReader(Iterator):
-    _reader: Iterator[dict]
+    _reader: Iterator[TranslationItem]
 
     def __init__(self, file_object: io.TextIOWrapper):
         file_object.seek(0)
         self._reader = load_po(file_object)
         first_entry = next(self._reader)
-        assert first_entry["msgid"] == "", "No metadata entry in the po file"
+        assert first_entry.text == "", "No metadata entry in the po file"
         self.meta = parse_metadata(first_entry)
 
     def __iter__(self):
         return self
 
-    def __next__(self):
+    def __next__(self) -> TranslationItem:
         return next(self._reader)
 
 

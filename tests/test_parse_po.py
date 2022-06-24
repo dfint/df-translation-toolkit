@@ -4,6 +4,7 @@ from typing import List, Tuple
 
 from base.base import strip_margin
 
+from df_gettext_toolkit.common import TranslationItem
 from df_gettext_toolkit.parse_po import (
     PoReader,
     escape_string,
@@ -44,13 +45,14 @@ def test_load_po():
     """
     )
 
-    expected = {
-        "#": "Some comment\n",
-        "#:": "body_default.txt:7",
-        "msgctxt": "BODY:BASIC_1PARTBODY",
-        "msgid": "[BP:UB:body:bodies]",
-        "msgstr": "[BP:UB:тело:тела]",
-    }
+    expected = TranslationItem(
+        context="BODY:BASIC_1PARTBODY",
+        text="[BP:UB:body:bodies]",
+        translation="[BP:UB:тело:тела]",
+        # translator_comment="Some comment\n",
+        # source_file="body_default.txt",
+        # line_number=7,
+    )
 
     result = next(load_po(StringIO(data)))
     assert result == expected
@@ -68,7 +70,7 @@ def test_save_load_po():
     file.seek(0)
 
     result = list(load_po(file))[1:]  # the first entry is metadata
-    assert result == [dict(msgid=text, msgstr=translation) for text, translation in entries]
+    assert result == [TranslationItem(text=text, translation=translation) for text, translation in entries]
 
 
 def test_parse_metadata_string():
@@ -124,10 +126,11 @@ def test_po_reader():
         "Language": "ru",
     }
 
-    assert next(po) == {
-        "#": "Some comment\n",
-        "#:": "body_default.txt:7",
-        "msgctxt": "BODY:BASIC_1PARTBODY",
-        "msgid": "[BP:UB:body:bodies]",
-        "msgstr": "[BP:UB:тело:тела]",
-    }
+    assert next(po) == TranslationItem(
+        context="BODY:BASIC_1PARTBODY",
+        text="[BP:UB:body:bodies]",
+        translation="[BP:UB:тело:тела]",
+        # translator_comment="Some comment\n",
+        # source_file="body_default.txt",
+        # line_number=7,
+    )

@@ -109,9 +109,9 @@ def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[Translation
 
 
 def get_from_dict_with_context(
-        dictionary: Mapping[Tuple[str, Optional[str]], str],
-        key: str,
-        context: str,
+    dictionary: Mapping[Tuple[str, Optional[str]], str],
+    key: str,
+    context: str,
 ) -> Optional[str]:
     if (key, context) in dictionary:
         return dictionary[(key, context)]
