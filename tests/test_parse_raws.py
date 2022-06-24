@@ -3,7 +3,7 @@ from inspect import cleandoc as trim_indent
 
 import pytest
 
-from df_gettext_toolkit import TranslationItem
+from df_gettext_toolkit.common import TranslationItem
 from df_gettext_toolkit.parse_raws import (
     extract_translatables_from_raws,
     translate_raw_file,

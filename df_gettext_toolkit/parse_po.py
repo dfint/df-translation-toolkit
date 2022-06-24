@@ -2,7 +2,7 @@ import io
 from collections import defaultdict
 from typing import Iterator, Mapping, Optional
 
-from df_gettext_toolkit import TranslationItem
+from df_gettext_toolkit.common import TranslationItem
 
 
 def strip_once(s, chars=" "):

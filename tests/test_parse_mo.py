@@ -2,7 +2,7 @@ import io
 
 import pytest
 
-from df_gettext_toolkit import TranslationItem
+from df_gettext_toolkit.common import TranslationItem
 from df_gettext_toolkit.parse_mo import create_mo, load_mo
 
 

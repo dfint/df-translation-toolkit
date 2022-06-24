@@ -1,7 +1,7 @@
 from io import BytesIO
 from typing import List, Iterator, Sequence, NamedTuple
 
-from df_gettext_toolkit import TranslationItem
+from df_gettext_toolkit.common import TranslationItem
 
 MO_MAGIC = b"\xde\x12\x04\x95"
 
