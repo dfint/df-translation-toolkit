@@ -39,6 +39,7 @@ def last_suitable(parts: Sequence[str], func: Callable[[str], bool]) -> int:
 
 class FilePartInfo(NamedTuple):
     line_number: int
+    translatable: bool
     context: Optional[str]
     text: Optional[str] = None
     tag: Optional[str] = None
@@ -49,30 +50,34 @@ def traverse_raw_file(file: Iterable[str]) -> Iterator[FilePartInfo]:
     object_name = None
     context = None
     for i, line in enumerate(file, 1):
-        if "[" in line:
+        if "[" not in line:
+            yield FilePartInfo(i, False, context, text=line.rstrip())
+        else:
             line_start = line.partition("[")[0]
-            yield FilePartInfo(i, context, text=line_start)
+            yield FilePartInfo(i, False, context, text=line_start)
 
             for tag in iterate_tags(line):
                 tag_parts = split_tag(tag)
 
                 if tag_parts[0] == "OBJECT":
                     object_name = tag_parts[1]
+                    yield FilePartInfo(i, False, context, tag=tag)
                 elif object_name and (
                     tag_parts[0] == object_name
                     or (object_name in {"ITEM", "BUILDING"} and tag_parts[0].startswith(object_name))
                     or object_name.endswith("_" + tag_parts[0])
                 ):
                     context = ":".join(tag_parts)
+                    yield FilePartInfo(i, False, context, tag=tag)
                 else:
-                    yield FilePartInfo(i, context, tag=tag, tag_parts=tag_parts)
+                    yield FilePartInfo(i, True, context, tag=tag, tag_parts=tag_parts)
 
 
 def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[TranslationItem]:
     translation_keys: Set[Tuple[str, ...]] = set()  # Translation keys in the current context
 
     for item in traverse_raw_file(file):
-        if item.tag:
+        if item.translatable:
             tag_parts = item.tag_parts
             if (
                 "TILE" not in tag_parts[0]
@@ -88,46 +93,46 @@ def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[Translation
 
 
 def translate_raw_file(file: Iterable[str], dictionary: Mapping[Tuple[str, Optional[str]], str]):
-    object_name = None
-    context = None
-    for line in file:
-        if "[" in line:
-            modified_line = line.partition("[")[0]
+    prev_line_number = 1
+    modified_line_parts = []
+    for item in traverse_raw_file(file):
+        if item.line_number > prev_line_number:
+            yield "".join(modified_line_parts)
+            modified_line_parts = []
 
-            for tag in iterate_tags(line):
-                tag_parts = split_tag(tag)
+        prev_line_number = item.line_number
 
-                if tag_parts[0] == "OBJECT":
-                    object_name = tag_parts[1]
-                elif object_name and (
-                    tag_parts[0] == object_name
-                    or (object_name in {"ITEM", "BUILDING"} and tag_parts[0].startswith(object_name))
-                    or object_name.endswith("_" + tag_parts[0])
-                ):
-                    context = ":".join(tag_parts)
-                elif any(is_translatable(s) for s in tag_parts[1:]):
-                    if (tag, context) in dictionary:
-                        tag = dictionary[(tag, context)]
-                    elif (tag, None) in dictionary:
-                        tag = dictionary[(tag, None)]
-                    elif not is_translatable(tag_parts[-1]):
-                        last = last_suitable(tag_parts, is_translatable)
-                        translatable_tag_parts = tag_parts[:last]
-                        translatable_tag_parts.append("")
-
-                        tag_key = join_tag(translatable_tag_parts)
-
-                        new_tag_parts = None
-                        if (tag_key, context) in dictionary:
-                            new_tag_parts = split_tag(dictionary[(tag_key, context)])
-                        elif (tag_key, None) in dictionary:
-                            new_tag_parts = split_tag(dictionary[(tag_key, None)])
-
-                        if new_tag_parts:
-                            tag_parts[: len(new_tag_parts) - 1] = new_tag_parts[:-1]
-                            tag = join_tag(tag_parts)
-
-                modified_line += tag
-            yield modified_line
+        if item.text:
+            modified_line_parts.append(item.text)
+        elif not item.translatable or not any(is_translatable(s) for s in item.tag_parts[1:]):
+            modified_line_parts.append(item.tag)
         else:
-            yield line.rstrip()
+            tag = item.tag
+            tag_parts = item.tag_parts
+            context = item.context
+
+            if (tag, item.context) in dictionary:
+                tag = dictionary[(tag, item.context)]
+            elif (tag, None) in dictionary:
+                tag = dictionary[(tag, None)]
+            elif not is_translatable(tag_parts[-1]):
+                last = last_suitable(tag_parts, is_translatable)
+                translatable_tag_parts = tag_parts[:last]
+                translatable_tag_parts.append("")
+
+                tag_key = join_tag(translatable_tag_parts)
+
+                new_tag_parts = None
+                if (tag_key, context) in dictionary:
+                    new_tag_parts = split_tag(dictionary[(tag_key, context)])
+                elif (tag_key, None) in dictionary:
+                    new_tag_parts = split_tag(dictionary[(tag_key, None)])
+
+                if new_tag_parts:
+                    tag_parts[: len(new_tag_parts) - 1] = new_tag_parts[:-1]
+                    tag = join_tag(tag_parts)
+
+            modified_line_parts.append(tag)
+
+    if modified_line_parts:
+        yield "".join(modified_line_parts)
