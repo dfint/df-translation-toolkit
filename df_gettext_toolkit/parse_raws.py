@@ -1,4 +1,4 @@
-from typing import Iterable, Iterator, List, Mapping, Tuple, Optional, Sequence, Callable
+from typing import Iterable, Iterator, List, Mapping, Tuple, Optional, Sequence, Callable, Set
 
 from df_gettext_toolkit.common import TranslationItem
 
@@ -7,16 +7,14 @@ def split_tag(s: str) -> List[str]:
     return s.strip("[]").split(":")
 
 
-def iterate_tags(s: str) -> Iterator[List[str]]:
+def iterate_tags(s: str) -> Iterator[str]:
     tag_start = None
     for i, char in enumerate(s):
         if tag_start is None:
             if char == "[":
                 tag_start = i
-            else:
-                pass
         elif char == "]":
-            yield split_tag(s[tag_start:i])
+            yield s[tag_start : i + 1]
             tag_start = None
 
 
@@ -28,7 +26,7 @@ def is_translatable(string: str) -> bool:
 
 
 def join_tag(tag: Iterable[str]) -> str:
-    return "[{}]".format(':'.join(tag))
+    return "[{}]".format(":".join(tag))
 
 
 def last_suitable(parts: Sequence[str], func: Callable[[str], bool]) -> int:
@@ -40,70 +38,73 @@ def last_suitable(parts: Sequence[str], func: Callable[[str], bool]) -> int:
 
 
 def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[TranslationItem]:
-    obj = None
+    object_name = None
     context = None
-    keys = set()
+    translation_keys: Set[Tuple[str, ...]] = set()  # Translation keys in the current context
     for i, line in enumerate(file, 1):
-        for tag_parts in iterate_tags(line):
+        for tag in iterate_tags(line):
+            tag_parts = split_tag(tag)
+
             if tag_parts[0] == "OBJECT":
-                obj = tag_parts[1]
-            elif obj and (
-                tag_parts[0] == obj
-                or (obj in {"ITEM", "BUILDING"} and tag_parts[0].startswith(obj))
-                or obj.endswith("_" + tag_parts[0])
+                object_name = tag_parts[1]
+            elif object_name and (
+                tag_parts[0] == object_name
+                or (object_name in {"ITEM", "BUILDING"} and tag_parts[0].startswith(object_name))
+                or object_name.endswith("_" + tag_parts[0])
             ):
                 context = ":".join(tag_parts)  # don't enclose context string into brackets - transifex dislikes this
-                keys.clear()
+                translation_keys.clear()
             elif (
                 "TILE" not in tag_parts[0]
                 and any(is_translatable(s) for s in tag_parts[1:])
-                and tuple(tag_parts) not in keys
+                and tuple(tag_parts) not in translation_keys  # Don't add duplicate items to translate
             ):
                 if not is_translatable(tag_parts[-1]):
                     last = last_suitable(tag_parts, is_translatable)
                     tag_parts = tag_parts[:last]
                     tag_parts.append("")  # Add an empty element to the tag to mark the tag as not completed
-                keys.add(tuple(tag_parts))
+                translation_keys.add(tuple(tag_parts))
                 yield TranslationItem(context=context, text=join_tag(tag_parts), line_number=i)
 
 
 def translate_raw_file(file: Iterable[str], dictionary: Mapping[Tuple[str, Optional[str]], str]):
-    obj = None
+    object_name = None
     context = None
     for line in file:
         if "[" in line:
             modified_line = line.partition("[")[0]
-            for tag_parts in iterate_tags(line):
+
+            for tag in iterate_tags(line):
+                tag_parts = split_tag(tag)
+
                 if tag_parts[0] == "OBJECT":
-                    obj = tag_parts[1]
-                elif obj and (
-                    tag_parts[0] == obj
-                    or (obj in {"ITEM", "BUILDING"} and tag_parts[0].startswith(obj))
-                    or obj.endswith("_" + tag_parts[0])
+                    object_name = tag_parts[1]
+                elif object_name and (
+                    tag_parts[0] == object_name
+                    or (object_name in {"ITEM", "BUILDING"} and tag_parts[0].startswith(object_name))
+                    or object_name.endswith("_" + tag_parts[0])
                 ):
                     context = ":".join(tag_parts)
-
-                tag = join_tag(tag_parts)
-                if any(is_translatable(s) for s in tag_parts[1:]):
-                    key = (tag, context)
-                    if key in dictionary:
-                        tag = dictionary[key]
+                elif any(is_translatable(s) for s in tag_parts[1:]):
+                    if (tag, context) in dictionary:
+                        tag = dictionary[(tag, context)]
                     elif (tag, None) in dictionary:
                         tag = dictionary[(tag, None)]
                     elif not is_translatable(tag_parts[-1]):
                         last = last_suitable(tag_parts, is_translatable)
-                        new_tag = tag_parts[: last + 1]
-                        new_tag[-1] = ""
-                        tag = join_tag(new_tag)
-                        key = (tag, context)
-                        new_tag = None
-                        if key in dictionary:
-                            new_tag = split_tag(dictionary[key])
-                        elif (tag, None) in dictionary:
-                            new_tag = split_tag(dictionary[(tag, None)])
+                        translatable_tag_parts = tag_parts[:last]
+                        translatable_tag_parts.append("")
 
-                        if new_tag:
-                            tag_parts[: len(new_tag) - 1] = new_tag[:-1]
+                        tag_key = join_tag(translatable_tag_parts)
+
+                        new_tag_parts = None
+                        if (tag_key, context) in dictionary:
+                            new_tag_parts = split_tag(dictionary[(tag_key, context)])
+                        elif (tag_key, None) in dictionary:
+                            new_tag_parts = split_tag(dictionary[(tag_key, None)])
+
+                        if new_tag_parts:
+                            tag_parts[: len(new_tag_parts) - 1] = new_tag_parts[:-1]
                             tag = join_tag(tag_parts)
 
                 modified_line += tag
