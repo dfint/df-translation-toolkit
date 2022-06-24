@@ -37,6 +37,24 @@ def last_suitable(parts: Sequence[str], func: Callable[[str], bool]) -> int:
         return 0  # if there aren't suitable elements, then return 0, so that s[:i] gives empty list
 
 
+class RawFileToken(NamedTuple):
+    line_number: int
+    is_token: bool
+    data: str
+
+
+def tokenize_raw_file(file: Iterable[str]) -> Iterator[RawFileToken]:
+    for i, line in enumerate(file, 1):
+        if "[" not in line:
+            yield RawFileToken(i, False, line.rstrip())
+        else:
+            line_start = line.partition("[")[0]
+            yield RawFileToken(i, False, line_start)
+
+            for tag in iterate_tags(line):
+                yield RawFileToken(i, True, tag)
+
+
 class FilePartInfo(NamedTuple):
     line_number: int
     translatable: bool
