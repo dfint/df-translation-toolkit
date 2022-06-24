@@ -69,8 +69,7 @@ def test_save_load_po():
     save_po(file, template, entries)
     file.seek(0)
 
-    result = list(load_po(file))[1:]  # the first entry is metadata
-    assert result == [TranslationItem(text=text, translation=translation) for text, translation in entries]
+    assert list(load_po(file))[1:] == entries
 
 
 def test_parse_metadata_string():
