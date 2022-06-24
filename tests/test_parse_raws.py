@@ -3,6 +3,7 @@ from inspect import cleandoc as trim_indent
 
 import pytest
 
+from df_gettext_toolkit import PoItem
 from df_gettext_toolkit.parse_raws import (
     extract_translatables_from_raws,
     translate_raw_file,
@@ -10,7 +11,7 @@ from df_gettext_toolkit.parse_raws import (
 
 
 @pytest.mark.parametrize(
-    "content,result",
+    "content, expected",
     [
         (
             trim_indent(
@@ -35,25 +36,28 @@ from df_gettext_toolkit.parse_raws import (
                 """
             ).splitlines(),
             [
-                (
-                    "CREATURE:BIRD_BLUEJAY",
-                    "[DESCRIPTION:A small blue-crested bird living in temperate woodlands, known for its harsh chirps.]",
+                PoItem(
+                    context="CREATURE:BIRD_BLUEJAY",
+                    text=(
+                        "[DESCRIPTION:"
+                        "A small blue-crested bird living in temperate woodlands, known for its harsh chirps.]"
+                    ),
                 ),
-                ("CREATURE:BIRD_BLUEJAY", "[NAME:blue jay:blue jays:blue jay]"),
-                ("CREATURE:BIRD_BLUEJAY", "[CASTE_NAME:blue jay:blue jays:blue jay]"),
-                (
-                    "CREATURE:BIRD_BLUEJAY",
-                    "[GENERAL_CHILD_NAME:blue jay hatchling:blue jay hatchlings]",
+                PoItem(context="CREATURE:BIRD_BLUEJAY", text="[NAME:blue jay:blue jays:blue jay]"),
+                PoItem(context="CREATURE:BIRD_BLUEJAY", text="[CASTE_NAME:blue jay:blue jays:blue jay]"),
+                PoItem(
+                    context="CREATURE:BIRD_BLUEJAY",
+                    text="[GENERAL_CHILD_NAME:blue jay hatchling:blue jay hatchlings]",
                 ),
-                (
-                    "CREATURE:BIRD_CARDINAL",
-                    "[DESCRIPTION:A small bright red bird with a distinctive crest, found in temperate forests.]",
+                PoItem(
+                    context="CREATURE:BIRD_CARDINAL",
+                    text="[DESCRIPTION:A small bright red bird with a distinctive crest, found in temperate forests.]",
                 ),
-                ("CREATURE:BIRD_CARDINAL", "[NAME:cardinal:cardinals:cardinal]"),
-                ("CREATURE:BIRD_CARDINAL", "[CASTE_NAME:cardinal:cardinals:cardinal]"),
-                (
-                    "CREATURE:BIRD_CARDINAL",
-                    "[GENERAL_CHILD_NAME:cardinal hatchling:cardinal hatchlings]",
+                PoItem(context="CREATURE:BIRD_CARDINAL", text="[NAME:cardinal:cardinals:cardinal]"),
+                PoItem(context="CREATURE:BIRD_CARDINAL", text="[CASTE_NAME:cardinal:cardinals:cardinal]"),
+                PoItem(
+                    context="CREATURE:BIRD_CARDINAL",
+                    text="[GENERAL_CHILD_NAME:cardinal hatchling:cardinal hatchlings]",
                 ),
             ],
         ),
@@ -75,19 +79,17 @@ from df_gettext_toolkit.parse_raws import (
                 """
             ).splitlines(),
             [
-                ("ITEM_WEAPON:ITEM_WEAPON_WHIP", "[NAME:whip:whips]"),
-                (
-                    "ITEM_WEAPON:ITEM_WEAPON_WHIP",
-                    "[ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:]",
+                PoItem(context="ITEM_WEAPON:ITEM_WEAPON_WHIP", text="[NAME:whip:whips]"),
+                PoItem(
+                    context="ITEM_WEAPON:ITEM_WEAPON_WHIP",
+                    text="[ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:]",
                 ),
             ],
         ),
     ],
 )
-def test_extract_translatables_from_raws(content, result):
-    actual_result = extract_translatables_from_raws(content)
-    result_without_name_numbers = list(map(lambda row: row[:2], actual_result))
-    assert result_without_name_numbers == result
+def test_extract_translatables_from_raws(content, expected):
+    assert list(extract_translatables_from_raws(content)) == expected
 
 
 @pytest.mark.parametrize(

@@ -1,26 +1,34 @@
 import io
-import sys
 from pathlib import Path
 from typing import Iterator
 
 import typer
 
-from .parse_po import default_header, format_po_item
+from df_gettext_toolkit.common import PoItem
+from .parse_po import save_pot
 from .parse_raws import extract_translatables_from_raws
 
 
-def create_pot_file(pot_file: io.TextIOWrapper, raw_files: Iterator[Path], source_encoding: str):
-    print(default_header, file=pot_file)
+def extract_translatables_from_raws_batch(raw_files: Iterator[Path], source_encoding: str) -> Iterator[PoItem]:
+    """
+    Read all translatable items from all raw files
+    """
     for file_name in raw_files:
         if file_name.is_file():
-            print(file_name.name, file=sys.stderr)
             with open(file_name, encoding=source_encoding) as file:
-                for context, item, line_number in extract_translatables_from_raws(file):
-                    print(
-                        format_po_item(msgid=item, msgctxt=context, file_name=file_name.name, line_number=line_number),
-                        end="\n\n",
-                        file=pot_file,
-                    )
+                for item in extract_translatables_from_raws(file):
+                    item.source_file = file_name.name
+                    yield item
+
+
+def create_pot_file(pot_file: io.TextIOWrapper, raw_files: Iterator[Path], source_encoding: str):
+    save_pot(
+        pot_file,
+        (
+            dict(msgid=item.text, msgctxt=item.context, file_name=item.source_file, line_number=item.line_number)
+            for item in extract_translatables_from_raws_batch(raw_files, source_encoding)
+        ),
+    )
 
 
 def main(pot_file: typer.FileTextWrite, raws_path: Path, source_encoding: str = "cp437"):

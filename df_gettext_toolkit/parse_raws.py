@@ -1,5 +1,7 @@
 from typing import Iterable, Iterator, List
 
+from df_gettext_toolkit.common import PoItem
+
 
 def split_tag(s: str) -> List[str]:
     return s.strip("[]").split(":")
@@ -37,7 +39,7 @@ def last_suitable(s, func):
         return 0  # if there aren't suitable elements, then return 0, so that s[:i] gives empty list
 
 
-def extract_translatables_from_raws(file: Iterable[str]):
+def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[PoItem]:
     obj = None
     context = None
     keys = set()
@@ -62,7 +64,7 @@ def extract_translatables_from_raws(file: Iterable[str]):
                     tag_parts = tag_parts[:last]
                     tag_parts.append("")  # Add an empty element to the tag to mark the tag as not completed
                 keys.add(tuple(tag_parts))
-                yield context, join_tag(tag_parts), i
+                yield PoItem(context=context, text=join_tag(tag_parts), line_number=i)
 
 
 def translate_raw_file(file, dictionary):

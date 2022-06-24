@@ -114,14 +114,13 @@ msgstr ""
 """.strip()
 
 
-def save_po(po_file, template: Iterator[str], dictionary: Mapping[str, str]):
+def save_po(po_file: io.TextIOWrapper, template: Iterator[str], dictionary: Mapping[str, str]):
     print(default_header, file=po_file, end="\n\n")
-    print(file=po_file)
     for text in template:
         print(format_po_item(msgid=text, msgstr=dictionary.get(text, "")), file=po_file, end="\n\n")
 
 
-def save_pot(po_file, template):
+def save_pot(po_file: io.TextIOWrapper, template):
     print(default_header, file=po_file, end="\n\n")
     for line in template:
         print(format_po_item(msgid=line), file=po_file, end="\n\n")
