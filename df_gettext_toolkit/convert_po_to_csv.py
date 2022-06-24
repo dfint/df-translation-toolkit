@@ -22,7 +22,7 @@ def prepare_dictionary(
 
 def main(input_file: str, output_file: str, encoding: str = "utf-8"):
     with open(input_file, "r", encoding="utf-8") as pofile:
-        dictionary = [(item["msgid"], item["msgstr"]) for item in load_po(pofile) if item["msgid"]]
+        dictionary = [(item.text, item.translation) for item in load_po(pofile) if item.text]
 
     exclusions_leading = {"  Choose Name  ", "  Trade Agreement with "}
     exclusions_trailing = {"  Choose Name  "}

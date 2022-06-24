@@ -1,6 +1,6 @@
 import io
 from collections import defaultdict
-from typing import Iterator, Mapping, Optional
+from typing import Iterable, Iterator, Mapping, Optional
 
 from df_gettext_toolkit.common import TranslationItem
 
@@ -117,10 +117,11 @@ msgstr ""
 """.strip()
 
 
-def save_po(po_file: io.TextIOWrapper, template: Iterator[str], dictionary: Mapping[str, str]):
+def save_po(po_file: io.TextIOWrapper, template: Iterator[str], dictionary: Iterable[TranslationItem]):
+    mapping_dict = {item.text: item.translation for item in dictionary}
     print(default_header, file=po_file, end="\n\n")
     for text in template:
-        print(format_po_item(msgid=text, msgstr=dictionary.get(text, "")), file=po_file, end="\n\n")
+        print(format_po_item(msgid=text, msgstr=mapping_dict.get(text, "")), file=po_file, end="\n\n")
 
 
 def save_pot(po_file: io.TextIOWrapper, template: Iterator[TranslationItem]):

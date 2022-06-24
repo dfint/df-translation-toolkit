@@ -1,4 +1,4 @@
-from typing import Iterable, Iterator, List, Mapping, Tuple, Optional, Sequence, Callable, Set, NamedTuple, TypeVar
+from typing import Callable, Iterable, Iterator, List, Mapping, NamedTuple, Optional, Sequence, Set, Tuple, TypeVar
 
 from df_gettext_toolkit.common import TranslationItem
 

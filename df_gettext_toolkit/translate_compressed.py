@@ -1,9 +1,9 @@
 import sys
 from pathlib import Path
-from typing import Mapping, Iterator, Iterable, Optional
+from typing import Iterable, Iterator, Mapping, Optional
 
 import typer
-from df_raw_decoder import unpack_data, pack_data
+from df_raw_decoder import pack_data, unpack_data
 
 from df_gettext_toolkit.backup import backup
 from df_gettext_toolkit.parse_plain_text import parse_plain_text_file
@@ -47,7 +47,7 @@ def translate_compressed_file(
 
 def translate_compressed(po_filename: str, path: Path, encoding: str):
     with open(po_filename, "r", encoding="utf-8") as pofile:
-        dictionary = {item["msgid"]: item["msgstr"] for item in load_po(pofile)}
+        dictionary = {item.text: item.translation for item in load_po(pofile) if item.text}
 
     for file in path.rglob("*"):
         if file.is_file() and "." not in file.name and file.name != "index":

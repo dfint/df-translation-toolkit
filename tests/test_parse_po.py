@@ -1,6 +1,6 @@
 import io
 from io import StringIO
-from typing import List, Tuple
+from typing import List
 
 from base.base import strip_margin
 
@@ -59,14 +59,14 @@ def test_load_po():
 
 
 def test_save_load_po():
-    entries: List[Tuple[str, str]] = [
-        ("asddf", "qwert"),
-        ("xcvf", "fghrth"),
-        ("cvbeb", "jtyjkty"),
+    entries: List[TranslationItem] = [
+        TranslationItem("asddf", "qwert"),
+        TranslationItem("xcvf", "fghrth"),
+        TranslationItem("cvbeb", "jtyjkty"),
     ]
-    template = (item[0] for item in entries)
+    template = (item.text for item in entries)
     file = StringIO()
-    save_po(file, template, dict(entries))
+    save_po(file, template, entries)
     file.seek(0)
 
     result = list(load_po(file))[1:]  # the first entry is metadata

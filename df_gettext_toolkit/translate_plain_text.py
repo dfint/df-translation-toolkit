@@ -33,7 +33,7 @@ def translate_plain_text_file(
 
 def translate_plain_text(po_filename: str, path: Path, encoding: str, join_paragraphs=True):
     with open(po_filename, "r", encoding="utf-8") as po_file:
-        dictionary = {item["msgid"]: item["msgstr"] for item in load_po(po_file)}
+        dictionary = {item.text: item.translation for item in load_po(po_file) if item.text}
 
     for path in Path(path).rglob("*.txt"):
         if path.is_file():
