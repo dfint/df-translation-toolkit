@@ -1,4 +1,4 @@
-from typing import Iterable, Iterator, List, Mapping, Tuple, Optional, Sequence, Callable, Set
+from typing import Iterable, Iterator, List, Mapping, Tuple, Optional, Sequence, Callable, Set, NamedTuple
 
 from df_gettext_toolkit.common import TranslationItem
 
@@ -35,6 +35,37 @@ def last_suitable(parts: Sequence[str], func: Callable[[str], bool]) -> int:
             return i + 1  # if the last element is suitable, then return len(s), so that s[:i] gives full list
     else:
         return 0  # if there aren't suitable elements, then return 0, so that s[:i] gives empty list
+
+
+class FilePartInfo(NamedTuple):
+    line_number: int
+    context: Optional[str]
+    text: Optional[str] = None
+    tag: Optional[str] = None
+    tag_parts: Optional[Sequence[str]] = None
+
+
+def traverse_raw_file(file: Iterable[str]) -> Iterator[FilePartInfo]:
+    object_name = None
+    context = None
+    for i, line in enumerate(file, 1):
+        if "[" in line:
+            line_start = line.partition("[")[0]
+            yield FilePartInfo(i, context, text=line_start)
+
+            for tag in iterate_tags(line):
+                tag_parts = split_tag(tag)
+
+                if tag_parts[0] == "OBJECT":
+                    object_name = tag_parts[1]
+                elif object_name and (
+                        tag_parts[0] == object_name
+                        or (object_name in {"ITEM", "BUILDING"} and tag_parts[0].startswith(object_name))
+                        or object_name.endswith("_" + tag_parts[0])
+                ):
+                    context = ":".join(tag_parts)
+                else:
+                    yield FilePartInfo(i, context, tag=tag, tag_parts=tag_parts)
 
 
 def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[TranslationItem]:
