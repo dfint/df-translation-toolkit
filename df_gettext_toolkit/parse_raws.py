@@ -59,9 +59,9 @@ def traverse_raw_file(file: Iterable[str]) -> Iterator[FilePartInfo]:
                 if tag_parts[0] == "OBJECT":
                     object_name = tag_parts[1]
                 elif object_name and (
-                        tag_parts[0] == object_name
-                        or (object_name in {"ITEM", "BUILDING"} and tag_parts[0].startswith(object_name))
-                        or object_name.endswith("_" + tag_parts[0])
+                    tag_parts[0] == object_name
+                    or (object_name in {"ITEM", "BUILDING"} and tag_parts[0].startswith(object_name))
+                    or object_name.endswith("_" + tag_parts[0])
                 ):
                     context = ":".join(tag_parts)
                 else:
@@ -69,23 +69,12 @@ def traverse_raw_file(file: Iterable[str]) -> Iterator[FilePartInfo]:
 
 
 def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[TranslationItem]:
-    object_name = None
-    context = None
     translation_keys: Set[Tuple[str, ...]] = set()  # Translation keys in the current context
-    for i, line in enumerate(file, 1):
-        for tag in iterate_tags(line):
-            tag_parts = split_tag(tag)
 
-            if tag_parts[0] == "OBJECT":
-                object_name = tag_parts[1]
-            elif object_name and (
-                tag_parts[0] == object_name
-                or (object_name in {"ITEM", "BUILDING"} and tag_parts[0].startswith(object_name))
-                or object_name.endswith("_" + tag_parts[0])
-            ):
-                context = ":".join(tag_parts)  # don't enclose context string into brackets - transifex dislikes this
-                translation_keys.clear()
-            elif (
+    for item in traverse_raw_file(file):
+        if item.tag:
+            tag_parts = item.tag_parts
+            if (
                 "TILE" not in tag_parts[0]
                 and any(is_translatable(s) for s in tag_parts[1:])
                 and tuple(tag_parts) not in translation_keys  # Don't add duplicate items to translate
@@ -95,7 +84,7 @@ def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[Translation
                     tag_parts = tag_parts[:last]
                     tag_parts.append("")  # Add an empty element to the tag to mark the tag as not completed
                 translation_keys.add(tuple(tag_parts))
-                yield TranslationItem(context=context, text=join_tag(tag_parts), line_number=i)
+                yield TranslationItem(context=item.context, text=join_tag(tag_parts), line_number=item.line_number)
 
 
 def translate_raw_file(file: Iterable[str], dictionary: Mapping[Tuple[str, Optional[str]], str]):
