@@ -1,5 +1,6 @@
 import io
 from inspect import cleandoc as trim_indent
+from typing import Callable, Sequence, TypeVar
 
 import pytest
 
@@ -7,6 +8,7 @@ from df_gettext_toolkit.common import TranslationItem
 from df_gettext_toolkit.parse_raws import (
     extract_translatables_from_raws,
     translate_raw_file,
+    last_suitable,
 )
 
 
@@ -139,3 +141,23 @@ def test_extract_translatables_from_raws(content, expected):
 )
 def test_translate_raw_file(content, dictionary, result):
     assert list(translate_raw_file(io.StringIO(content), dictionary)) == result.splitlines()
+
+
+T = TypeVar("T")
+
+
+@pytest.mark.parametrize(
+    "sequence, function, expected",
+    [
+        [[1, 1, 1, 1, 1, 0, 0], bool, 5],
+        [[1, 1, 1, 1, 1, 1, 1], bool, 7],
+        [[0, 0, 0, 0, 0, 0, 0], bool, 0],
+        [[1, 0, 0, 0, 0, 0, 0], bool, 1],
+        [[1, 1, 0, 0, 0, 0, 0], bool, 2],
+        [[], bool, 0],
+    ],
+)
+def test_last_suitable(sequence: Sequence[T], function: Callable[[T], bool], expected):
+    assert last_suitable(sequence, function) == expected
+    result = last_suitable(sequence, function)
+    assert len(sequence[:result]) == result

@@ -1,5 +1,5 @@
 from io import BytesIO
-from typing import List, Iterator, Sequence, NamedTuple
+from typing import Iterator, List, NamedTuple, Sequence
 
 from df_gettext_toolkit.common import TranslationItem
 

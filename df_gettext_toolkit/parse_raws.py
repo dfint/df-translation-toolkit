@@ -1,4 +1,4 @@
-from typing import Iterable, Iterator, List, Mapping, Tuple, Optional, Sequence, Callable, Set, NamedTuple
+from typing import Iterable, Iterator, List, Mapping, Tuple, Optional, Sequence, Callable, Set, NamedTuple, TypeVar
 
 from df_gettext_toolkit.common import TranslationItem
 
@@ -29,8 +29,11 @@ def join_tag(tag: Iterable[str]) -> str:
     return "[{}]".format(":".join(tag))
 
 
-def last_suitable(parts: Sequence[str], func: Callable[[str], bool]) -> int:
-    for i in range(len(parts) - 1, 0, -1):
+T = TypeVar("T")
+
+
+def last_suitable(parts: Sequence[T], func: Callable[[T], bool]) -> int:
+    for i in range(len(parts) - 1, -1, -1):
         if func(parts[i]):
             return i + 1  # if the last element is suitable, then return len(s), so that s[:i] gives full list
     else:
