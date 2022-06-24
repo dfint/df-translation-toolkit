@@ -50,12 +50,9 @@ def translate_compressed(po_filename: str, path: Path, encoding: str):
         dictionary = {item["msgid"]: item["msgstr"] for item in load_po(pofile)}
 
     for file in path.rglob("*"):
-        if file.is_file() and "." not in file.name:
+        if file.is_file() and "." not in file.name and file.name != "index":
             # Don't patch index file
             # (it's encoded, it is possible to decode/encode it, but the game crashes if it is changed)
-            if file.name == "index":
-                continue
-
             with backup(file) as backup_file:
                 try:
                     yield from translate_compressed_file(backup_file, file, dictionary, encoding)
