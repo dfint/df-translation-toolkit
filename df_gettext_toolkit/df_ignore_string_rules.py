@@ -1,7 +1,7 @@
 import re
 from typing import Callable, List
 
-from .parse_raws import is_translatable
+from df_gettext_toolkit.parse_raws import is_translatable
 
 
 class IgnoringRuleRegistry:

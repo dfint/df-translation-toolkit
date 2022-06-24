@@ -4,8 +4,8 @@ from typing import Iterable, Set, Tuple
 
 import typer
 
-from .fix_translated_strings import cleanup_string, fix_spaces
-from .parse_po import escape_string, load_po
+from df_gettext_toolkit.fix_translated_strings import cleanup_string, fix_spaces
+from df_gettext_toolkit.parse_po import escape_string, load_po
 
 
 def prepare_dictionary(

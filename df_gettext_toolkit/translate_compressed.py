@@ -45,11 +45,11 @@ def translate_compressed_file(
             dest.write(pack_data(encoded_translation))
 
 
-def translate_compressed(po_filename, path, encoding):
+def translate_compressed(po_filename: str, path: Path, encoding: str):
     with open(po_filename, "r", encoding="utf-8") as pofile:
         dictionary = {item["msgid"]: item["msgstr"] for item in load_po(pofile)}
 
-    for file in Path(path).rglob("*"):
+    for file in path.rglob("*"):
         if file.is_file() and "." not in file.name:
             # Don't patch index file
             # (it's encoded, it is possible to decode/encode it, but the game crashes if it is changed)

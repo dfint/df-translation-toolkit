@@ -3,8 +3,8 @@ from pathlib import Path
 
 import typer
 
-from .translate_plain_text import translate_plain_text
-from .translate_raws import translate_raws
+from df_gettext_toolkit.translate_plain_text import translate_plain_text
+from df_gettext_toolkit.translate_raws import translate_raws
 
 patterns = {
     "raw/objects": dict(
@@ -27,15 +27,13 @@ patterns = {
 
 
 def main(
-    base_path: str,
-    po_directory: str,
+    base_path: Path,
+    po_directory: Path,
     encoding: str,
     po_name_prefix: str = "",
     po_name_postfix: str = "",
 ):
-    po_directory = Path(po_directory)
-
-    for cur_dir in Path(base_path).rglob("*"):
+    for cur_dir in base_path.rglob("*"):
         if cur_dir.is_dir():
             for pattern in patterns:
                 if cur_dir.match("*/" + pattern):

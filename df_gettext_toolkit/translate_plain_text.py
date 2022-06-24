@@ -4,9 +4,9 @@ from typing import Mapping, Optional
 
 import typer
 
-from .backup import backup
-from .parse_plain_text import parse_plain_text_file
-from .parse_po import load_po
+from df_gettext_toolkit.backup import backup
+from df_gettext_toolkit.parse_plain_text import parse_plain_text_file
+from df_gettext_toolkit.parse_po import load_po
 
 
 def translate_plain_text_file(
@@ -31,7 +31,7 @@ def translate_plain_text_file(
                 print(translation, file=destination_file)
 
 
-def translate_plain_text(po_filename: str, path: str, encoding: str, join_paragraphs=True):
+def translate_plain_text(po_filename: str, path: Path, encoding: str, join_paragraphs=True):
     with open(po_filename, "r", encoding="utf-8") as po_file:
         dictionary = {item["msgid"]: item["msgstr"] for item in load_po(po_file)}
 
@@ -43,7 +43,7 @@ def translate_plain_text(po_filename: str, path: str, encoding: str, join_paragr
 
 def main(
     po_filename: str,
-    path: str = ".",
+    path: Path,
     encoding: Optional[str] = None,
     split: bool = False,
 ):
