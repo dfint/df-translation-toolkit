@@ -146,19 +146,20 @@ def get_tag_translation(dictionary: Mapping[Tuple[str, Optional[str]], str], ite
 
 def translate_raw_file(file: Iterable[str], dictionary: Mapping[Tuple[str, Optional[str]], str]):
     prev_line_number = 1
-    modified_line_parts = []
+    modified_line_parts: List[str] = []
     for item in parse_raw_file(file):
         if item.line_number > prev_line_number:
             yield "".join(modified_line_parts)
             modified_line_parts = []
             prev_line_number = item.line_number
 
-        if item.text:
+        if item.text is not None:
             modified_line_parts.append(item.text)
         elif not item.translatable or not any(is_translatable(s) for s in item.tag_parts[1:]):
             modified_line_parts.append(item.tag)
         else:
-            modified_line_parts.append(get_tag_translation(dictionary, item))
+            translation = get_tag_translation(dictionary, item)
+            modified_line_parts.append(translation)
 
     if modified_line_parts:
         yield "".join(modified_line_parts)

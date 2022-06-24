@@ -42,7 +42,7 @@ def test_load_po():
         |msgctxt "BODY:BASIC_1PARTBODY"
         |msgid "[BP:UB:body:bodies]"
         |msgstr "[BP:UB:тело:тела]"
-    """
+        """
     )
 
     expected = TranslationItem(
@@ -87,7 +87,7 @@ def test_parse_metadata():
         |msgstr ""
         |"Content-Type: text/plain; charset=UTF-8\n"
         |"Content-Transfer-Encoding: 8bit\n"
-    """
+        """
     ).strip()
 
     metadata = next(load_po(io.StringIO(header)))
@@ -113,7 +113,7 @@ def test_po_reader():
         |msgctxt "BODY:BASIC_1PARTBODY"
         |msgid "[BP:UB:body:bodies]"
         |msgstr "[BP:UB:тело:тела]"
-    """
+        """
     )
 
     po = PoReader(StringIO(po_content))
