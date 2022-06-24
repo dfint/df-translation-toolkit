@@ -9,6 +9,11 @@ class TranslationItem:
     context: Optional[str] = None
     source_file: Optional[str] = None
     line_number: Optional[int] = None
+    translator_comment: Optional[str] = None  # "#"
+    extracted_comment: Optional[str] = None  # "#."
+    # reference: Optional[str] = None  # "#: source_file: line_number
+    flag: Optional[str] = None  # "#,"
+    previous_untranslated_msgid: Optional[str] = None  # "#|"
 
     def __eq__(self, other):
         if isinstance(other, TranslationItem):
