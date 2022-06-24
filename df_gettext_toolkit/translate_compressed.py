@@ -1,6 +1,8 @@
+import sys
 from pathlib import Path
-from typing import Mapping, Iterator, Iterable
+from typing import Mapping, Iterator, Iterable, Optional
 
+import typer
 from df_raw_decoder import unpack_data, pack_data
 
 from df_gettext_toolkit.backup import backup
@@ -58,4 +60,17 @@ def translate_compressed(po_filename, path, encoding):
                 try:
                     yield from translate_compressed_file(backup_file, file, dictionary, encoding)
                 except Exception as ex:
-                    yield "Error: " + str(ex)
+                    yield f"Error: {ex}"
+
+
+def main(
+    po_filename: str,
+    path: Path,
+    encoding: Optional[str] = None,
+):
+    for filename in translate_compressed(po_filename, path, encoding):
+        print(filename, file=sys.stderr)
+
+
+if __name__ == "__main__":
+    typer.run(main)
