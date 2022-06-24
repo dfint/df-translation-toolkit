@@ -1,3 +1,4 @@
+import io
 from io import StringIO
 from typing import List, Tuple
 
@@ -8,6 +9,7 @@ from df_gettext_toolkit.parse_po import (
     load_po,
     save_po,
     PoReader,
+    parse_metadata_string, parse_metadata,
 )
 
 
@@ -83,4 +85,30 @@ def test_po_reader():
         "Content-Type": "text/plain; charset=UTF-8",
         "Content-Transfer-Encoding": "8bit",
         "Language": "ru",
+    }
+
+
+def test_parse_metadata_string():
+    metadata_string = (
+        "Content-Type: text/plain; charset=UTF-8\n"
+        "Content-Transfer-Encoding: 8bit\n"
+    )
+    assert parse_metadata_string(metadata_string) == {
+        "Content-Type": "text/plain; charset=UTF-8",
+        "Content-Transfer-Encoding": "8bit",
+    }
+
+
+def test_parse_metadata():
+    header = (
+        'msgid ""\n'
+        'msgstr ""\n'
+        '"Content-Type: text/plain; charset=UTF-8\\n"\n'
+        '"Content-Transfer-Encoding: 8bit\\n"\n'
+    )
+
+    metadata = next(load_po(io.StringIO(header)))
+    assert parse_metadata(metadata) == {
+        "Content-Type": "text/plain; charset=UTF-8",
+        "Content-Transfer-Encoding": "8bit",
     }

@@ -1,5 +1,6 @@
+import io
 from collections import defaultdict
-from typing import Mapping, Iterator
+from typing import Mapping, Iterator, Optional
 
 
 def strip_once(s, chars=" "):
@@ -34,7 +35,7 @@ def escape_string(s):
     return s.translate(_escape_translation_table)
 
 
-def load_po(po_file):
+def load_po(po_file: io.TextIOWrapper) -> Iterator[dict]:
     item = defaultdict(str)
     prev = None
     for line in po_file:
@@ -62,29 +63,28 @@ def load_po(po_file):
         yield item
 
 
-def get_metadata(entry) -> Mapping[str, str]:
-    def get_metadata_str(s):
-        return dict(item.split(": ", maxsplit=1) for item in s.splitlines())
+def parse_metadata_string(string: str) -> dict:
+    return dict(item.partition(": ")[::2] for item in string.splitlines())
 
-    if isinstance(entry, str):
-        return get_metadata_str(entry)
-    elif isinstance(entry, dict) and "msgstr" in entry:
-        return get_metadata_str(entry["msgstr"])
+
+def parse_metadata(entry: dict) -> Optional[Mapping[str, str]]:
+    if "msgstr" in entry:
+        return parse_metadata_string(entry["msgstr"])
 
 
 class PoReader:
-    def __init__(self, file_object):
+    def __init__(self, file_object: io.TextIOWrapper):
         file_object.seek(0)
-        self._iterator = load_po(file_object)
-        first_entry = next(self._iterator)
+        self._reader = load_po(file_object)
+        first_entry = next(self._reader)
         assert first_entry["msgid"] == "", "No metadata entry in the po file"
-        self.meta = get_metadata(first_entry)
+        self.meta = parse_metadata(first_entry)
 
-    def __iter__(self):
-        return self._iterator
+    def __iter__(self) -> Iterator[dict]:
+        return self._reader
 
 
-def format_lines(line: str):
+def format_lines(line: str) -> str:
     return "\n".join(f'"{escape_string(x)}"' for x in line.splitlines(keepends=True)) or '""'
 
 
@@ -110,7 +110,7 @@ msgstr ""
 
 
 def save_po(po_file, template: Iterator[str], dictionary: Mapping[str, str]):
-    print(default_header, file=po_file)
+    print(default_header, file=po_file, end="\n\n")
     print(file=po_file)
     for text in template:
         print(format_po_item(msgid=text, msgstr=dictionary.get(text, "")), file=po_file, end="\n\n")
