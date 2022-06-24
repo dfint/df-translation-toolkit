@@ -16,9 +16,7 @@ def extract_translatables_from_file(file, file_path, join_paragraphs, keys):
                 print("Key already exists:", repr(text_block), file=sys.stderr)
             else:
                 keys.add(text_block)
-                yield TranslationItem(
-                    text=text_block.rstrip("\n"), source_file=file_path.name, line_number=line_number
-                )
+                yield TranslationItem(text=text_block.rstrip("\n"), source_file=file_path.name, line_number=line_number)
 
 
 def extract_translatables(files: Iterable[Path], join_paragraphs: bool) -> Iterator[TranslationItem]:
