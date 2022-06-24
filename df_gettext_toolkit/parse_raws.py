@@ -108,6 +108,42 @@ def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[Translation
                 yield TranslationItem(context=item.context, text=join_tag(tag_parts), line_number=item.line_number)
 
 
+def get_from_dict_with_context(
+        dictionary: Mapping[Tuple[str, Optional[str]], str],
+        key: str,
+        context: str,
+) -> Optional[str]:
+    if (key, context) in dictionary:
+        return dictionary[(key, context)]
+    elif (key, None) in dictionary:
+        return dictionary[(key, None)]
+
+
+def get_tag_translation(dictionary: Mapping[Tuple[str, Optional[str]], str], item: FilePartInfo):
+    tag = item.tag
+    tag_parts = item.tag_parts
+    context = item.context
+    new_tag = get_from_dict_with_context(dictionary, tag, context)
+
+    if new_tag:
+        tag = new_tag
+    elif not is_translatable(tag_parts[-1]):
+        last = last_suitable(tag_parts, is_translatable)
+        translatable_tag_parts = tag_parts[:last]
+        translatable_tag_parts.append("")
+
+        tag_key = join_tag(translatable_tag_parts)
+
+        new_tag = get_from_dict_with_context(dictionary, tag_key, context)
+
+        if new_tag:
+            new_tag_parts = split_tag(new_tag)
+            tag_parts[: len(new_tag_parts) - 1] = new_tag_parts[:-1]
+            tag = join_tag(tag_parts)
+
+    return tag
+
+
 def translate_raw_file(file: Iterable[str], dictionary: Mapping[Tuple[str, Optional[str]], str]):
     prev_line_number = 1
     modified_line_parts = []
@@ -115,40 +151,14 @@ def translate_raw_file(file: Iterable[str], dictionary: Mapping[Tuple[str, Optio
         if item.line_number > prev_line_number:
             yield "".join(modified_line_parts)
             modified_line_parts = []
-
-        prev_line_number = item.line_number
+            prev_line_number = item.line_number
 
         if item.text:
             modified_line_parts.append(item.text)
         elif not item.translatable or not any(is_translatable(s) for s in item.tag_parts[1:]):
             modified_line_parts.append(item.tag)
         else:
-            tag = item.tag
-            tag_parts = item.tag_parts
-            context = item.context
-
-            if (tag, item.context) in dictionary:
-                tag = dictionary[(tag, item.context)]
-            elif (tag, None) in dictionary:
-                tag = dictionary[(tag, None)]
-            elif not is_translatable(tag_parts[-1]):
-                last = last_suitable(tag_parts, is_translatable)
-                translatable_tag_parts = tag_parts[:last]
-                translatable_tag_parts.append("")
-
-                tag_key = join_tag(translatable_tag_parts)
-
-                new_tag_parts = None
-                if (tag_key, context) in dictionary:
-                    new_tag_parts = split_tag(dictionary[(tag_key, context)])
-                elif (tag_key, None) in dictionary:
-                    new_tag_parts = split_tag(dictionary[(tag_key, None)])
-
-                if new_tag_parts:
-                    tag_parts[: len(new_tag_parts) - 1] = new_tag_parts[:-1]
-                    tag = join_tag(tag_parts)
-
-            modified_line_parts.append(tag)
+            modified_line_parts.append(get_tag_translation(dictionary, item))
 
     if modified_line_parts:
         yield "".join(modified_line_parts)
