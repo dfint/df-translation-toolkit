@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-from typing import Mapping, Optional
+from typing import Mapping
 
 import typer
 
@@ -31,7 +31,7 @@ def translate_plain_text_file(
                 print(translation, file=destination_file)
 
 
-def translate_plain_text(po_filename: str, path: Path, encoding: str, join_paragraphs=True):
+def translate_plain_text(po_filename: Path, path: Path, encoding: str, join_paragraphs=True):
     with open(po_filename, "r", encoding="utf-8") as po_file:
         dictionary = {item.text: item.translation for item in load_po(po_file) if item.text}
 
@@ -42,9 +42,9 @@ def translate_plain_text(po_filename: str, path: Path, encoding: str, join_parag
 
 
 def main(
-    po_filename: str,
+    po_filename: Path,
     path: Path,
-    encoding: Optional[str] = None,
+    encoding: str,
     split: bool = False,
 ):
     join_paragraphs = not split

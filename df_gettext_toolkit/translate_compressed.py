@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-from typing import Iterable, Iterator, Mapping, Optional
+from typing import Iterable, Iterator, Mapping
 
 import typer
 from df_raw_decoder import pack_data, unpack_data
@@ -45,7 +45,7 @@ def translate_compressed_file(
             dest.write(pack_data(encoded_translation))
 
 
-def translate_compressed(po_filename: str, path: Path, encoding: str):
+def translate_compressed(po_filename: Path, path: Path, encoding: str):
     with open(po_filename, "r", encoding="utf-8") as pofile:
         dictionary = {item.text: item.translation for item in load_po(pofile) if item.text}
 
@@ -61,9 +61,9 @@ def translate_compressed(po_filename: str, path: Path, encoding: str):
 
 
 def main(
-    po_filename: str,
+    po_filename: Path,
     path: Path,
-    encoding: Optional[str] = None,
+    encoding: str,
 ):
     for filename in translate_compressed(po_filename, path, encoding):
         print(filename, file=sys.stderr)
