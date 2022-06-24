@@ -3,7 +3,7 @@ from inspect import cleandoc as trim_indent
 
 import pytest
 
-from df_gettext_toolkit import PoItem
+from df_gettext_toolkit import TranslationItem
 from df_gettext_toolkit.parse_raws import (
     extract_translatables_from_raws,
     translate_raw_file,
@@ -36,26 +36,26 @@ from df_gettext_toolkit.parse_raws import (
                 """
             ).splitlines(),
             [
-                PoItem(
+                TranslationItem(
                     context="CREATURE:BIRD_BLUEJAY",
                     text=(
                         "[DESCRIPTION:"
                         "A small blue-crested bird living in temperate woodlands, known for its harsh chirps.]"
                     ),
                 ),
-                PoItem(context="CREATURE:BIRD_BLUEJAY", text="[NAME:blue jay:blue jays:blue jay]"),
-                PoItem(context="CREATURE:BIRD_BLUEJAY", text="[CASTE_NAME:blue jay:blue jays:blue jay]"),
-                PoItem(
+                TranslationItem(context="CREATURE:BIRD_BLUEJAY", text="[NAME:blue jay:blue jays:blue jay]"),
+                TranslationItem(context="CREATURE:BIRD_BLUEJAY", text="[CASTE_NAME:blue jay:blue jays:blue jay]"),
+                TranslationItem(
                     context="CREATURE:BIRD_BLUEJAY",
                     text="[GENERAL_CHILD_NAME:blue jay hatchling:blue jay hatchlings]",
                 ),
-                PoItem(
+                TranslationItem(
                     context="CREATURE:BIRD_CARDINAL",
                     text="[DESCRIPTION:A small bright red bird with a distinctive crest, found in temperate forests.]",
                 ),
-                PoItem(context="CREATURE:BIRD_CARDINAL", text="[NAME:cardinal:cardinals:cardinal]"),
-                PoItem(context="CREATURE:BIRD_CARDINAL", text="[CASTE_NAME:cardinal:cardinals:cardinal]"),
-                PoItem(
+                TranslationItem(context="CREATURE:BIRD_CARDINAL", text="[NAME:cardinal:cardinals:cardinal]"),
+                TranslationItem(context="CREATURE:BIRD_CARDINAL", text="[CASTE_NAME:cardinal:cardinals:cardinal]"),
+                TranslationItem(
                     context="CREATURE:BIRD_CARDINAL",
                     text="[GENERAL_CHILD_NAME:cardinal hatchling:cardinal hatchlings]",
                 ),
@@ -79,8 +79,8 @@ from df_gettext_toolkit.parse_raws import (
                 """
             ).splitlines(),
             [
-                PoItem(context="ITEM_WEAPON:ITEM_WEAPON_WHIP", text="[NAME:whip:whips]"),
-                PoItem(
+                TranslationItem(context="ITEM_WEAPON:ITEM_WEAPON_WHIP", text="[NAME:whip:whips]"),
+                TranslationItem(
                     context="ITEM_WEAPON:ITEM_WEAPON_WHIP",
                     text="[ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:]",
                 ),

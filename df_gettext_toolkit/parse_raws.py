@@ -1,6 +1,6 @@
 from typing import Iterable, Iterator, List, Mapping, Tuple, Optional, Sequence, Callable
 
-from df_gettext_toolkit.common import PoItem
+from df_gettext_toolkit.common import TranslationItem
 
 
 def split_tag(s: str) -> List[str]:
@@ -39,7 +39,7 @@ def last_suitable(parts: Sequence[str], func: Callable[[str], bool]) -> int:
         return 0  # if there aren't suitable elements, then return 0, so that s[:i] gives empty list
 
 
-def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[PoItem]:
+def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[TranslationItem]:
     obj = None
     context = None
     keys = set()
@@ -64,7 +64,7 @@ def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[PoItem]:
                     tag_parts = tag_parts[:last]
                     tag_parts.append("")  # Add an empty element to the tag to mark the tag as not completed
                 keys.add(tuple(tag_parts))
-                yield PoItem(context=context, text=join_tag(tag_parts), line_number=i)
+                yield TranslationItem(context=context, text=join_tag(tag_parts), line_number=i)
 
 
 def translate_raw_file(file: Iterable[str], dictionary: Mapping[Tuple[str, Optional[str]], str]):

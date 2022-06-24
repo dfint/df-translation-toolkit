@@ -3,7 +3,7 @@ from typing import Optional
 
 
 @dataclass
-class PoItem:
+class TranslationItem:
     text: str
     translation: str = ""
     context: Optional[str] = None
@@ -11,7 +11,7 @@ class PoItem:
     line_number: Optional[int] = None
 
     def __eq__(self, other):
-        if isinstance(other, PoItem):
+        if isinstance(other, TranslationItem):
             return self.text == other.text and self.translation == other.translation and self.context == other.context
         else:
             return False

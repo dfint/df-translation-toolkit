@@ -4,12 +4,12 @@ from typing import Iterator
 
 import typer
 
-from df_gettext_toolkit.common import PoItem
+from df_gettext_toolkit.common import TranslationItem
 from .parse_po import save_pot
 from .parse_raws import extract_translatables_from_raws
 
 
-def extract_translatables_from_raws_batch(raw_files: Iterator[Path], source_encoding: str) -> Iterator[PoItem]:
+def extract_translatables_from_raws_batch(raw_files: Iterator[Path], source_encoding: str) -> Iterator[TranslationItem]:
     """
     Read all translatable items from all raw files
     """
