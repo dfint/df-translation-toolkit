@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-from typing import Mapping
+from typing import Mapping, Tuple, Optional
 
 import typer
 
@@ -13,7 +13,7 @@ from .parse_raws import translate_raw_file
 def translate_single_raw_file(
     source_file_path: Path,
     destination_file_path: Path,
-    dictionary: Mapping[str, str],
+    dictionary: Mapping[Tuple[str, Optional[str]], str],
     encoding: str,
 ):
 

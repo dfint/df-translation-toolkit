@@ -1,4 +1,4 @@
-from typing import Iterable, Iterator, List
+from typing import Iterable, Iterator, List, Mapping, Tuple, Optional
 
 from df_gettext_toolkit.common import PoItem
 
@@ -67,7 +67,7 @@ def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[PoItem]:
                 yield PoItem(context=context, text=join_tag(tag_parts), line_number=i)
 
 
-def translate_raw_file(file, dictionary):
+def translate_raw_file(file: Iterable[str], dictionary: Mapping[Tuple[str, Optional[str]], str]):
     obj = None
     context = None
     for line in file:
