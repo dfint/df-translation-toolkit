@@ -39,20 +39,18 @@ def last_suitable(parts: Sequence[str], func: Callable[[str], bool]) -> int:
 
 class RawFileToken(NamedTuple):
     line_number: int
-    is_token: bool
-    data: str
+    is_tag: bool
+    text: str
 
 
 def tokenize_raw_file(file: Iterable[str]) -> Iterator[RawFileToken]:
     for i, line in enumerate(file, 1):
         if "[" not in line:
-            yield RawFileToken(i, False, line.rstrip())
+            yield RawFileToken(i, is_tag=False, text=line.rstrip())
         else:
             line_start = line.partition("[")[0]
-            yield RawFileToken(i, False, line_start)
-
-            for tag in iterate_tags(line):
-                yield RawFileToken(i, True, tag)
+            yield RawFileToken(i, is_tag=False, text=line_start)
+            yield from (RawFileToken(i, is_tag=True, text=tag) for tag in iterate_tags(line))
 
 
 class FilePartInfo(NamedTuple):
@@ -64,37 +62,34 @@ class FilePartInfo(NamedTuple):
     tag_parts: Optional[Sequence[str]] = None
 
 
-def traverse_raw_file(file: Iterable[str]) -> Iterator[FilePartInfo]:
+def parse_raw_file(file: Iterable[str]) -> Iterator[FilePartInfo]:
     object_name = None
     context = None
-    for i, line in enumerate(file, 1):
-        if "[" not in line:
-            yield FilePartInfo(i, False, context, text=line.rstrip())
+    for token in tokenize_raw_file(file):
+        if not token.is_tag:
+            yield FilePartInfo(token.line_number, False, context, text=token.text)
         else:
-            line_start = line.partition("[")[0]
-            yield FilePartInfo(i, False, context, text=line_start)
+            tag = token.text
+            tag_parts = split_tag(tag)
 
-            for tag in iterate_tags(line):
-                tag_parts = split_tag(tag)
-
-                if tag_parts[0] == "OBJECT":
-                    object_name = tag_parts[1]
-                    yield FilePartInfo(i, False, context, tag=tag)
-                elif object_name and (
-                    tag_parts[0] == object_name
-                    or (object_name in {"ITEM", "BUILDING"} and tag_parts[0].startswith(object_name))
-                    or object_name.endswith("_" + tag_parts[0])
-                ):
-                    context = ":".join(tag_parts)
-                    yield FilePartInfo(i, False, context, tag=tag)
-                else:
-                    yield FilePartInfo(i, True, context, tag=tag, tag_parts=tag_parts)
+            if tag_parts[0] == "OBJECT":
+                object_name = tag_parts[1]
+                yield FilePartInfo(token.line_number, False, context, tag=tag)
+            elif object_name and (
+                tag_parts[0] == object_name
+                or (object_name in {"ITEM", "BUILDING"} and tag_parts[0].startswith(object_name))
+                or object_name.endswith("_" + tag_parts[0])
+            ):
+                context = ":".join(tag_parts)
+                yield FilePartInfo(token.line_number, False, context, tag=tag)
+            else:
+                yield FilePartInfo(token.line_number, True, context, tag=tag, tag_parts=tag_parts)
 
 
 def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[TranslationItem]:
     translation_keys: Set[Tuple[str, ...]] = set()  # Translation keys in the current context
 
-    for item in traverse_raw_file(file):
+    for item in parse_raw_file(file):
         if item.translatable:
             tag_parts = item.tag_parts
             if (
@@ -113,7 +108,7 @@ def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[Translation
 def translate_raw_file(file: Iterable[str], dictionary: Mapping[Tuple[str, Optional[str]], str]):
     prev_line_number = 1
     modified_line_parts = []
-    for item in traverse_raw_file(file):
+    for item in parse_raw_file(file):
         if item.line_number > prev_line_number:
             yield "".join(modified_line_parts)
             modified_line_parts = []
