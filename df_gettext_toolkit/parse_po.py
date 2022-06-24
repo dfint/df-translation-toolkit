@@ -2,6 +2,8 @@ import io
 from collections import defaultdict
 from typing import Iterator, Mapping, Optional
 
+from df_gettext_toolkit import TranslationItem
+
 
 def strip_once(s, chars=" "):
     if s and s[0] in chars:
@@ -120,7 +122,13 @@ def save_po(po_file: io.TextIOWrapper, template: Iterator[str], dictionary: Mapp
         print(format_po_item(msgid=text, msgstr=dictionary.get(text, "")), file=po_file, end="\n\n")
 
 
-def save_pot(po_file: io.TextIOWrapper, template):
+def save_pot(po_file: io.TextIOWrapper, template: Iterator[TranslationItem]):
     print(default_header, file=po_file, end="\n\n")
-    for line in template:
-        print(format_po_item(msgid=line), file=po_file, end="\n\n")
+    for item in template:
+        print(
+            format_po_item(
+                msgid=item.text, msgctxt=item.context, file_name=item.source_file, line_number=item.line_number
+            ),
+            file=po_file,
+            end="\n\n",
+        )

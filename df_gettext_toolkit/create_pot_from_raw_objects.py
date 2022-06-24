@@ -24,10 +24,7 @@ def extract_translatables_from_raws_batch(raw_files: Iterator[Path], source_enco
 def create_pot_file(pot_file: io.TextIOWrapper, raw_files: Iterator[Path], source_encoding: str):
     save_pot(
         pot_file,
-        (
-            dict(msgid=item.text, msgctxt=item.context, file_name=item.source_file, line_number=item.line_number)
-            for item in extract_translatables_from_raws_batch(raw_files, source_encoding)
-        ),
+        extract_translatables_from_raws_batch(raw_files, source_encoding),
     )
 
 
