@@ -117,8 +117,8 @@ from df_gettext_toolkit.parse_raws import (
                 TranslationItem(context="BODY:BASIC_1PARTBODY", text="[BP:UB:body:bodies]"),
                 TranslationItem(context="BODY:BASIC_1PARTBODY_THOUGHT", text="[BP:UB:body:bodies]"),
                 TranslationItem(context="BODY:BASIC_1PARTBODY_FLYING_HEAD_FLAG_THOUGHT", text="[BP:UB:body:bodies]"),
-            ]
-        )
+            ],
+        ),
     ],
 )
 def test_extract_translatables_from_raws(content, expected):
