@@ -109,6 +109,8 @@ from df_gettext_toolkit.parse_raws import (
                 |[BODY:BASIC_1PARTBODY_FLYING_HEAD_FLAG_THOUGHT]
                 |    [BP:UB:body:bodies][UPPERBODY][LOWERBODY][HEAD][THOUGHT][CATEGORY:BODY][FLIER]
                 |        [DEFAULT_RELSIZE:2000]
+                |    [BP:UB:body:bodies][UPPERBODY][LOWERBODY][HEAD][THOUGHT][CATEGORY:BODY][FLIER]  # Duplicate entry - must be ignored
+                |        [DEFAULT_RELSIZE:2000]
                 """
             ).strip(),
             [
