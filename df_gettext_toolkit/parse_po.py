@@ -1,6 +1,5 @@
-import io
 from collections import defaultdict
-from typing import Iterable, Iterator, Mapping, Optional
+from typing import Iterable, Iterator, Mapping, Optional, TextIO
 
 from df_gettext_toolkit.common import TranslationItem
 
@@ -78,7 +77,7 @@ def parse_metadata(entry: TranslationItem) -> Optional[Mapping[str, str]]:
 class PoReader(Iterator[TranslationItem]):
     _reader: Iterator[TranslationItem]
 
-    def __init__(self, file_object: io.TextIOWrapper):
+    def __init__(self, file_object: TextIO):
         file_object.seek(0)
         self._reader = load_po(file_object)
         first_entry = next(self._reader)
@@ -117,14 +116,14 @@ msgstr ""
 """.strip()
 
 
-def save_po(po_file: io.TextIOWrapper, template: Iterator[str], dictionary: Iterable[TranslationItem]):
+def save_po(po_file: TextIO, template: Iterator[str], dictionary: Iterable[TranslationItem]):
     mapping_dict = {item.text: item.translation for item in dictionary}
     print(default_header, file=po_file, end="\n\n")
     for text in template:
         print(format_po_item(msgid=text, msgstr=mapping_dict.get(text, "")), file=po_file, end="\n\n")
 
 
-def save_pot(po_file: io.TextIOWrapper, template: Iterator[TranslationItem]):
+def save_pot(po_file: TextIO, template: Iterator[TranslationItem]):
     print(default_header, file=po_file, end="\n\n")
     for item in template:
         print(

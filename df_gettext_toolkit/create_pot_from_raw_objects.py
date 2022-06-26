@@ -1,6 +1,5 @@
-import io
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, TextIO
 
 import typer
 
@@ -21,7 +20,7 @@ def extract_translatables_from_raws_batch(raw_files: Iterator[Path], source_enco
                     yield item
 
 
-def create_pot_file(pot_file: io.TextIOWrapper, raw_files: Iterator[Path], source_encoding: str):
+def create_pot_file(pot_file: TextIO, raw_files: Iterator[Path], source_encoding: str):
     save_pot(
         pot_file,
         extract_translatables_from_raws_batch(raw_files, source_encoding),
