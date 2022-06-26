@@ -88,6 +88,35 @@ from df_gettext_toolkit.parse_raws import (
                 ),
             ],
         ),
+        (
+            strip_margin(
+                """
+                |body_default
+                |
+                |[OBJECT:BODY]
+                |
+                |[BODY:BASIC_1PARTBODY]
+                |    Categories are user-defined strings that can be used elsewhere to refer to groups of bodyparts for other commands.
+                |    [BP:UB:body:bodies][UPPERBODY][LOWERBODY][CATEGORY:BODY]
+                |    This command establishes the relative size of body parts within a creature.  The numbers have no absolute meaning or units.
+                |        [DEFAULT_RELSIZE:2000]
+                |
+                |[BODY:BASIC_1PARTBODY_THOUGHT]
+                |    This is useful for blobs and other simple headless creatures that don't have brains, since they will die then when they lose a functional tissue in this part.
+                |    [BP:UB:body:bodies][UPPERBODY][LOWERBODY][THOUGHT][CATEGORY:BODY]
+                |        [DEFAULT_RELSIZE:2000]
+                |
+                |[BODY:BASIC_1PARTBODY_FLYING_HEAD_FLAG_THOUGHT]
+                |    [BP:UB:body:bodies][UPPERBODY][LOWERBODY][HEAD][THOUGHT][CATEGORY:BODY][FLIER]
+                |        [DEFAULT_RELSIZE:2000]
+                """
+            ).strip(),
+            [
+                TranslationItem(context="BODY:BASIC_1PARTBODY", text="[BP:UB:body:bodies]"),
+                TranslationItem(context="BODY:BASIC_1PARTBODY_THOUGHT", text="[BP:UB:body:bodies]"),
+                TranslationItem(context="BODY:BASIC_1PARTBODY_FLYING_HEAD_FLAG_THOUGHT", text="[BP:UB:body:bodies]"),
+            ]
+        )
     ],
 )
 def test_extract_translatables_from_raws(content, expected):
