@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Callable, Iterable, Iterator, NamedTuple, Tuple
+from typing import Callable, Iterable, Iterator, NamedTuple, Sequence
 
 import typer
 
@@ -28,7 +28,7 @@ def translate_files(
     encoding: str,
     po_name_postfix: str = "",
     translate: bool = True,
-    directory_patterns: Tuple[Pattern] = tuple(patterns),
+    directory_patterns: Sequence[Pattern] = tuple(patterns),
 ) -> Iterator[str]:
     for cur_dir in base_path.rglob("*"):
         if cur_dir.is_dir():
