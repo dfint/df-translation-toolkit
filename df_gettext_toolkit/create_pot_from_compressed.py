@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-from typing import Sequence, Iterator, Iterable
+from typing import Iterable, Iterator, Sequence
 
 import typer
 from df_raw_decoder import unpack_data

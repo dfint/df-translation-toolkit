@@ -1,56 +1,58 @@
-import sys
 from pathlib import Path
+from typing import Callable, Iterable, Iterator, NamedTuple, Tuple
 
 import typer
 
+from df_gettext_toolkit.translate_compressed import translate_compressed
 from df_gettext_toolkit.translate_plain_text import translate_plain_text
 from df_gettext_toolkit.translate_raws import translate_raws
 
-patterns = {
-    "raw/objects": dict(
-        po_filename="raw-objects.po",
-        func=translate_raws,
-    ),
-    "data_src": dict(
-        po_filename="uncompressed.po",
-        func=lambda *args: translate_plain_text(*args, join_paragraphs=True),
-    ),
-    "data/speech": dict(
-        po_filename="speech.po",
-        func=lambda *args: translate_plain_text(*args, join_paragraphs=False),
-    ),
-    "raw/objects/text": dict(
-        po_filename="text.po",
-        func=lambda *args: translate_plain_text(*args, join_paragraphs=False),
-    ),
-}
+
+class Pattern(NamedTuple):
+    directory: str
+    po_filename: str
+    function: Callable[[Path, Path, str], Iterable[str]]
+
+
+patterns = [
+    Pattern("raw/objects", "raw-objects", translate_raws),
+    Pattern("data", "uncompressed", translate_compressed),
+    Pattern("data/speech", "speech", lambda *args: translate_plain_text(*args, join_paragraphs=False)),
+    Pattern("raw/objects/text", "text", lambda *args: translate_plain_text(*args, join_paragraphs=False)),
+]
+
+
+def translate_files(
+    base_path: Path,
+    po_directory: Path,
+    encoding: str,
+    po_name_postfix: str = "",
+    translate: bool = True,
+    directory_patterns: Tuple[Pattern] = tuple(patterns),
+) -> Iterator[str]:
+    for cur_dir in base_path.rglob("*"):
+        if cur_dir.is_dir():
+            for directory, po_filename, function in directory_patterns:
+                if cur_dir.match("*/" + directory):
+                    yield f"Matched {directory} pattern"
+
+                    po_filename = f"{po_filename}_{po_name_postfix}.po"
+                    po_file_path = po_directory / po_filename
+
+                    if translate:
+                        for filename in function(po_file_path, cur_dir, encoding):
+                            yield filename
 
 
 def main(
     base_path: Path,
     po_directory: Path,
     encoding: str,
-    po_name_prefix: str = "",
     po_name_postfix: str = "",
+    translate: bool = True,
 ):
-    for cur_dir in base_path.rglob("*"):
-        if cur_dir.is_dir():
-            for pattern in patterns:
-                if cur_dir.match("*/" + pattern):
-                    print(f"Matched {pattern} pattern")
-                    print(cur_dir, file=sys.stderr)
-                    print(file=sys.stderr)
-
-                    match = patterns[pattern]
-
-                    po_filename = Path(match["po_filename"])
-                    po_filename = po_filename.with_name(po_name_prefix + po_filename.name + po_name_postfix)
-
-                    po_file_path = po_directory / po_filename
-                    func = match["func"]
-                    for filename in func(po_file_path, cur_dir, encoding):
-                        print(filename, file=sys.stderr)
-                    print(file=sys.stderr)
+    for message in translate_files(base_path, po_directory, encoding, po_name_postfix, translate):
+        print(message)
 
 
 if __name__ == "__main__":

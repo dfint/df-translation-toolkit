@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-from typing import Mapping, Optional, Tuple
+from typing import Iterator, Mapping, Optional, Tuple
 
 import typer
 
@@ -15,8 +15,7 @@ def translate_single_raw_file(
     destination_file_path: Path,
     dictionary: Mapping[Tuple[str, Optional[str]], str],
     encoding: str,
-):
-
+) -> Iterator[str]:
     with open(source_file_path, encoding="cp437") as src:
         with open(destination_file_path, "w", encoding=encoding) as dest:
             yield destination_file_path.name
@@ -35,7 +34,7 @@ def translate_single_raw_file(
                     print(line, file=dest)
 
 
-def translate_raws(po_filename: Path, path: Path, encoding: str):
+def translate_raws(po_filename: Path, path: Path, encoding: str) -> Iterator[str]:
     with open(po_filename, "r", encoding="utf-8") as pofile:
         dictionary = {(item.text, item.context): item.translation for item in load_po(pofile)}
 

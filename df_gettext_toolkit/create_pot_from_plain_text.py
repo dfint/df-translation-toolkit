@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-from typing import Iterator, Iterable, Sequence
+from typing import Iterable, Iterator, Sequence
 
 import typer
 
