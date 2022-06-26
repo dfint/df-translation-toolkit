@@ -40,7 +40,7 @@ def parse_plain_text_file(lines: Iterable[str], join_paragraphs=True, start_line
             if local_is_translatable(line):
                 if "~" in line or line[0] == "[" and not (paragraph and paragraph[-1][-1].isalpha()):
                     if paragraph:
-                        yield PlainTextFileToken("".join(paragraph), True, paragraph_start_line)
+                        yield PlainTextFileToken(join_paragraph(paragraph), True, paragraph_start_line)
                         paragraph = []
                         paragraph_start_line = line_number
 
@@ -52,7 +52,7 @@ def parse_plain_text_file(lines: Iterable[str], join_paragraphs=True, start_line
                     paragraph.append(line)
             else:
                 if paragraph:
-                    yield PlainTextFileToken("".join(paragraph), True, paragraph_start_line)
+                    yield PlainTextFileToken(join_paragraph(paragraph), True, paragraph_start_line)
                     paragraph = []
                     paragraph_start_line = line_number
 
@@ -61,4 +61,8 @@ def parse_plain_text_file(lines: Iterable[str], join_paragraphs=True, start_line
             yield PlainTextFileToken(line, local_is_translatable(line), line_number)
 
     if paragraph:
-        yield PlainTextFileToken("".join(paragraph), True, paragraph_start_line)
+        yield PlainTextFileToken(join_paragraph(paragraph), True, paragraph_start_line)
+
+
+def join_paragraph(paragraph):
+    return "\n".join(paragraph)
