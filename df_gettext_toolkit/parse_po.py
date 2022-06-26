@@ -75,7 +75,7 @@ def parse_metadata(entry: TranslationItem) -> Optional[Mapping[str, str]]:
         return parse_metadata_string(entry.translation)
 
 
-class PoReader(Iterator):
+class PoReader(Iterator[TranslationItem]):
     _reader: Iterator[TranslationItem]
 
     def __init__(self, file_object: io.TextIOWrapper):
