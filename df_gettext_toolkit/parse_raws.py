@@ -1,4 +1,4 @@
-from typing import Callable, Iterable, Iterator, List, Mapping, NamedTuple, Optional, Sequence, Set, Tuple, TypeVar
+from typing import Callable, Iterable, Iterator, List, Mapping, NamedTuple, Optional, Sequence, Tuple, TypeVar
 
 from df_gettext_toolkit.common import TranslationItem
 
@@ -90,21 +90,17 @@ def parse_raw_file(file: Iterable[str]) -> Iterator[FilePartInfo]:
 
 
 def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[TranslationItem]:
-    translation_keys: Set[Tuple[str, ...]] = set()  # Translation keys in the current context
-
     for item in parse_raw_file(file):
         if item.translatable:
             tag_parts = item.tag_parts
             if (
                 "TILE" not in tag_parts[0]
                 and any(is_translatable(s) for s in tag_parts[1:])
-                and tuple(tag_parts) not in translation_keys  # Don't add duplicate items to translate
             ):
                 if not is_translatable(tag_parts[-1]):
                     last = last_suitable(tag_parts, is_translatable)
                     tag_parts = tag_parts[:last]
                     tag_parts.append("")  # Add an empty element to the tag to mark the tag as not completed
-                translation_keys.add(tuple(tag_parts))
                 yield TranslationItem(context=item.context, text=join_tag(tag_parts), line_number=item.line_number)
 
 
