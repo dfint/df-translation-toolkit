@@ -16,7 +16,7 @@ def test_translate_files():
     base_dir_mock = Mock("base_dir")
     directory_mock = Mock("directory")
     directory_mock.is_dir = lambda: True
-    directory_mock.match = lambda *args: True
+    directory_mock.match = lambda pattern: pattern == "*/" + directory_name
     base_dir_mock.rglob = lambda *args: [directory_mock]
     po_directory = PurePath("po_directory")
     encoding = "utf-8"
