@@ -15,12 +15,12 @@ class Parameters(NamedTuple):
     source_file_path: str
 
 
-parameters = {
+parameters = [
     Parameters(create_pot_from_raw_objects, "raws.pot", "raw/objects"),
     Parameters(create_pot_from_speech, "speech.pot", "data/speech"),
     Parameters(create_pot_from_plain_text, "text.pot", "raw/objects/text"),
     Parameters(create_pot_from_compressed, "uncompressed.pot", "data"),
-}
+]
 
 
 def main(df_path: Path):
