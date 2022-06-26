@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, Iterable, Sequence
 
 import typer
 
@@ -8,8 +8,8 @@ from df_gettext_toolkit.common import TranslationItem
 from df_gettext_toolkit.parse_po import save_pot
 
 
-def convert_file_lines_to_translation_items(path: Path) -> Iterator[TranslationItem]:
-    for file_path in sorted(path.glob("*.txt")):
+def extract_translatables(files: Iterable[Path]) -> Iterator[TranslationItem]:
+    for file_path in files:
         if file_path.is_file():
             print("File:", file_path.name, file=sys.stderr)
             with open(file_path) as file:
@@ -19,12 +19,19 @@ def convert_file_lines_to_translation_items(path: Path) -> Iterator[TranslationI
                         yield TranslationItem(text=text, source_file=file_path.name, line_number=i)
 
 
+def create_pot_file(pot_file: typer.FileTextWrite, files: Sequence[Path]):
+    save_pot(
+        pot_file,
+        extract_translatables(files),
+    )
+
+
 def main(
     path: Path,
-    destination_file: typer.FileTextWrite = typer.Option(..., encoding="utf-8"),
+    pot_file: typer.FileTextWrite = typer.Option(..., encoding="utf-8"),
 ):
-    print("Path:", path, file=sys.stderr)
-    save_pot(destination_file, convert_file_lines_to_translation_items(path))
+    files = (file for file in path.glob("*.txt") if file.is_file())
+    create_pot_file(pot_file, sorted(files))
 
 
 if __name__ == "__main__":

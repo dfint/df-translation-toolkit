@@ -28,7 +28,7 @@ def create_pot_file(pot_file: io.TextIOWrapper, raw_files: Iterator[Path], sourc
     )
 
 
-def main(pot_file: typer.FileTextWrite, raws_path: Path, source_encoding: str = "cp437"):
+def main(raws_path: Path, pot_file: typer.FileTextWrite, source_encoding: str = "cp437"):
     raw_files = (file for file in raws_path.glob("*.txt") if not file.name.startswith("language_"))
     create_pot_file(pot_file, sorted(raw_files), source_encoding)
 

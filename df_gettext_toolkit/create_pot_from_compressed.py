@@ -26,7 +26,7 @@ def create_pot_file(pot_file: typer.FileTextWrite, files: Sequence[Path]):
     )
 
 
-def main(pot_file: typer.FileTextWrite, path: Path):
+def main(path: Path, pot_file: typer.FileTextWrite):
     files = (file for file in path.glob("*") if file.is_file() and "." not in file.name and file.name != "index")
     create_pot_file(pot_file, sorted(files))
 
