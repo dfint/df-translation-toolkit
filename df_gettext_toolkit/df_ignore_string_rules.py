@@ -72,17 +72,17 @@ def ignore_tags(string: str) -> bool:
 
 @rules.register
 def ignore_filenames(string: str) -> bool:
-    return re.fullmatch(r".+\.[\w]{3}", string) is not None
+    return re.fullmatch(r".+\.\w{3}", string) is not None
 
 
 @rules.register
 def ignore_gl(string: str) -> bool:
-    return re.fullmatch(r"(w?gl[A-Z]|W?GL_)[\w]+", string) is not None
+    return re.fullmatch(r"(w?gl[A-Z]|W?GL_)\w+", string) is not None
 
 
 @rules.register
 def ignore_underline_separated_words(string: str) -> bool:
-    return re.fullmatch(r"[A-Za-z0-9]+_.*", string) is not None
+    return re.fullmatch(r"[A-Za-z\d]+_.*", string) is not None
 
 
 @rules.register
