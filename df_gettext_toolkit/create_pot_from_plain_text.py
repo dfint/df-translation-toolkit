@@ -35,7 +35,7 @@ def create_pot_file(pot_file: typer.FileTextWrite, files: Sequence[Path], join_p
     )
 
 
-def main(path: Path, pot_file: typer.FileTextWrite = typer.Option(..., encoding="utf-8"), split: bool = False):
+def main(path: Path, pot_file: typer.FileTextWrite = typer.Option(..., encoding="utf-8"), split: bool = True):
     files = (file for file in path.rglob("*.txt") if file.is_file())
     create_pot_file(pot_file, sorted(files), not split)
 

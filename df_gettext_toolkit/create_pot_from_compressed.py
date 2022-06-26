@@ -15,7 +15,7 @@ def extract_translatables(files: Iterable[Path]) -> Iterator[TranslationItem]:
     for file_path in files:
         print(file_path, file=sys.stderr)
         with open(file_path, "rb") as file:
-            lines = unpack_data(file)
+            lines = (line.decode("cp437") for line in unpack_data(file))
             yield from extract_translatables_from_file(lines, file_path, True, keys)
 
 
@@ -27,7 +27,7 @@ def create_pot_file(pot_file: typer.FileTextWrite, files: Sequence[Path]):
 
 
 def main(path: Path, pot_file: typer.FileTextWrite):
-    files = (file for file in path.glob("*") if file.is_file() and "." not in file.name and file.name != "index")
+    files = (file for file in path.rglob("*") if file.is_file() and "." not in file.name and file.name != "index")
     create_pot_file(pot_file, sorted(files))
 
 
