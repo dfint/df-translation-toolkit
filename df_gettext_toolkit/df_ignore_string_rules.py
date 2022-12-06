@@ -160,6 +160,8 @@ forbidden_starts = {
     ": DEMAND_",
     "DOUBLE TAGGED ITEM:",
     "Patched save:",
+    "vector",
+    "?_",
 }
 
 
@@ -336,6 +338,7 @@ blacklist_full_string = {
     "2DASYNC",
     "2DHW",
     "2DSW",
+    "insufficient memory",
 }
 
 
@@ -353,6 +356,7 @@ blacklisted_words = {
     "REJECTION",
     "font",
     "Font",
+    "crc",
 }
 
 
