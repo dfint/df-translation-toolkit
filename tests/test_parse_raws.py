@@ -5,11 +5,7 @@ import pytest
 from base.base import strip_margin
 
 from df_gettext_toolkit.common import TranslationItem
-from df_gettext_toolkit.parse_raws import (
-    extract_translatables_from_raws,
-    translate_raw_file,
-    last_suitable,
-)
+from df_gettext_toolkit.parse_raws import extract_translatables_from_raws, last_suitable, translate_raw_file
 
 
 @pytest.mark.parametrize(
