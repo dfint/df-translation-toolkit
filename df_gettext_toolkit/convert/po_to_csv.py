@@ -22,7 +22,7 @@ def prepare_dictionary(
 
 def main(po_file: str, csv_file: str, encoding: str):
     """
-    Convert a po file into a csv file
+    Convert a po file into a csv file in a specified encoding
     """
 
     with open(po_file, "r", encoding="utf-8") as pofile:

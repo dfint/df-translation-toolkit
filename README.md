@@ -4,12 +4,13 @@
 [![codecov](https://codecov.io/gh/dfint/df-gettext-toolkit/branch/master/graph/badge.svg?token=JfVwndEDlC)](https://codecov.io/gh/dfint/df-gettext-toolkit)
 [![Maintainability](https://api.codeclimate.com/v1/badges/8f5de82303b55de3b930/maintainability)](https://codeclimate.com/github/dfint/df-gettext-toolkit/maintainability)
 
-Toolset to convert text to [gettext](https://en.wikipedia.org/wiki/Gettext) format and aback. Includes mimimalistic parsers for .po (text) and .mo (binary) formats.
+Toolset to convert text to [gettext](https://en.wikipedia.org/wiki/Gettext) format and aback. Includes minimalistic parsers for .po (text) and .mo (binary) formats.
 
 Usage examples:
 
-```commandline
-poetry run python -m df_gettext_toolkit convert po_to_csv file.po result.csv
-poetry run df_gettext_toolkit convert po_to_csv file.po result.csv
-poetry run convert file.po result.csv
+```bash
+# These commands do the same thing: convert a po file into a csv file in a specified encoding
+poetry run python -m df_gettext_toolkit convert po_to_csv file.po result.csv cp1251
+poetry run df_gettext_toolkit convert po_to_csv file.po result.csv cp1251
+poetry run convert file.po result.csv cp1251
 ```
