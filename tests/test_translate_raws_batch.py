@@ -1,7 +1,7 @@
 from pathlib import PurePath
 from unittest.mock import Mock
 
-from df_gettext_toolkit.translate_batch import Pattern, translate_files
+from df_gettext_toolkit.translate.batch import Pattern, translate_files
 
 
 def test_translate_files():

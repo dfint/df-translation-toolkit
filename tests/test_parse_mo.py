@@ -2,8 +2,8 @@ import io
 
 import pytest
 
-from df_gettext_toolkit.common import TranslationItem
-from df_gettext_toolkit.parse_mo import create_mo, load_mo
+from df_gettext_toolkit.parse.parse_mo import create_mo, load_mo
+from df_gettext_toolkit.utils.common import TranslationItem
 
 
 def test_load_mo():

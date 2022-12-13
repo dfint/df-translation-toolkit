@@ -5,10 +5,10 @@ from typing import Iterable
 import typer
 from loguru import logger
 
-from df_gettext_toolkit.create_pot_from_raw_objects import extract_from_raw_file
-from df_gettext_toolkit.parse_po import save_pot
-from df_gettext_toolkit.parse_raws import split_tag, tokenize_raw_file
-from df_gettext_toolkit.parse_text_set import extract_from_vanilla_text
+from df_gettext_toolkit.create_pot.from_raw_objects import extract_from_raw_file
+from df_gettext_toolkit.parse.parse_po import save_pot
+from df_gettext_toolkit.parse.parse_raws import split_tag, tokenize_raw_file
+from df_gettext_toolkit.parse.parse_text_set import extract_from_vanilla_text
 
 
 def traverse_vanilla_directories(vanilla_path: Path) -> Iterable[Path]:

@@ -4,9 +4,9 @@ from typing import Mapping
 
 import typer
 
-from df_gettext_toolkit.backup import backup
-from df_gettext_toolkit.parse_plain_text import parse_plain_text_file
-from df_gettext_toolkit.parse_po import load_po
+from df_gettext_toolkit.parse.parse_plain_text import parse_plain_text_file
+from df_gettext_toolkit.parse.parse_po import load_po
+from df_gettext_toolkit.utils.backup import backup
 
 
 def translate_plain_text_file(

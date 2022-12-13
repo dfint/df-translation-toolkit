@@ -4,9 +4,9 @@ from typing import Iterable, Iterator, Sequence
 
 import typer
 
-from df_gettext_toolkit.common import TranslationItem
-from df_gettext_toolkit.parse_plain_text import parse_plain_text_file
-from df_gettext_toolkit.parse_po import save_pot
+from df_gettext_toolkit.parse.parse_plain_text import parse_plain_text_file
+from df_gettext_toolkit.parse.parse_po import save_pot
+from df_gettext_toolkit.utils.common import TranslationItem
 
 
 def extract_translatables_from_file(file, file_path, join_paragraphs, keys):

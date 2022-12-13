@@ -3,9 +3,9 @@ from typing import Callable, Iterable, Iterator, NamedTuple, Sequence
 
 import typer
 
-from df_gettext_toolkit.translate_compressed import translate_compressed
-from df_gettext_toolkit.translate_plain_text import translate_plain_text
-from df_gettext_toolkit.translate_raws import translate_raws
+from df_gettext_toolkit.translate.translate_compressed import translate_compressed
+from df_gettext_toolkit.translate.translate_plain_text import translate_plain_text
+from df_gettext_toolkit.translate.translate_raws import translate_raws
 
 
 class Pattern(NamedTuple):
