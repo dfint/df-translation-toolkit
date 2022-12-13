@@ -1,0 +1,1 @@
+import df_gettext_toolkit.create_pot.cli

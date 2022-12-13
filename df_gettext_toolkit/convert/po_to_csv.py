@@ -4,8 +4,8 @@ from typing import Iterable, Set, Tuple
 
 import typer
 
-from df_gettext_toolkit.fix_translated_strings import cleanup_string, fix_spaces
-from df_gettext_toolkit.parse_po import escape_string, load_po
+from df_gettext_toolkit.parse.parse_po import escape_string, load_po
+from df_gettext_toolkit.utils.fix_translated_strings import cleanup_string, fix_spaces
 
 
 def prepare_dictionary(
@@ -20,8 +20,12 @@ def prepare_dictionary(
             yield original_string, cleanup_string(translation)
 
 
-def main(input_file: str, output_file: str, encoding: str = "utf-8"):
-    with open(input_file, "r", encoding="utf-8") as pofile:
+def main(po_file: str, csv_file: str, encoding: str):
+    """
+    Convert a po file into a csv file in a specified encoding
+    """
+
+    with open(po_file, "r", encoding="utf-8") as pofile:
         dictionary = [(item.text, item.translation) for item in load_po(pofile) if item.text]
 
     exclusions_leading = {"  Choose Name  ", "  Trade Agreement with "}
@@ -30,7 +34,7 @@ def main(input_file: str, output_file: str, encoding: str = "utf-8"):
     if encoding == "cp1251":
         exclusions_trailing.add("Histories of ")
 
-    with open(output_file, "w", newline="", encoding=encoding, errors="replace") as outfile:
+    with open(csv_file, "w", newline="", encoding=encoding, errors="replace") as outfile:
         writer = csv.writer(outfile, dialect="unix")
 
         for original_string, translation in prepare_dictionary(dictionary, exclusions_leading, exclusions_trailing):

@@ -4,8 +4,7 @@ from typing import List
 
 from base.base import strip_margin
 
-from df_gettext_toolkit.common import TranslationItem
-from df_gettext_toolkit.parse_po import (
+from df_gettext_toolkit.parse.parse_po import (
     PoReader,
     escape_string,
     load_po,
@@ -15,6 +14,7 @@ from df_gettext_toolkit.parse_po import (
     strip_once,
     unescape_string,
 )
+from df_gettext_toolkit.utils.common import TranslationItem
 
 
 def test_escape_string():

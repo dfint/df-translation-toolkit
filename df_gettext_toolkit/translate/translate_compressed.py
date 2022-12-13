@@ -5,9 +5,9 @@ from typing import Iterable, Iterator, Mapping
 import typer
 from df_raw_decoder import pack_data, unpack_data
 
-from df_gettext_toolkit.backup import backup
-from df_gettext_toolkit.parse_plain_text import parse_plain_text_file
-from df_gettext_toolkit.parse_po import load_po
+from df_gettext_toolkit.parse.parse_plain_text import parse_plain_text_file
+from df_gettext_toolkit.parse.parse_po import load_po
+from df_gettext_toolkit.utils.backup import backup
 
 
 def translate_file(lines: Iterable[str], dictionary: Mapping[str, str]) -> Iterator[str]:

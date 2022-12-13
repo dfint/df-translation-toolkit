@@ -4,8 +4,8 @@ from typing import Callable, Sequence, TypeVar
 import pytest
 from base.base import strip_margin
 
-from df_gettext_toolkit.common import TranslationItem
-from df_gettext_toolkit.parse_raws import extract_translatables_from_raws, last_suitable, translate_raw_file
+from df_gettext_toolkit.parse.parse_raws import extract_translatables_from_raws, last_suitable, translate_raw_file
+from df_gettext_toolkit.utils.common import TranslationItem
 
 
 @pytest.mark.parametrize(

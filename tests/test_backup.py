@@ -1,7 +1,7 @@
 import shutil
 from pathlib import Path
 
-from df_gettext_toolkit.backup import backup
+from df_gettext_toolkit.utils.backup import backup
 
 
 def test_backup_doesnt_exist(mocker):

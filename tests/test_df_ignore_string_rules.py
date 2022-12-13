@@ -1,6 +1,6 @@
 import pytest
 
-import df_gettext_toolkit.df_ignore_string_rules as rules
+import df_gettext_toolkit.utils.df_ignore_string_rules as rules
 
 
 @pytest.mark.parametrize(

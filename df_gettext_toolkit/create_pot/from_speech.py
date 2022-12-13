@@ -4,8 +4,8 @@ from typing import Iterable, Iterator, Sequence, TextIO
 
 import typer
 
-from df_gettext_toolkit.common import TranslationItem
-from df_gettext_toolkit.parse_po import save_pot
+from df_gettext_toolkit.parse.parse_po import save_pot
+from df_gettext_toolkit.utils.common import TranslationItem
 
 
 def extract_from_speech_file(file: TextIO, source_path: str):

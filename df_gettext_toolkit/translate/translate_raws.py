@@ -4,10 +4,10 @@ from typing import Iterator, Mapping, Optional, Tuple
 
 import typer
 
-from df_gettext_toolkit.backup import backup
-from df_gettext_toolkit.fix_translated_strings import cleanup_string
-from df_gettext_toolkit.parse_po import load_po
-from df_gettext_toolkit.parse_raws import translate_raw_file
+from df_gettext_toolkit.parse.parse_po import load_po
+from df_gettext_toolkit.parse.parse_raws import translate_raw_file
+from df_gettext_toolkit.utils.backup import backup
+from df_gettext_toolkit.utils.fix_translated_strings import cleanup_string
 
 
 def translate_single_raw_file(
