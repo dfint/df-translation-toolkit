@@ -1,0 +1,22 @@
+from pathlib import Path
+from typing import TextIO
+
+from df_gettext_toolkit.create_pot_from_speech import extract_from_speech_file
+from df_gettext_toolkit.parse_raws import tokenize_raw_file, split_tag
+
+
+def skip_text_set_header(file: TextIO) -> None:
+    for item in tokenize_raw_file(file):
+        if item.is_tag:
+            object_tag = split_tag(item.text)
+            assert object_tag[0] in {"OBJECT", "TEXT_SET"}
+            if object_tag[0] == "TEXT_SET":
+                return
+
+
+def extract_from_vanilla_text(file_name: Path, source_encoding: str):
+    with open(file_name, encoding=source_encoding) as file:
+        skip_text_set_header(file)
+        for item in extract_from_speech_file(file, file_name.name):
+            item.source_file = file_name.name
+            yield item

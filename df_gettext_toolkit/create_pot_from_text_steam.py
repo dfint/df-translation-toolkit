@@ -1,14 +1,14 @@
 from collections import defaultdict
 from pathlib import Path
-from typing import Iterable, TextIO
+from typing import Iterable
 
 import typer
 from loguru import logger
 
 from df_gettext_toolkit.create_pot_from_raw_objects import extract_from_raw_file
-from df_gettext_toolkit.create_pot_from_speech import extract_from_speech_file
 from df_gettext_toolkit.parse_po import save_pot
 from df_gettext_toolkit.parse_raws import split_tag, tokenize_raw_file
+from df_gettext_toolkit.parse_text_set import extract_from_vanilla_text
 
 
 def traverse_vanilla_directories(vanilla_path: Path) -> Iterable[Path]:
@@ -26,23 +26,6 @@ def get_raw_object_type(file_name: Path, source_encoding: str) -> str:
                 object_tag = split_tag(item.text)
                 assert object_tag[0] == "OBJECT"
                 return object_tag[1]
-
-
-def skip_text_set_header(file: TextIO) -> None:
-    for item in tokenize_raw_file(file):
-        if item.is_tag:
-            object_tag = split_tag(item.text)
-            assert object_tag[0] in {"OBJECT", "TEXT_SET"}
-            if object_tag[0] == "TEXT_SET":
-                return
-
-
-def extract_from_vanilla_text(file_name: Path, source_encoding: str):
-    with open(file_name, encoding=source_encoding) as file:
-        skip_text_set_header(file)
-        for item in extract_from_speech_file(file, file_name.name):
-            item.source_file = file_name.name
-            yield item
 
 
 dont_translate = {"LANGUAGE"}
