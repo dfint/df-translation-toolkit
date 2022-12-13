@@ -6,7 +6,13 @@
 
 Toolset to convert text to [gettext](https://en.wikipedia.org/wiki/Gettext) format and aback. Includes minimalistic parsers for .po (text) and .mo (binary) formats.
 
-Usage examples:
+## Installation:
+
+You need Python 3.7 (or higher) and poetry (`pip install poetry`).
+
+Clone or download the repo, then install dependencies it with `poetry install` command
+
+## Usage examples:
 
 ```bash
 poetry run convert file.po result.csv cp1251
