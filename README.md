@@ -9,8 +9,11 @@ Toolset to convert text to [gettext](https://en.wikipedia.org/wiki/Gettext) form
 Usage examples:
 
 ```bash
-# These commands do the same thing: convert a po file into a csv file in a specified encoding
-poetry run python -m df_gettext_toolkit convert po_to_csv file.po result.csv cp1251
-poetry run df_gettext_toolkit convert po_to_csv file.po result.csv cp1251
 poetry run convert file.po result.csv cp1251
+```
+```bash
+poetry run create_pot from_steam_text "./Dwarf Fortress/data/vanilla" ./pot_files/
+```
+```bash
+poetry run create_pot from_string_dump stringdump.txt result.pot
 ```

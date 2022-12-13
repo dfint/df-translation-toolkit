@@ -32,7 +32,8 @@ dont_translate = {"LANGUAGE"}
 
 
 def main(vanilla_path: Path, destination_path: Path, source_encoding: str = "cp437"):
-    assert destination_path.exists()
+    assert vanilla_path.exists(), "Source path doesn't exist"
+    assert destination_path.exists(), "Destination path doesn't exist"
 
     results = defaultdict(list)
 
