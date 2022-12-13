@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import TextIO
 
 from df_gettext_toolkit.create_pot.from_speech import extract_from_speech_file
-from df_gettext_toolkit.parse.parse_raws import tokenize_raw_file, split_tag
+from df_gettext_toolkit.parse.parse_raws import split_tag, tokenize_raw_file
 
 
 def skip_text_set_header(file: TextIO) -> None:
