@@ -15,11 +15,11 @@ Clone or download the repo, then install dependencies it with `poetry install` c
 ## Usage examples:
 
 ```bash
-poetry run convert file.po result.csv cp1251
+poetry run convert hardcoded_steam.po dict.csv cp1251
 ```
 ```bash
 poetry run create_pot from_steam_text "./Dwarf Fortress/data/vanilla" ./pot_files/
 ```
 ```bash
-poetry run create_pot from_string_dump stringdump.txt result.pot
+poetry run create_pot from_string_dump stringdump.txt hardcoded_steam.pot
 ```
