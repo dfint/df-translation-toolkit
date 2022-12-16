@@ -2,8 +2,6 @@ import io
 from io import StringIO
 from typing import List
 
-from base.base import strip_margin
-
 from df_gettext_toolkit.parse.parse_po import (
     PoReader,
     escape_string,
@@ -15,6 +13,7 @@ from df_gettext_toolkit.parse.parse_po import (
     unescape_string,
 )
 from df_gettext_toolkit.utils.common import TranslationItem
+from tests.strip_margin import strip_margin
 
 
 def test_escape_string():
