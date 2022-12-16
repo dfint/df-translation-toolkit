@@ -78,6 +78,7 @@ python-versions = ">=3.7,<4.0"
 [package.source]
 type = "url"
 url = 'https://github.com/dfint/df_raw_decoder/releases/download/1.1.0/df_raw_decoder-1.1.0-py3-none-any.whl'
+
 [[package]]
 name = "exceptiongroup"
 version = "1.0.4"
@@ -315,7 +316,7 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8.1"
-content-hash = "228636833bc4f35d8947c17eb22ca78c20ffd9268593a5a8a5ab5f10b6ae3d54"
+content-hash = "5108e5a7d2143298e590301ff673eb381242e0caff142d1abd2559f33e12e25e"
 
 [metadata.files]
 attrs = []
