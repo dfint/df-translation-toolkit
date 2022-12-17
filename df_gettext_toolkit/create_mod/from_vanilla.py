@@ -93,31 +93,38 @@ def patch_info_tag(tag: list[str], language: str) -> list[str]:
     return tag
 
 
-def get_dictionaries(po_objects_file: Path, po_textset_file: Path) -> Dictionaries:
-    if po_objects_file.name != po_textset_file.name:
-        raise Exception("Dictionaries for two diffirent languages")
-    with open(po_objects_file, "r", encoding="utf-8") as pofile:
+def get_dictionaries(tranlation_path: Path, language: str) -> Dictionaries:
+    po_files = {"objects": Path(), "text_set": Path()}
+    for po_file in po_files:
+        mtime = 0
+        for file in tranlation_path.glob(f"*{po_file}*/{language.lower()}.po"):
+            if file.is_file() and file.stat().st_mtime > mtime:
+                po_files[po_file] = file
+        if po_files[po_file].is_file() == False:
+            raise Exception(f"Unable to find {po_file} po file for language {language}")
+
+    with open(po_files["objects"], "r", encoding="utf-8") as pofile:
         dictionary_object = {(item.text, item.context): item.translation for item in load_po(pofile)}
-    with open(po_textset_file, "r", encoding="utf-8") as po_file:
+    with open(po_files["text_set"], "r", encoding="utf-8") as po_file:
         dictionary_textset = {item.text: item.translation for item in load_po(po_file) if item.text}
-    return Dictionaries((po_objects_file.stem, dictionary_object, dictionary_textset))
+    return Dictionaries((po_files["objects"].stem, dictionary_object, dictionary_textset))
 
 
 @logger.catch
 def main(
     vanilla_path: Path,
     destination_path: Path,
-    po_objects_file: Path,
-    po_textset_file: Path,
-    source_encoding: str,
+    tranlation_path: Path,
+    language: str,
     destination_encoding: str,
+    source_encoding: str = "cp437",
 ) -> None:
     assert vanilla_path.exists(), "Source path doesn't exist"
     assert destination_path.exists(), "Destination path doesn't exist"
 
     dictionaries = get_dictionaries(
-        po_objects_file,
-        po_textset_file,
+        tranlation_path,
+        language,
     )
 
     for directory in traverse_vanilla_directories(vanilla_path):
