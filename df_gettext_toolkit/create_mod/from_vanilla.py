@@ -97,7 +97,7 @@ def get_dictionaries(tranlation_path: Path, language: str) -> Dictionaries:
     po_files = {"objects": Path(), "text_set": Path()}
     for po_file in po_files:
         mtime = 0
-        for file in tranlation_path.glob(f"*{po_file}*/{language.lower()}.po"):
+        for file in tranlation_path.glob(f"*{po_file}*{language}.po"):
             if file.is_file() and file.stat().st_mtime > mtime:
                 po_files[po_file] = file
         if po_files[po_file].is_file() == False:
@@ -107,7 +107,7 @@ def get_dictionaries(tranlation_path: Path, language: str) -> Dictionaries:
         dictionary_object = {(item.text, item.context): item.translation for item in load_po(pofile)}
     with open(po_files["text_set"], "r", encoding="utf-8") as po_file:
         dictionary_textset = {item.text: item.translation for item in load_po(po_file) if item.text}
-    return Dictionaries((po_files["objects"].stem, dictionary_object, dictionary_textset))
+    return Dictionaries((language.lower(), dictionary_object, dictionary_textset))
 
 
 @logger.catch
