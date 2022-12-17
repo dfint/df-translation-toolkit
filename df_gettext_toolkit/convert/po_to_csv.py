@@ -1,11 +1,15 @@
 #! python3
 import csv
-from typing import Iterable, Set, Tuple
+from typing import Iterable, Set, Tuple, TextIO
 
 import typer
 
 from df_gettext_toolkit.parse.parse_po import escape_string, load_po
 from df_gettext_toolkit.utils.fix_translated_strings import cleanup_string, fix_spaces
+
+
+def csv_writer(file: TextIO, **kwargs):
+    return csv.writer(file, dialect="unix", lineterminator="\r\n", **kwargs)
 
 
 def prepare_dictionary(
@@ -35,7 +39,7 @@ def main(po_file: str, csv_file: str, encoding: str):
         exclusions_trailing.add("Histories of ")
 
     with open(csv_file, "w", newline="", encoding=encoding, errors="replace") as outfile:
-        writer = csv.writer(outfile, dialect="unix")
+        writer = csv_writer(outfile)
 
         for original_string, translation in prepare_dictionary(dictionary, exclusions_leading, exclusions_trailing):
             writer.writerow([escape_string(original_string), escape_string(translation)])
