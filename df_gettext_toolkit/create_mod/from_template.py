@@ -30,6 +30,7 @@ def create_single_localized_mod(
     generate_preview.main(
         template_path / "preview.png", dictionaries[0].upper(), str(template_path.name).replace("_", "\n").title()
     )
+    template_path.rename(f"{str(template_path.resolve())}_{dictionaries[0].lower()}")
 
 
 def localize_directory(
