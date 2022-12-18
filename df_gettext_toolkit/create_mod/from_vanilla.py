@@ -82,7 +82,7 @@ def create_info(
 
 def patch_info_tag(tag: list[str], language: str) -> list[str]:
     if tag[0] == "ID":
-        tag[1] = f"{tag[1]}_{language}"
+        tag[1] = f"{language.lower()}_{tag[1]}"
     elif tag[0] == "AUTHOR":
         tag[1] = f"DFINT (Original by {tag[1]})"
     elif tag[0] == "NAME":
