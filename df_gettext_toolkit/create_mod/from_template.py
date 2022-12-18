@@ -1,11 +1,10 @@
-import shutil
 from pathlib import Path
 from typing import Iterator, Mapping, Optional, Tuple, NewType
 
 import typer
 from loguru import logger
 
-
+from df_gettext_toolkit.utils.backup import backup
 from df_gettext_toolkit.create_pot.from_steam_text import traverse_vanilla_directories
 from df_gettext_toolkit.create_pot.from_steam_text import get_raw_object_type
 from df_gettext_toolkit.parse.parse_po import load_po
@@ -18,66 +17,65 @@ Dictionaries = NewType("Dictionaries", Tuple[str, Mapping[Tuple[str, Optional[st
 
 
 def create_single_localized_mod(
-    source_path: Path,
-    destination_path: Path,
+    template_path: Path,
     dictionaries: Dictionaries,
     source_encoding: str,
     destination_encoding: str,
 ) -> Iterator[str]:
-    dest = Path(destination_path, f"{source_path.name}_{dictionaries[0]}")
-    yield from localize_directory(
-        source_path / "objects", dest / "objects", dictionaries, source_encoding, destination_encoding
-    )
-    tranlated_files = len([*dest.glob("**/*.txt")])
-    if tranlated_files == 0:
-        shutil.rmtree(dest)
-    else:
-        logger.info(f"{source_path.name} -> {dest.name}: {tranlated_files} files")
-        create_info(source_path / "info.txt", dest / "info.txt", source_encoding, destination_encoding, dictionaries[0])
+    yield from localize_directory(template_path / "objects", dictionaries, source_encoding, destination_encoding)
+    tranlated_files = len([*(template_path / "objects").glob("*.txt")])
+    logger.info(f"{template_path.name} -> {template_path.name}: {tranlated_files} files")
+    create_info(template_path / "info.txt", source_encoding, destination_encoding, dictionaries[0])
 
 
 def localize_directory(
-    source_directory: Path,
-    destination_directory: Path,
+    template_path: Path,
     dictionaries: Dictionaries,
     source_encoding: str,
     destination_encoding: str,
 ) -> Iterator[str]:
-    Path.mkdir(destination_directory, parents=True, exist_ok=True)
-
-    for file_path in source_directory.glob("*.txt"):
-        if file_path.is_file() and not file_path.name.startswith("language_"):
+    for file_path in template_path.glob("*.txt"):
+        if file_path.is_file():
             object_type = get_raw_object_type(file_path, source_encoding)
-            if object_type == "TEXT_SET":
-                yield from translate_plain_text_file(
-                    file_path, destination_directory / file_path.name, dictionaries[2], destination_encoding, False
+            with backup(file_path) as bak_name:
+                if object_type == "TEXT_SET":
+                    yield from translate_plain_text_file(
+                        bak_name, file_path, dictionaries[2], destination_encoding, False
+                    )
+                else:
+                    yield from translate_single_raw_file(bak_name, file_path, dictionaries[1], destination_encoding)
+
+
+def create_info(info_file: Path, source_encoding: str, destination_encoding: str, language: str) -> None:
+    with backup(info_file) as bak_name:
+        with open(bak_name, encoding=source_encoding) as src:
+            with open(info_file, "w", encoding=destination_encoding) as dest:
+                title = "Vanilla"
+                for item in tokenize_raw_file(src):
+                    if item.is_tag:
+                        object_tag = split_tag(item.text)
+                        if object_tag[0] == "NAME":
+                            title = object_tag[1]
+                        print(join_tag(patch_info_tag(object_tag, language)), file=dest)
+
+                print(
+                    f"""
+[STEAM_TITLE: {language.upper()} {title}]
+[STEAM_DESCRIPTION: {language.upper()} translation for {title}]
+[STEAM_TAG:ui]
+[STEAM_TAG:qol]
+[STEAM_TAG:translation]
+[STEAM_TAG:language]
+[STEAM_TAG:{language.lower()}]
+[STEAM_KEY_VALUE_TAG:what:isthis?]
+[STEAM_METADATA:andthis?]
+[STEAM_CHANGELOG:Changelog here]""",
+                    file=dest,
                 )
-            else:
-                yield from translate_single_raw_file(
-                    file_path, destination_directory / file_path.name, dictionaries[1], destination_encoding
-                )
 
 
-def create_info(
-    source_file: Path, destination_file: Path, source_encoding: str, destination_encoding: str, language: str
-) -> None:
-    with open(source_file, encoding=source_encoding) as src:
-        with open(destination_file, "w", encoding=destination_encoding) as dest:
-            for item in tokenize_raw_file(src):
-                if item.is_tag:
-                    object_tag = split_tag(item.text)
-                    print(join_tag(patch_info_tag(object_tag, language)), file=dest)
-
-            print(
-                f"""
-[STEAM_TITLE:Test Descriptors]
-[STEAM_DESCRIPTION:Some test object definitions for shapes and colors.]
-[STEAM_TAG:mod] <-- as many as you want, use a separate STEAM_TAG for each one
-[STEAM_KEY_VALUE_TAG:test:stuff] <-- as many as you want, similarly
-[STEAM_METADATA:metadata test]
-[STEAM_CHANGELOG:made some changes]""",
-                file=dest,
-            )
+def pretty_directory_name(text: str) -> str:
+    return text.replace("_", " ").title()
 
 
 def patch_info_tag(tag: list[str], language: str) -> list[str]:
@@ -112,30 +110,38 @@ def get_dictionaries(tranlation_path: Path, language: str) -> Dictionaries:
 
 @logger.catch
 def main(
-    vanilla_path: Path,
-    destination_path: Path,
-    tranlation_path: Path,
+    template_path: Path,
+    translation_path: Path,
     language: str,
     destination_encoding: str,
     source_encoding: str = "cp437",
 ) -> None:
-    assert vanilla_path.exists(), "Source path doesn't exist"
-    assert destination_path.exists(), "Destination path doesn't exist"
+    assert template_path.exists(), "Source path doesn't exist"
+    assert translation_path.exists(), "Translation path doesn't exist"
 
     dictionaries = get_dictionaries(
-        tranlation_path,
+        translation_path,
         language,
     )
 
-    for directory in traverse_vanilla_directories(vanilla_path):
+    for directory in traverse_vanilla_directories(template_path):
         for file in create_single_localized_mod(
             directory.parent,
-            destination_path,
             dictionaries,
             source_encoding,
             destination_encoding,
         ):
             logger.debug(f"{file} translated")
+
+    for bak_file in template_path.glob("**/*.bak"):
+        try:
+            bak_file.unlink()
+        except:
+            logger.error(f"Error occured while removing {bak_file.resolve()}")
+
+    logger.warning(
+        "All done! Consider to change info file and made unique preview.png of mod before uploading to steam or sharing the mod."
+    )
 
 
 if __name__ == "__main__":
