@@ -11,6 +11,7 @@ typer = "^0.7.0"
 Unidecode = "^1.2.0"
 df_raw_decoder = { url = 'https://github.com/dfint/df_raw_decoder/releases/download/1.1.0/df_raw_decoder-1.1.0-py3-none-any.whl' }
 loguru = "^0.6.0"
+pillow = "^9.3.0"
 prompt-toolkit = "^3.0.36"
 
 [tool.poetry.dev-dependencies]
@@ -19,13 +20,14 @@ pytest-cov = "^4.0.0"
 pytest-mock = "^3.8.1"
 flake8 = "^6.0.0"
 black = "^22.12.0"
-isort = "^5.10.1"
+isort = "^5.11.3"
 coverage = "^6.5.0"
 
 [tool.poetry.scripts]
 df_gettext_toolkit = "df_gettext_toolkit.cli:app"
 convert = "df_gettext_toolkit.convert.cli:app"
 create_pot = "df_gettext_toolkit.create_pot.cli:app"
+create_mod = "df_gettext_toolkit.create_mod.cli:app"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
