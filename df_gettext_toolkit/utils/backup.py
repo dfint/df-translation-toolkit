@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 @contextmanager
-def backup(file):
+def backup(file: str | Path):
     file = Path(file)
     backup_path = file.with_suffix(".bak")
 
