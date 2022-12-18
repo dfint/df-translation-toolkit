@@ -11,7 +11,7 @@ typer = "^0.7.0"
 Unidecode = "^1.2.0"
 df_raw_decoder = { url = 'https://github.com/dfint/df_raw_decoder/releases/download/1.1.0/df_raw_decoder-1.1.0-py3-none-any.whl' }
 loguru = "^0.6.0"
-Pillow = "^9.3.0"
+pillow = "^9.3.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.2.0"
