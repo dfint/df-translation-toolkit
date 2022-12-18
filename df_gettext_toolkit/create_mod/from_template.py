@@ -11,6 +11,7 @@ from df_gettext_toolkit.parse.parse_po import load_po
 from df_gettext_toolkit.parse.parse_raws import split_tag, join_tag, tokenize_raw_file
 from df_gettext_toolkit.translate.translate_raws import translate_single_raw_file
 from df_gettext_toolkit.translate.translate_plain_text import translate_plain_text_file
+import df_gettext_toolkit.create_mod.generate_preview as generate_preview
 
 
 Dictionaries = NewType("Dictionaries", Tuple[str, Mapping[Tuple[str, Optional[str]], str], Mapping[str, str]])
@@ -26,6 +27,9 @@ def create_single_localized_mod(
     tranlated_files = len([*(template_path / "objects").glob("*.txt")])
     logger.info(f"{template_path.name} -> {template_path.name}: {tranlated_files} files")
     create_info(template_path / "info.txt", source_encoding, destination_encoding, dictionaries[0])
+    generate_preview.main(
+        template_path / "preview.png", dictionaries[0].upper(), str(template_path.name).replace("_", "\n").title()
+    )
 
 
 def localize_directory(
@@ -140,7 +144,7 @@ def main(
             logger.error(f"Error occured while removing {bak_file.resolve()}")
 
     logger.warning(
-        "All done! Consider to change info file and made unique preview.png of mod before uploading to steam or sharing the mod."
+        "All done! Consider to change info.txt file and made unique preview.png before uploading to steam or sharing the mod."
     )
 
 
