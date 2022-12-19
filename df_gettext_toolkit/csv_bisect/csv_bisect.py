@@ -16,7 +16,7 @@ def split_right(start, end):
     return mid, end
 
 
-def bisect(data: List[Tuple[str, str]], start: int, end: int) -> bool:
+def bisect(file_path: Path, data: List[Tuple[str, str]], start: int, end: int) -> bool:
     """
     returns:
     - True -> found
@@ -31,34 +31,32 @@ def bisect(data: List[Tuple[str, str]], start: int, end: int) -> bool:
         return False
     else:
         print(f"From {start} to {end} (in total {end - start})")
-        # TODO: write csv
+        with open(file_path, "w", newline="") as file:
+            csv_writer = csv_utils.writer(file)
+            csv_writer.writerows(data[start:end])
 
         answer = input("[G]ood/[B]ad/Step [U]p").upper()
-        if answer == "G":
+        if answer in "GU":
             return False
         elif answer == "B":
             print("Trying left half")
-            result = bisect(data, *split_left(start, end))
+            result = bisect(file_path, data, *split_left(start, end))
             if result:
                 return result
 
             print("Trying right half")
-            return bisect(data, *split_right(start, end))
+            return bisect(file_path, data, *split_right(start, end))
 
 
 def main(csv_file: Path, encoding: str):
     assert csv_file.is_file(), f"{csv_file.name} is not a file"
 
     with backup(csv_file) as backup_path:
-        with open(backup_path, encoding=encoding,  newline="") as file:
+        with open(backup_path, encoding=encoding, newline="") as file:
             csv_reader = csv_utils.reader(file)
             data = list(csv_reader)
 
-        prev = (0, len(data))
-        stack = [prev]
-
-        while prev[0] < prev[1]:
-            break
+        bisect(csv_file, data, 0, len(data))
 
     # Restore backup
     shutil.copy(csv_file, backup_path)
