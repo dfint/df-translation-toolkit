@@ -32,7 +32,7 @@ def bisect(file_path: Path, encoding: str, data: List[Tuple[str, str]], start: i
         print(f"Found string index {start}:")
         print(data[start])
 
-        confirmed = input("Exclude from csv?").upper() == "Y"
+        confirmed = input("Exclude from csv (Y/N)? ").upper() == "Y"
         if confirmed:
             write_csv(file_path, encoding, data[:start] + data[start+1:])
 
@@ -71,6 +71,6 @@ def main(csv_file: Path, encoding: str):
 
         bisect(csv_file, encoding, data, 0, len(data), first_time=True)
 
-    confirmed = input("Restore from backup?").upper() == "Y"
+    confirmed = input("Restore from backup (Y/N)? ").upper() == "Y"
     if confirmed:
         shutil.copy(backup_path, csv_file)
