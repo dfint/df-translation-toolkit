@@ -36,10 +36,6 @@ def bisect(file_path: Path, encoding: str, data: List[Tuple[str, str]], start: i
         if confirmed:
             write_csv(file_path, encoding, data[:start] + data[start+1:])
 
-        confirmed = input("Restore csv?").upper() == "Y"
-        if confirmed:
-            write_csv(file_path, encoding, data)
-
         return True
     elif start >= end:
         print("Empty slice, step back")
@@ -75,5 +71,6 @@ def main(csv_file: Path, encoding: str):
 
         bisect(csv_file, encoding, data, 0, len(data), first_time=True)
 
-    # Restore backup
-    shutil.copy(csv_file, backup_path)
+    confirmed = input("Restore from backup?").upper() == "Y"
+    if confirmed:
+        shutil.copy(backup_path, csv_file)
