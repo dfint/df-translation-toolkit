@@ -28,37 +28,38 @@ def bisect(file_path: Path, encoding: str, data: List[Tuple[str, str]], start: i
     - True -> found
     - False -> not found
     """
-    if start == end - 1:
-        print(f"Found string index {start}:")
-        print(data[start])
-
-        confirmed = input("Exclude from csv (Y/N)? ").upper() == "Y"
-        if confirmed:
-            write_csv(file_path, encoding, data[:start] + data[start+1:])
-
-        return True
-    elif start >= end:
+    if start >= end:
         print("Empty slice, step back")
         return False
+
+    print(f"From {start} to {end} (in total {end - start})")
+    write_csv(file_path, encoding, data[start:end])
+
+    if first_time:
+        confirmed = True
     else:
-        print(f"From {start} to {end} (in total {end - start})")
-        write_csv(file_path, encoding, data[start:end])
+        confirmed = input("Is it bad (Y/N)? ").upper() == "Y"
 
-        if first_time:
-            confirmed = True
-        else:
-            confirmed = input("Is it bad (Y/N)? ").upper() == "Y"
+    if confirmed:
+        if start == end - 1:
+            print(f"Found string:")
+            print(data[start])
 
-        if confirmed:
-            print("Trying left half")
-            result = bisect(file_path, encoding, data, *split_left(start, end))
-            if result:
-                return result
+            confirmed = input("Exclude from csv (Y/N)? ").upper() == "Y"
+            if confirmed:
+                write_csv(file_path, encoding, data[:start] + data[start + 1:])
 
-            print("Trying right half")
-            return bisect(file_path, encoding, data, *split_right(start, end))
-        else:
-            return False
+            return True
+
+        print("Trying left half")
+        result = bisect(file_path, encoding, data, *split_left(start, end))
+        if result:
+            return result
+
+        print("Trying right half")
+        return bisect(file_path, encoding, data, *split_right(start, end))
+    else:
+        return False
 
 
 def main(csv_file: Path, encoding: str):
