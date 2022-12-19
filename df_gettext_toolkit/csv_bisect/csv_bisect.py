@@ -16,7 +16,13 @@ def split_right(start, end):
     return mid, end
 
 
-def bisect(file_path: Path, data: List[Tuple[str, str]], start: int, end: int) -> bool:
+def write_csv(file_path: Path, encoding: str, data: List[Tuple[str, str]]):
+    with open(file_path, "w", encoding=encoding, newline="") as file:
+        csv_writer = csv_utils.writer(file)
+        csv_writer.writerows(data)
+
+
+def bisect(file_path: Path, encoding: str, data: List[Tuple[str, str]], start: int, end: int, first_time=False) -> bool:
     """
     returns:
     - True -> found
@@ -25,27 +31,38 @@ def bisect(file_path: Path, data: List[Tuple[str, str]], start: int, end: int) -
     if start == end - 1:
         print(f"Found string index {start}:")
         print(data[start])
+
+        confirmed = input("Exclude from csv?").upper() == "Y"
+        if confirmed:
+            write_csv(file_path, encoding, data[:start] + data[start+1:])
+
+        confirmed = input("Restore csv?").upper() == "Y"
+        if confirmed:
+            write_csv(file_path, encoding, data)
+
         return True
     elif start >= end:
         print("Empty slice, step back")
         return False
     else:
         print(f"From {start} to {end} (in total {end - start})")
-        with open(file_path, "w", newline="") as file:
-            csv_writer = csv_utils.writer(file)
-            csv_writer.writerows(data[start:end])
+        write_csv(file_path, encoding, data[start:end])
 
-        answer = input("[G]ood/[B]ad/Step [U]p").upper()
-        if answer in "GU":
-            return False
-        elif answer == "B":
+        if first_time:
+            confirmed = True
+        else:
+            confirmed = input("Is it bad (Y/N)? ").upper() == "Y"
+
+        if confirmed:
             print("Trying left half")
-            result = bisect(file_path, data, *split_left(start, end))
+            result = bisect(file_path, encoding, data, *split_left(start, end))
             if result:
                 return result
 
             print("Trying right half")
-            return bisect(file_path, data, *split_right(start, end))
+            return bisect(file_path, encoding, data, *split_right(start, end))
+        else:
+            return False
 
 
 def main(csv_file: Path, encoding: str):
@@ -56,7 +73,7 @@ def main(csv_file: Path, encoding: str):
             csv_reader = csv_utils.reader(file)
             data = list(csv_reader)
 
-        bisect(csv_file, data, 0, len(data))
+        bisect(csv_file, encoding, data, 0, len(data), first_time=True)
 
     # Restore backup
     shutil.copy(csv_file, backup_path)
