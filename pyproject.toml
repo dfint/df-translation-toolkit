@@ -27,6 +27,7 @@ df_gettext_toolkit = "df_gettext_toolkit.cli:app"
 convert = "df_gettext_toolkit.convert.cli:app"
 create_pot = "df_gettext_toolkit.create_pot.cli:app"
 create_mod = "df_gettext_toolkit.create_mod.cli:app"
+csv_bisect = "df_gettext_toolkit.csv_bisect.cli:app"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

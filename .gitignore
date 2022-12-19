@@ -10,4 +10,5 @@ dist
 *.pot
 *.mo
 *.csv
+*.bak
 .coverage
