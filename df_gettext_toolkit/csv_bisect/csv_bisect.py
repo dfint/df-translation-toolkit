@@ -54,7 +54,7 @@ class Bisector:
 
                 confirmed = input("Exclude from csv (Y/N)? ").upper() == "Y"
                 if confirmed:
-                    csv_utils.write_csv(self.file_path, self.encoding, self.data[:start] + self.data[start + 1:])
+                    csv_utils.write_csv(self.file_path, self.encoding, self.data[:start] + self.data[start + 1 :])
 
                 return True
 
