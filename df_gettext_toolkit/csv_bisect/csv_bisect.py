@@ -16,44 +16,57 @@ def split_right(start, end):
     return mid, end
 
 
-def bisect(file_path: Path, encoding: str, data: List[List[str, str]], start: int, end: int, first_time=False) -> bool:
-    """
-    returns:
-    - True -> found
-    - False -> not found
-    """
-    if start >= end:
-        print("Empty slice, step back")
-        return False
+class Bisector:
+    file_path: Path
+    encoding: str
+    data: List[List[str, str]]
 
-    print(f"From {start} to {end} (in total {end - start})")
-    csv_utils.write_csv(file_path, encoding, data[start:end])
+    def __init__(self, file_path: Path, encoding: str, data: List[List[str, str]]):
+        self.file_path = file_path
+        self.encoding = encoding
+        self.data = data
 
-    if first_time:
-        confirmed = True
-    else:
-        confirmed = input("Is it bad (Y/N)? ").upper() == "Y"
+    def bisect(self) -> bool:
+        return self._bisect(0, len(self.data), first_time=True)
 
-    if confirmed:
-        if start == end - 1:
-            print(f"Found string:")
-            print(data[start])
+    def _bisect(self, start: int, end: int, first_time: bool = False) -> bool:
+        """
+        returns:
+        - True -> found
+        - False -> not found
+        """
+        if start >= end:
+            print("Empty slice, step back")
+            return False
 
-            confirmed = input("Exclude from csv (Y/N)? ").upper() == "Y"
-            if confirmed:
-                csv_utils.write_csv(file_path, encoding, data[:start] + data[start + 1 :])
+        print(f"From {start} to {end} (in total {end - start})")
+        csv_utils.write_csv(self.file_path, self.encoding, self.data[start:end])
 
-            return True
+        if first_time:
+            confirmed = True
+        else:
+            confirmed = input("Is it bad (Y/N)? ").upper() == "Y"
 
-        print("Trying left half")
-        result = bisect(file_path, encoding, data, *split_left(start, end))
-        if result:
-            return result
+        if confirmed:
+            if start == end - 1:
+                print(f"Found string:")
+                print(self.data[start])
 
-        print("Trying right half")
-        return bisect(file_path, encoding, data, *split_right(start, end))
-    else:
-        return False
+                confirmed = input("Exclude from csv (Y/N)? ").upper() == "Y"
+                if confirmed:
+                    csv_utils.write_csv(self.file_path, self.encoding, self.data[:start] + self.data[start + 1:])
+
+                return True
+
+            print("Trying left half")
+            result = self._bisect(*split_left(start, end))
+            if result:
+                return result
+
+            print("Trying right half")
+            return self._bisect(*split_right(start, end))
+        else:
+            return False
 
 
 def main(csv_file: Path, encoding: str):
@@ -61,7 +74,7 @@ def main(csv_file: Path, encoding: str):
 
     with backup(csv_file) as backup_path:
         data = list(csv_utils.read_csv(backup_path, encoding))
-        bisect(csv_file, encoding, data, 0, len(data), first_time=True)
+        Bisector(csv_file, encoding, data).bisect()
 
     confirmed = input("Restore from backup (Y/N)? ").upper() == "Y"
     if confirmed:
