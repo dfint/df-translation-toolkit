@@ -1,10 +1,10 @@
-from PIL import Image, ImageDraw, ImageFont
-from pathlib import Path
-from typing import Optional
-from platform import system
 import os
+from pathlib import Path
+from platform import system
+from typing import Optional
 
 import typer
+from PIL import Image, ImageDraw, ImageFont
 from loguru import logger
 
 

@@ -1,6 +1,6 @@
 import shutil
 from pathlib import Path
-from typing import List, Tuple
+from typing import List
 
 from df_gettext_toolkit.utils import csv_utils
 from df_gettext_toolkit.utils.backup import backup
@@ -16,13 +16,7 @@ def split_right(start, end):
     return mid, end
 
 
-def write_csv(file_path: Path, encoding: str, data: List[Tuple[str, str]]):
-    with open(file_path, "w", encoding=encoding, newline="") as file:
-        csv_writer = csv_utils.writer(file)
-        csv_writer.writerows(data)
-
-
-def bisect(file_path: Path, encoding: str, data: List[Tuple[str, str]], start: int, end: int, first_time=False) -> bool:
+def bisect(file_path: Path, encoding: str, data: List[List[str, str]], start: int, end: int, first_time=False) -> bool:
     """
     returns:
     - True -> found
@@ -33,7 +27,7 @@ def bisect(file_path: Path, encoding: str, data: List[Tuple[str, str]], start: i
         return False
 
     print(f"From {start} to {end} (in total {end - start})")
-    write_csv(file_path, encoding, data[start:end])
+    csv_utils.write_csv(file_path, encoding, data[start:end])
 
     if first_time:
         confirmed = True
@@ -47,7 +41,7 @@ def bisect(file_path: Path, encoding: str, data: List[Tuple[str, str]], start: i
 
             confirmed = input("Exclude from csv (Y/N)? ").upper() == "Y"
             if confirmed:
-                write_csv(file_path, encoding, data[:start] + data[start + 1:])
+                csv_utils.write_csv(file_path, encoding, data[:start] + data[start + 1 :])
 
             return True
 
@@ -66,10 +60,7 @@ def main(csv_file: Path, encoding: str):
     assert csv_file.is_file(), f"{csv_file.name} is not a file"
 
     with backup(csv_file) as backup_path:
-        with open(backup_path, encoding=encoding, newline="") as file:
-            csv_reader = csv_utils.reader(file)
-            data = list(csv_reader)
-
+        data = list(csv_utils.read_csv(backup_path, encoding))
         bisect(csv_file, encoding, data, 0, len(data), first_time=True)
 
     confirmed = input("Restore from backup (Y/N)? ").upper() == "Y"

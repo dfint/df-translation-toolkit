@@ -1,18 +1,16 @@
 from pathlib import Path
-from typing import Iterator, Mapping, Optional, Tuple, NewType
+from typing import Iterator, Mapping, NewType, Optional, Tuple
 
 import typer
 from loguru import logger
 
-from df_gettext_toolkit.utils.backup import backup
-from df_gettext_toolkit.create_pot.from_steam_text import traverse_vanilla_directories
-from df_gettext_toolkit.create_pot.from_steam_text import get_raw_object_type
-from df_gettext_toolkit.parse.parse_po import load_po
-from df_gettext_toolkit.parse.parse_raws import split_tag, join_tag, tokenize_raw_file
-from df_gettext_toolkit.translate.translate_raws import translate_single_raw_file
-from df_gettext_toolkit.translate.translate_plain_text import translate_plain_text_file
 import df_gettext_toolkit.create_mod.generate_preview as generate_preview
-
+from df_gettext_toolkit.create_pot.from_steam_text import get_raw_object_type, traverse_vanilla_directories
+from df_gettext_toolkit.parse.parse_po import load_po
+from df_gettext_toolkit.parse.parse_raws import join_tag, split_tag, tokenize_raw_file
+from df_gettext_toolkit.translate.translate_plain_text import translate_plain_text_file
+from df_gettext_toolkit.translate.translate_raws import translate_single_raw_file
+from df_gettext_toolkit.utils.backup import backup
 
 Dictionaries = NewType("Dictionaries", Tuple[str, Mapping[Tuple[str, Optional[str]], str], Mapping[str, str]])
 
