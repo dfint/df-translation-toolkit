@@ -20,7 +20,7 @@ def fetch_po_from_git(language: str, destination_path: Path) -> None:
         file.write(repsonse_text_set.text)
     if repsonse_objects.status_code == 404 or repsonse_text_set.status_code == 404:
         raise Exception(f"Unable to download po file for language {language}")
-    logger.info("PO files downloaded")
+    logger.info(f"PO files for {language.upper()} downloaded")
 
 
 @logger.catch
