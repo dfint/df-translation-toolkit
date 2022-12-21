@@ -20,4 +20,4 @@ def write_csv(file_path: Path, encoding: str, data: List[List[str]]):
 def read_csv(file_path: Path, encoding: str) -> Iterator[List[str]]:
     with open(file_path, encoding=encoding, newline="") as file:
         csv_reader = reader(file)
-        return csv_reader
+        yield from csv_reader
