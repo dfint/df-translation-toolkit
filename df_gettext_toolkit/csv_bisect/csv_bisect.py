@@ -17,7 +17,7 @@ def split_right(start, end):
 
 
 def bisect(file_path: Path, encoding: str, data: List[List[str]]):
-    def _bisect(start: int, end: int, first_time: bool = False) -> bool:
+    def _bisect(start: int, end: int, bad: bool = False) -> bool:
         """
         returns:
         - True -> found
@@ -30,14 +30,14 @@ def bisect(file_path: Path, encoding: str, data: List[List[str]]):
         print(f"From {start} to {end} (in total {end - start})")
         csv_utils.write_csv(file_path, encoding, data[start:end])
 
-        if first_time:
+        if bad:
             confirmed = True
         else:
             confirmed = input("Is it bad (Y/N)? ").upper() == "Y"
 
         if confirmed:
             if start == end - 1:
-                print(f"Found string:")
+                print(f"Found string, line number {start+1}:")
                 print(data[start])
 
                 confirmed = input("Exclude from csv (Y/N)? ").upper() == "Y"
@@ -52,11 +52,11 @@ def bisect(file_path: Path, encoding: str, data: List[List[str]]):
                 return result
 
             print("Trying right half")
-            return _bisect(*split_right(start, end))
+            return _bisect(*split_right(start, end), bad=True)
         else:
             return False
 
-    _bisect(0, len(data), first_time=True)
+    _bisect(0, len(data), bad=True)
 
 
 def main(csv_file: Path, encoding: str):
