@@ -61,7 +61,7 @@ def bisect(file_path: Path, encoding: str, data: List[List[str]]):
 
 def main(csv_file: Path, encoding: str):
     assert csv_file.is_file(), f"{csv_file.name} is not a file"
-    
+
     try:
         with backup(csv_file, overwrite=True) as backup_path:
             data = list(csv_utils.read_csv(backup_path, encoding))

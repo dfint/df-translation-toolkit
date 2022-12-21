@@ -4,8 +4,8 @@ from platform import system
 from typing import Optional
 
 import typer
-from PIL import Image, ImageDraw, ImageFont
 from loguru import logger
+from PIL import Image, ImageDraw, ImageFont
 
 
 def draw_text(
