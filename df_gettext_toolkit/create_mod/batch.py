@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import List
+from urllib.error import HTTPError
 
 import requests
 import typer
@@ -12,14 +13,12 @@ PO_URL = "https://raw.githubusercontent.com/dfint/translations-backup/main/trans
 
 
 def fetch_po_from_git(language: str, destination_path: Path) -> None:
-    repsonse_objects = requests.get(f"{PO_URL}/objects/{language.lower()}.po")
-    with open(Path(destination_path / f"objects_{language.lower()}.po"), "w", encoding="utf-8") as file:
-        file.write(repsonse_objects.text)
-    repsonse_text_set = requests.get(f"{PO_URL}/text_set/{language.lower()}.po")
-    with open(Path(destination_path / f"text_set_{language.lower()}.po"), "w", encoding="utf-8") as file:
-        file.write(repsonse_text_set.text)
-    if repsonse_objects.status_code == 404 or repsonse_text_set.status_code == 404:
-        raise Exception(f"Unable to download po file for language {language}")
+    resourses: list[str] = ["objects", "text_set"]
+    for resourse in resourses:
+        response = requests.get(f"{PO_URL}/{resourse}/{language.lower()}.po")
+        response.raise_for_status()
+        with open(Path(destination_path / f"{resourse}_{language.lower()}.po"), "w", encoding="utf-8") as file:
+            file.write(response.text)
     logger.info(f"PO files for {language.upper()} downloaded")
 
 
@@ -29,7 +28,10 @@ def main(vanilla_path: Path, destination_path: Path, encoding: str, languages: L
     assert destination_path.exists(), "Destination path doesn't exist"
 
     for language in languages:
-        fetch_po_from_git(language, destination_path)
+        try:
+            fetch_po_from_git(language, destination_path)
+        except HTTPError as e:
+            raise Exception(f"Unable to download po file for language {language}. Error: {e.code}, {e.reason}")
         Path.mkdir(destination_path / language.lower(), parents=True, exist_ok=True)
         template_from_vanilla(vanilla_path, destination_path / language.lower())
         from_template(destination_path / language.lower(), destination_path, language, "utf-8")
