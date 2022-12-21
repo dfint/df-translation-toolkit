@@ -11,7 +11,7 @@ def reader(file: TextIO, **kwargs):
     return csv.reader(file, dialect="unix", lineterminator="\r\n", **kwargs)
 
 
-def write_csv(file_path: Path, encoding: str, data: List[List[str, str]]):
+def write_csv(file_path: Path, encoding: str, data: List[List[str,]]):
     with open(file_path, "w", encoding=encoding, newline="") as file:
         csv_writer = writer(file)
         csv_writer.writerows(data)
