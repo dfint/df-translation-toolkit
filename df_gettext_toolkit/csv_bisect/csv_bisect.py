@@ -16,7 +16,7 @@ def split_right(start, end):
     return mid, end
 
 
-def bisect(file_path: Path, encoding: str, data: List[List[str,]]):
+def bisect(file_path: Path, encoding: str, data: List[List[str]]):
     def _bisect(start: int, end: int, first_time: bool = False) -> bool:
         """
         returns:
