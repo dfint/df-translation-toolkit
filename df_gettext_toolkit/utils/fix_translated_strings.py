@@ -11,9 +11,6 @@ def fix_leading_spaces(original_string: str, translation: str, exclusions: set):
         if not (translation.startswith(" ") or translation.startswith(",")):
             translation = " " + translation
 
-    elif translation.startswith(" "):
-        translation = translation.lstrip()
-
     return translation
 
 
