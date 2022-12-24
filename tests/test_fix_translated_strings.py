@@ -30,8 +30,9 @@ def test_cleanup_string(original, fixed):
     "text,translation,fixed",
     [
         (" test", "test", " test"),
-        ("test", " test", "test"),
+        ("test", " test", " test"),
         (" test", ", test", ", test"),
+        (" test", " , test", ", test"),
         (".  What do you command?", " . ¿Qué ordenas?", ". ¿Qué ordenas?"),
     ],
 )
