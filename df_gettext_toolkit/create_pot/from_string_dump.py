@@ -2,9 +2,8 @@
 
 import typer
 
-from df_gettext_toolkit.parse.parse_po import save_pot
-from df_gettext_toolkit.utils.common import TranslationItem
 from df_gettext_toolkit.utils.df_ignore_string_rules import all_ignore_rules, dont_ignore
+from df_gettext_toolkit.utils.po_utils import TranslationItem, save_pot
 
 
 def main(

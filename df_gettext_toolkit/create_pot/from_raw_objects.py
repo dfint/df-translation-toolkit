@@ -3,9 +3,8 @@ from typing import Iterator, TextIO
 
 import typer
 
-from df_gettext_toolkit.parse.parse_po import save_pot
 from df_gettext_toolkit.parse.parse_raws import extract_translatables_from_raws
-from df_gettext_toolkit.utils.common import TranslationItem
+from df_gettext_toolkit.utils.po_utils import TranslationItem, save_pot
 
 
 def extract_from_raw_file(file_name: Path, source_encoding: str) -> Iterator[TranslationItem]:

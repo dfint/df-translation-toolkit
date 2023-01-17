@@ -4,7 +4,7 @@ from typing import Callable, Sequence, TypeVar
 import pytest
 
 from df_gettext_toolkit.parse.parse_raws import extract_translatables_from_raws, last_suitable, translate_raw_file
-from df_gettext_toolkit.utils.common import TranslationItem
+from df_gettext_toolkit.utils.po_utils import TranslationItem
 from tests.strip_margin import strip_margin
 
 

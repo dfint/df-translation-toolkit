@@ -1,5 +1,8 @@
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, TextIO, Iterator
+
+from babel.messages import Catalog
+from babel.messages.pofile import write_po
 
 
 @dataclass
@@ -20,3 +23,12 @@ class TranslationItem:
             return self.text == other.text and self.translation == other.translation and self.context == other.context
         else:
             return False
+
+
+def save_pot(po_file: TextIO, template: Iterator[TranslationItem]):
+    catalog = Catalog()
+
+    for item in template:
+        catalog.add(item.text, locations=[(item.source_file, item.line_number)])
+
+    write_po(po_file, catalog)

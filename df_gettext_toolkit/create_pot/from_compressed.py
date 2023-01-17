@@ -6,8 +6,7 @@ import typer
 from df_raw_decoder import unpack_data
 
 from df_gettext_toolkit.create_pot.from_plain_text import extract_translatables_from_file
-from df_gettext_toolkit.parse.parse_po import save_pot
-from df_gettext_toolkit.utils.common import TranslationItem
+from df_gettext_toolkit.utils.po_utils import TranslationItem, save_pot
 
 
 def extract_translatables(files: Iterable[Path]) -> Iterator[TranslationItem]:
