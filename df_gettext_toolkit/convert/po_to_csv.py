@@ -26,8 +26,7 @@ def main(po_file: str, csv_file: str, encoding: str):
     """
 
     with open(po_file, "r", encoding="utf-8") as pofile:
-        catalog = read_po(pofile)
-        dictionary = [(item.id, item.string) for item in catalog if item.id and item.string]
+        dictionary = [(item.id, item.string) for item in read_po(pofile) if item.id and item.string]
 
     exclusions_leading = {"  Choose Name  ", "  Trade Agreement with "}
     exclusions_trailing = {"  Choose Name  "}

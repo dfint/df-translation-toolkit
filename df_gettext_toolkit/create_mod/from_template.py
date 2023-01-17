@@ -2,11 +2,11 @@ from pathlib import Path
 from typing import Iterator, Mapping, NewType, Optional, Tuple
 
 import typer
+from babel.messages.pofile import read_po
 from loguru import logger
 
 import df_gettext_toolkit.create_mod.generate_preview as generate_preview
 from df_gettext_toolkit.create_pot.from_steam_text import get_raw_object_type, traverse_vanilla_directories
-from df_gettext_toolkit.parse.parse_po import load_po
 from df_gettext_toolkit.parse.parse_raws import join_tag, split_tag, tokenize_raw_file
 from df_gettext_toolkit.translate.translate_plain_text import translate_plain_text_file
 from df_gettext_toolkit.translate.translate_raws import translate_single_raw_file
@@ -105,9 +105,9 @@ def get_dictionaries(tranlation_path: Path, language: str) -> Dictionaries:
             raise Exception(f"Unable to find {po_file} po file for language {language}")
 
     with open(po_files["objects"], "r", encoding="utf-8") as pofile:
-        dictionary_object = {(item.text, item.context): item.translation for item in load_po(pofile)}
+        dictionary_object = {(item.id, item.context): item.string for item in read_po(pofile)}
     with open(po_files["text_set"], "r", encoding="utf-8") as po_file:
-        dictionary_textset = {item.text: item.translation for item in load_po(po_file) if item.text}
+        dictionary_textset = {item.id: item.string for item in read_po(po_file) if item.text}
     return Dictionaries((language.lower(), dictionary_object, dictionary_textset))
 
 

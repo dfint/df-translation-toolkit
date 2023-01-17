@@ -3,8 +3,8 @@ from pathlib import Path
 from typing import Iterator, Mapping, Optional, Tuple
 
 import typer
+from babel.messages.pofile import read_po
 
-from df_gettext_toolkit.parse.parse_po import load_po
 from df_gettext_toolkit.parse.parse_raws import translate_raw_file
 from df_gettext_toolkit.utils.backup import backup
 from df_gettext_toolkit.utils.fix_translated_strings import cleanup_string
@@ -36,7 +36,7 @@ def translate_single_raw_file(
 
 def translate_raws(po_filename: Path, path: Path, encoding: str) -> Iterator[str]:
     with open(po_filename, "r", encoding="utf-8") as pofile:
-        dictionary = {(item.text, item.context): item.translation for item in load_po(pofile)}
+        dictionary = {(item.id, item.string): item.translation for item in read_po(pofile)}
 
     for file_path in path.glob("*.txt"):
         if file_path.is_file() and not file_path.name.startswith("language_"):

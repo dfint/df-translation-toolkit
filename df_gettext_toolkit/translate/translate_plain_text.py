@@ -3,9 +3,9 @@ from pathlib import Path
 from typing import Mapping
 
 import typer
+from babel.messages.pofile import read_po
 
 from df_gettext_toolkit.parse.parse_plain_text import parse_plain_text_file
-from df_gettext_toolkit.parse.parse_po import load_po
 from df_gettext_toolkit.utils.backup import backup
 
 
@@ -33,7 +33,7 @@ def translate_plain_text_file(
 
 def translate_plain_text(po_filename: Path, path: Path, encoding: str, join_paragraphs=True):
     with open(po_filename, "r", encoding="utf-8") as po_file:
-        dictionary = {item.text: item.translation for item in load_po(po_file) if item.text}
+        dictionary = {item.id: item.string for item in read_po(po_file) if item.text}
 
     for path in Path(path).rglob("*.txt"):
         if path.is_file():
