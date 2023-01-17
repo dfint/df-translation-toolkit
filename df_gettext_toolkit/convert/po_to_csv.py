@@ -2,8 +2,9 @@
 from typing import Iterable, Set, Tuple
 
 import typer
+from babel.messages.pofile import read_po
 
-from df_gettext_toolkit.parse.parse_po import escape_string, load_po
+from df_gettext_toolkit.parse.parse_po import escape_string
 from df_gettext_toolkit.utils import csv_utils
 from df_gettext_toolkit.utils.fix_translated_strings import cleanup_string, fix_spaces
 
@@ -26,7 +27,8 @@ def main(po_file: str, csv_file: str, encoding: str):
     """
 
     with open(po_file, "r", encoding="utf-8") as pofile:
-        dictionary = [(item.text, item.translation) for item in load_po(pofile) if item.text]
+        catalog = read_po(pofile)
+        dictionary = [(item.id, item.string) for item in catalog if item.id and item.string]
 
     exclusions_leading = {"  Choose Name  ", "  Trade Agreement with "}
     exclusions_trailing = {"  Choose Name  "}
