@@ -1,6 +1,6 @@
 from typing import Callable, Iterable, Iterator, List, Mapping, NamedTuple, Optional, Sequence, Set, Tuple, TypeVar
 
-from df_gettext_toolkit.utils.common import TranslationItem
+from df_gettext_toolkit.utils.po_utils import TranslationItem
 
 
 def split_tag(s: str) -> List[str]:

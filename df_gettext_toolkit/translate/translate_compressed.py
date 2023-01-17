@@ -3,10 +3,10 @@ from pathlib import Path
 from typing import Iterable, Iterator, Mapping
 
 import typer
+from babel.messages.pofile import read_po
 from df_raw_decoder import pack_data, unpack_data
 
 from df_gettext_toolkit.parse.parse_plain_text import parse_plain_text_file
-from df_gettext_toolkit.parse.parse_po import load_po
 from df_gettext_toolkit.utils.backup import backup
 
 
@@ -47,7 +47,7 @@ def translate_compressed_file(
 
 def translate_compressed(po_filename: Path, path: Path, encoding: str):
     with open(po_filename, "r", encoding="utf-8") as pofile:
-        dictionary = {item.text: item.translation for item in load_po(pofile) if item.text}
+        dictionary = {item.id: item.string for item in read_po(pofile) if item.text}
 
     for file in path.rglob("*"):
         if file.is_file() and "." not in file.name and file.name != "index":

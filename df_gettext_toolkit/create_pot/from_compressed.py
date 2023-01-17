@@ -6,8 +6,7 @@ import typer
 from df_raw_decoder import unpack_data
 
 from df_gettext_toolkit.create_pot.from_plain_text import extract_translatables_from_file
-from df_gettext_toolkit.parse.parse_po import save_pot
-from df_gettext_toolkit.utils.common import TranslationItem
+from df_gettext_toolkit.utils.po_utils import TranslationItem, save_pot
 
 
 def extract_translatables(files: Iterable[Path]) -> Iterator[TranslationItem]:
@@ -19,14 +18,14 @@ def extract_translatables(files: Iterable[Path]) -> Iterator[TranslationItem]:
             yield from extract_translatables_from_file(lines, file_path, True, keys)
 
 
-def create_pot_file(pot_file: typer.FileTextWrite, files: Sequence[Path]):
+def create_pot_file(pot_file: typer.FileBinaryWrite, files: Sequence[Path]):
     save_pot(
         pot_file,
         extract_translatables(files),
     )
 
 
-def main(path: Path, pot_file: typer.FileTextWrite):
+def main(path: Path, pot_file: typer.FileBinaryWrite):
     files = (file for file in path.rglob("*") if file.is_file() and "." not in file.name and file.name != "index")
     create_pot_file(pot_file, sorted(files))
 
