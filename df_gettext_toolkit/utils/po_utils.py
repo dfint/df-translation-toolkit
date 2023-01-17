@@ -25,10 +25,19 @@ class TranslationItem:
             return False
 
 
+_default_header = b"""
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+""".strip()
+
+
 def save_pot(po_file: BinaryIO, template: Iterator[TranslationItem]):
     catalog = Catalog()
 
     for item in template:
         catalog.add(item.text, locations=[(item.source_file, item.line_number)])
 
-    write_po(po_file, catalog)
+    po_file.write(_default_header + b"\n\n")
+    write_po(po_file, catalog, omit_header=True)
