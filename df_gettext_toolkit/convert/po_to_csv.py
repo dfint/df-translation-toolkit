@@ -4,7 +4,6 @@ from typing import Iterable, Set, Tuple
 import typer
 from babel.messages.pofile import read_po
 
-from df_gettext_toolkit.parse.parse_po import escape_string
 from df_gettext_toolkit.utils import csv_utils
 from df_gettext_toolkit.utils.fix_translated_strings import cleanup_string, fix_spaces
 
@@ -40,7 +39,7 @@ def main(po_file: str, csv_file: str, encoding: str):
         csv_writer = csv_utils.writer(outfile)
 
         for original_string, translation in prepare_dictionary(dictionary, exclusions_leading, exclusions_trailing):
-            csv_writer.writerow([escape_string(original_string), escape_string(translation)])
+            csv_writer.writerow([original_string, translation])
 
 
 if __name__ == "__main__":
