@@ -8,7 +8,7 @@ from df_gettext_toolkit.utils.po_utils import TranslationItem, save_pot
 
 def main(
     source_file: typer.FileText,
-    destination_file: typer.FileTextWrite,
+    destination_file: typer.FileBinaryWrite,
     no_ignore: bool = False,
 ):
     template = (line.rstrip("\n") for line in source_file)

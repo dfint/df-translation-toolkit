@@ -56,7 +56,7 @@ def main(vanilla_path: Path, destination_path: Path, source_encoding: str = "cp4
         for group, data in results.items():
             if data:
                 pot_path = destination_path / (group.lower() + ".pot")
-                with open(pot_path, "wt", encoding=source_encoding) as file_path:
+                with open(pot_path, "wb") as file_path:
                     save_pot(file_path, data)
 
 

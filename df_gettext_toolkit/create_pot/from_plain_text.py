@@ -27,14 +27,14 @@ def extract_translatables(files: Iterable[Path], join_paragraphs: bool) -> Itera
                 yield from extract_translatables_from_file(file, file_path, join_paragraphs, keys)
 
 
-def create_pot_file(pot_file: typer.FileTextWrite, files: Sequence[Path], join_paragraphs: bool):
+def create_pot_file(pot_file: typer.FileBinaryWrite, files: Sequence[Path], join_paragraphs: bool):
     save_pot(
         pot_file,
         extract_translatables(files, join_paragraphs),
     )
 
 
-def main(path: Path, pot_file: typer.FileTextWrite = typer.Option(..., encoding="utf-8"), split: bool = True):
+def main(path: Path, pot_file: typer.FileBinaryWrite, split: bool = True):
     files = (file for file in path.rglob("*.txt") if file.is_file())
     create_pot_file(pot_file, sorted(files), not split)
 

@@ -18,14 +18,14 @@ def extract_translatables(files: Iterable[Path]) -> Iterator[TranslationItem]:
             yield from extract_translatables_from_file(lines, file_path, True, keys)
 
 
-def create_pot_file(pot_file: typer.FileTextWrite, files: Sequence[Path]):
+def create_pot_file(pot_file: typer.FileBinaryWrite, files: Sequence[Path]):
     save_pot(
         pot_file,
         extract_translatables(files),
     )
 
 
-def main(path: Path, pot_file: typer.FileTextWrite):
+def main(path: Path, pot_file: typer.FileBinaryWrite):
     files = (file for file in path.rglob("*") if file.is_file() and "." not in file.name and file.name != "index")
     create_pot_file(pot_file, sorted(files))
 

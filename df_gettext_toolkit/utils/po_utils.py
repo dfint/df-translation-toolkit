@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional, TextIO, Iterator
+from typing import BinaryIO, Iterator, Optional
 
 from babel.messages import Catalog
 from babel.messages.pofile import write_po
@@ -25,7 +25,7 @@ class TranslationItem:
             return False
 
 
-def save_pot(po_file: TextIO, template: Iterator[TranslationItem]):
+def save_pot(po_file: BinaryIO, template: Iterator[TranslationItem]):
     catalog = Catalog()
 
     for item in template:
