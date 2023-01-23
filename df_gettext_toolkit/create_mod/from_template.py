@@ -49,6 +49,19 @@ def localize_directory(
                     yield from translate_single_raw_file(bak_name, file_path, dictionaries[1], destination_encoding)
 
 
+INFO_TEMPLATE = """
+[STEAM_TITLE: {language} {title}]
+[STEAM_DESCRIPTION: {language} translation for {title}]
+[STEAM_TAG:ui]
+[STEAM_TAG:qol]
+[STEAM_TAG:translation]
+[STEAM_TAG:language]
+[STEAM_TAG:{language}]
+[STEAM_KEY_VALUE_TAG:what:isthis?]
+[STEAM_METADATA:andthis?]
+[STEAM_CHANGELOG:Changelog here]"""
+
+
 def create_info(info_file: Path, source_encoding: str, destination_encoding: str, language: str) -> None:
     with backup(info_file) as bak_name:
         with open(bak_name, encoding=source_encoding) as src:
@@ -62,17 +75,7 @@ def create_info(info_file: Path, source_encoding: str, destination_encoding: str
                         print(join_tag(patch_info_tag(object_tag, language)), file=dest)
 
                 print(
-                    f"""
-[STEAM_TITLE: {language.upper()} {title}]
-[STEAM_DESCRIPTION: {language.upper()} translation for {title}]
-[STEAM_TAG:ui]
-[STEAM_TAG:qol]
-[STEAM_TAG:translation]
-[STEAM_TAG:language]
-[STEAM_TAG:{language.lower()}]
-[STEAM_KEY_VALUE_TAG:what:isthis?]
-[STEAM_METADATA:andthis?]
-[STEAM_CHANGELOG:Changelog here]""",
+                    INFO_TEMPLATE.format(language=language.upper(), title=title),
                     file=dest,
                 )
 
