@@ -47,7 +47,7 @@ def translate_compressed_file(
 
 def translate_compressed(po_filename: Path, path: Path, encoding: str):
     with open(po_filename, "r", encoding="utf-8") as pofile:
-        dictionary = {item.id: item.string for item in read_po(pofile) if item.text}
+        dictionary = {item.id: item.string for item in read_po(pofile) if item.id}
 
     for file in path.rglob("*"):
         if file.is_file() and "." not in file.name and file.name != "index":

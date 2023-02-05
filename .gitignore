@@ -12,3 +12,4 @@ dist
 *.csv
 *.bak
 .coverage
+mod/

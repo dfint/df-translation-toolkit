@@ -110,7 +110,7 @@ def get_dictionaries(tranlation_path: Path, language: str) -> Dictionaries:
     with open(po_files["objects"], "r", encoding="utf-8") as pofile:
         dictionary_object = {(item.id, item.context): item.string for item in read_po(pofile)}
     with open(po_files["text_set"], "r", encoding="utf-8") as po_file:
-        dictionary_textset = {item.id: item.string for item in read_po(po_file) if item.text}
+        dictionary_textset = {item.id: item.string for item in read_po(po_file) if item.id}
     return Dictionaries((language.lower(), dictionary_object, dictionary_textset))
 
 
