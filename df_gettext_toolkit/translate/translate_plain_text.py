@@ -16,7 +16,6 @@ def translate_plain_text_file(
     encoding: str,
     join_paragraphs: bool,
 ):
-
     with open(source_file_path) as source_file:
         with open(destination_file_path, "w", encoding=encoding) as destination_file:
             yield destination_file_path.name
