@@ -12,11 +12,9 @@ directories_to_copy = {
     "vanilla_creatures",
     "vanilla_descriptors",
     "vanilla_entities",
-    "vanilla_interactions",
     "vanilla_items",
     "vanilla_materials",
     "vanilla_plants",
-    "vanilla_reactions",
     "vanilla_text",
 }
 
@@ -25,7 +23,6 @@ directories_to_copy = {
 def main(
     vanilla_path: Path,
     destination_path: Path,
-    source_encoding: str = "cp437",
 ) -> None:
     assert vanilla_path.exists(), "Source path doesn't exist"
     assert destination_path.exists(), "Destination path doesn't exist"
