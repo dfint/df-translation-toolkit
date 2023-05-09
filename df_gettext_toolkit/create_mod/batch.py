@@ -13,11 +13,11 @@ PO_URL = "https://raw.githubusercontent.com/dfint/translations-backup/main/trans
 
 
 def fetch_po_from_git(language: str, destination_path: Path) -> None:
-    resourses: list[str] = ["objects", "text_set"]
-    for resourse in resourses:
-        response = requests.get(f"{PO_URL}/{resourse}/{language.lower()}.po")
+    resources: list[str] = ["objects", "text_set"]
+    for resource in resources:
+        response = requests.get(f"{PO_URL}/{resource}/{language.lower()}.po")
         response.raise_for_status()
-        with open(Path(destination_path / f"{resourse}_{language.lower()}.po"), "w", encoding="utf-8") as file:
+        with open(Path(destination_path / f"{resource}_{language.lower()}.po"), "w", encoding="utf-8") as file:
             file.write(response.text)
     logger.info(f"PO files for {language.upper()} downloaded")
 
@@ -34,7 +34,7 @@ def main(vanilla_path: Path, destination_path: Path, encoding: str, languages: L
             raise Exception(f"Unable to download po file for language {language}. Error: {e.code}, {e.reason}")
         Path.mkdir(destination_path / language.lower(), parents=True, exist_ok=True)
         template_from_vanilla(vanilla_path, destination_path / language.lower())
-        from_template(destination_path / language.lower(), destination_path, language, "utf-8")
+        from_template(destination_path / language.lower(), destination_path, language, encoding)
 
     for po in destination_path.glob("**/*.po"):
         po.unlink()

@@ -22,8 +22,8 @@ def create_single_localized_mod(
     destination_encoding: str,
 ) -> Iterator[str]:
     yield from localize_directory(template_path / "objects", dictionaries, source_encoding, destination_encoding)
-    tranlated_files = len([*(template_path / "objects").glob("*.txt")])
-    logger.info(f"{template_path.name} -> {template_path.name}: {tranlated_files} files")
+    translated_files = len([*(template_path / "objects").glob("*.txt")])
+    logger.info(f"{template_path.name} -> {template_path.name}: {translated_files} files")
     create_info(template_path / "info.txt", source_encoding, destination_encoding, dictionaries[0])
     generate_preview.main(
         template_path / "preview.png", dictionaries[0].upper(), str(template_path.name).replace("_", "\n").title()
@@ -104,7 +104,7 @@ def get_dictionaries(tranlation_path: Path, language: str) -> Dictionaries:
         for file in tranlation_path.glob(f"*{po_file}*{language}.po"):
             if file.is_file() and file.stat().st_mtime > mtime:
                 po_files[po_file] = file
-        if po_files[po_file].is_file() == False:
+        if not po_files[po_file].is_file():
             raise Exception(f"Unable to find {po_file} po file for language {language}")
 
     with open(po_files["objects"], "r", encoding="utf-8") as pofile:
@@ -142,8 +142,8 @@ def main(
     for bak_file in template_path.glob("**/*.bak"):
         try:
             bak_file.unlink()
-        except:
-            logger.error(f"Error occured while removing {bak_file.resolve()}")
+        except Exception:
+            logger.error(f"Error occurred while removing {bak_file.resolve()}")
 
     logger.warning(
         "All done! Consider to change info.txt file and made unique preview.png before uploading to steam or sharing the mod."

@@ -4,8 +4,8 @@ from platform import system
 from typing import Optional
 
 import typer
-from loguru import logger
 from PIL import Image, ImageDraw, ImageFont
+from loguru import logger
 
 
 def draw_text(
@@ -82,7 +82,7 @@ def main(
     box_width: int = 10,
 ) -> None:
     assert png_path.parent.exists() and png_path.suffix == ".png", "Invalid png_path to output png image file"
-    assert title_y < 1 and title_y > 0 and subtitle_y < 1 and subtitle_y > 0, "Invalid Y value, should be 0 < Y < 1"
+    assert 0 < title_y < 1 and 0 < subtitle_y < 1, "Invalid Y value, should be 0 < Y < 1"
 
     if not font_path:
         logger.info("Searching for default font")
@@ -95,8 +95,8 @@ def main(
     # Draw box
     if box_width > 0:
         if second_color:
-            draw.rectangle(xy=(0, 0, *canvas_size), outline=second_color, width=box_width)
-        draw.rectangle(xy=(0, 0, *canvas_size), outline=main_color, width=box_width - 2)
+            draw.rectangle(xy=(0, 0, canvas_size[0], canvas_size[1]), outline=second_color, width=box_width)
+        draw.rectangle(xy=(0, 0, canvas_size[0], canvas_size[1]), outline=main_color, width=box_width - 2)
 
     # Draw Title
     draw_text(
@@ -121,7 +121,7 @@ def main(
     )
 
     img.save(png_path)
-    logger.info("Preview generadet successfully")
+    logger.info("Preview generated successfully")
 
 
 if __name__ == "__main__":
