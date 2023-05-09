@@ -1,0 +1,17 @@
+<svg version="1.1" width="500" height="500" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    <![CDATA[
+      text {
+        font-family: sans-serif;
+        font-weight: bold
+      }
+    ]]>
+  </style>
+  <rect x="4" y="4" width="492" height="492" fill="#003049" stroke="#fcbf49" stroke-width="8" />
+  <text x="50%" y="192" fill="#fcbf49" font-size="72" text-anchor="middle">
+    {{ TITLE }}
+  </text>
+  <text x="50%" y="300" fill="#fcbf49" font-size="43" text-anchor="middle">
+    {{ DESCRIPTION }}
+  </text>
+</svg>
