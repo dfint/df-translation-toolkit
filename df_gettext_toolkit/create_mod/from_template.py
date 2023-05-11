@@ -5,7 +5,7 @@ import typer
 from babel.messages.pofile import read_po
 from loguru import logger
 
-import df_gettext_toolkit.create_mod.generate_preview as generate_preview
+from df_gettext_toolkit.create_mod.generate_preview import main as generate_preview
 from df_gettext_toolkit.create_pot.from_steam_text import get_raw_object_type, traverse_vanilla_directories
 from df_gettext_toolkit.parse.parse_raws import join_tag, split_tag, tokenize_raw_file
 from df_gettext_toolkit.translate.translate_plain_text import translate_plain_text_file
@@ -22,13 +22,20 @@ def create_single_localized_mod(
     destination_encoding: str,
 ) -> Iterator[str]:
     yield from localize_directory(template_path / "objects", dictionaries, source_encoding, destination_encoding)
-    tranlated_files = len([*(template_path / "objects").glob("*.txt")])
-    logger.info(f"{template_path.name} -> {template_path.name}: {tranlated_files} files")
-    create_info(template_path / "info.txt", source_encoding, destination_encoding, dictionaries[0])
-    generate_preview.main(
-        template_path / "preview.png", dictionaries[0].upper(), str(template_path.name).replace("_", "\n").title()
+    translated_files = len(list((template_path / "objects").glob("*.txt")))
+    logger.info(f"{template_path.name} -> {template_path.name}: {translated_files} files")
+    language_name = dictionaries[0]
+    create_info(template_path / "info.txt", source_encoding, destination_encoding, language_name)
+
+    svg_template_path = Path(__file__).parent / "preview_template.svg"
+    generate_preview(
+        svg_template_path,
+        language_name.upper(),
+        str(template_path.name).replace("_", "\n").title(),
+        template_path / "preview.png",
     )
-    template_path.rename(f"{str(template_path.resolve())}_{dictionaries[0].lower()}")
+
+    template_path.rename(template_path.parent / f"{template_path.name}_{language_name.lower()}")
 
 
 def localize_directory(
@@ -50,8 +57,8 @@ def localize_directory(
 
 
 INFO_TEMPLATE = """
-[STEAM_TITLE: {language} {title}]
-[STEAM_DESCRIPTION: {language} translation for {title}]
+[STEAM_TITLE:{language} {title}]
+[STEAM_DESCRIPTION:{language} translation for {title}]
 [STEAM_TAG:ui]
 [STEAM_TAG:qol]
 [STEAM_TAG:translation]
@@ -59,7 +66,8 @@ INFO_TEMPLATE = """
 [STEAM_TAG:{language}]
 [STEAM_KEY_VALUE_TAG:what:isthis?]
 [STEAM_METADATA:andthis?]
-[STEAM_CHANGELOG:Changelog here]"""
+[STEAM_CHANGELOG:Changelog here]
+""".strip()
 
 
 def create_info(info_file: Path, source_encoding: str, destination_encoding: str, language: str) -> None:
@@ -97,14 +105,14 @@ def patch_info_tag(tag: list[str], language: str) -> list[str]:
     return tag
 
 
-def get_dictionaries(tranlation_path: Path, language: str) -> Dictionaries:
+def get_dictionaries(translation_path: Path, language: str) -> Dictionaries:
     po_files = {"objects": Path(), "text_set": Path()}
     for po_file in po_files:
         mtime = 0
-        for file in tranlation_path.glob(f"*{po_file}*{language}.po"):
+        for file in translation_path.glob(f"*{po_file}*{language}.po"):
             if file.is_file() and file.stat().st_mtime > mtime:
                 po_files[po_file] = file
-        if po_files[po_file].is_file() == False:
+        if not po_files[po_file].is_file():
             raise Exception(f"Unable to find {po_file} po file for language {language}")
 
     with open(po_files["objects"], "r", encoding="utf-8") as pofile:
@@ -142,11 +150,12 @@ def main(
     for bak_file in template_path.glob("**/*.bak"):
         try:
             bak_file.unlink()
-        except:
-            logger.error(f"Error occured while removing {bak_file.resolve()}")
+        except Exception:
+            logger.error(f"Error occurred while removing {bak_file.resolve()}")
 
     logger.warning(
-        "All done! Consider to change info.txt file and made unique preview.png before uploading to steam or sharing the mod."
+        "All done! Consider to change info.txt file and made unique preview.png "
+        "before uploading to steam or sharing the mod."
     )
 
 
