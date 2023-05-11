@@ -5,7 +5,7 @@ import typer
 from babel.messages.pofile import read_po
 from loguru import logger
 
-import df_gettext_toolkit.create_mod.generate_preview as generate_preview
+from df_gettext_toolkit.create_mod.generate_preview import main as generate_preview
 from df_gettext_toolkit.create_pot.from_steam_text import get_raw_object_type, traverse_vanilla_directories
 from df_gettext_toolkit.parse.parse_raws import join_tag, split_tag, tokenize_raw_file
 from df_gettext_toolkit.translate.translate_plain_text import translate_plain_text_file
@@ -25,10 +25,12 @@ def create_single_localized_mod(
     translated_files = len([*(template_path / "objects").glob("*.txt")])
     logger.info(f"{template_path.name} -> {template_path.name}: {translated_files} files")
     create_info(template_path / "info.txt", source_encoding, destination_encoding, dictionaries[0])
-    generate_preview.main(
-        template_path / "preview.png", dictionaries[0].upper(), str(template_path.name).replace("_", "\n").title()
-    )
-    template_path.rename(f"{str(template_path.resolve())}_{dictionaries[0].lower()}")
+
+    svg_template_path = Path(__file__).parent / "preview_template.svg"
+    generate_preview(svg_template_path, dictionaries[0].upper(), str(template_path.name).replace("_", "\n").title(),
+                     template_path / "preview.png")
+
+    template_path.rename(template_path.parent / f"{template_path.name}_{dictionaries[0].lower()}")
 
 
 def localize_directory(
