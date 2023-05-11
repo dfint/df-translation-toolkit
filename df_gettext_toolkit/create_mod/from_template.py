@@ -57,8 +57,8 @@ def localize_directory(
 
 
 INFO_TEMPLATE = """
-[STEAM_TITLE: {language} {title}]
-[STEAM_DESCRIPTION: {language} translation for {title}]
+[STEAM_TITLE:{language} {title}]
+[STEAM_DESCRIPTION:{language} translation for {title}]
 [STEAM_TAG:ui]
 [STEAM_TAG:qol]
 [STEAM_TAG:translation]
@@ -66,7 +66,8 @@ INFO_TEMPLATE = """
 [STEAM_TAG:{language}]
 [STEAM_KEY_VALUE_TAG:what:isthis?]
 [STEAM_METADATA:andthis?]
-[STEAM_CHANGELOG:Changelog here]"""
+[STEAM_CHANGELOG:Changelog here]
+""".strip()
 
 
 def create_info(info_file: Path, source_encoding: str, destination_encoding: str, language: str) -> None:
@@ -104,11 +105,11 @@ def patch_info_tag(tag: list[str], language: str) -> list[str]:
     return tag
 
 
-def get_dictionaries(tranlation_path: Path, language: str) -> Dictionaries:
+def get_dictionaries(translation_path: Path, language: str) -> Dictionaries:
     po_files = {"objects": Path(), "text_set": Path()}
     for po_file in po_files:
         mtime = 0
-        for file in tranlation_path.glob(f"*{po_file}*{language}.po"):
+        for file in translation_path.glob(f"*{po_file}*{language}.po"):
             if file.is_file() and file.stat().st_mtime > mtime:
                 po_files[po_file] = file
         if not po_files[po_file].is_file():
