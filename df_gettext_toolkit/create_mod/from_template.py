@@ -28,8 +28,12 @@ def create_single_localized_mod(
     create_info(template_path / "info.txt", source_encoding, destination_encoding, language_name)
 
     svg_template_path = Path(__file__).parent / "preview_template.svg"
-    generate_preview(svg_template_path, language_name.upper(), str(template_path.name).replace("_", "\n").title(),
-                     template_path / "preview.png")
+    generate_preview(
+        svg_template_path,
+        language_name.upper(),
+        str(template_path.name).replace("_", "\n").title(),
+        template_path / "preview.png",
+    )
 
     template_path.rename(template_path.parent / f"{template_path.name}_{language_name.lower()}")
 
@@ -149,7 +153,8 @@ def main(
             logger.error(f"Error occurred while removing {bak_file.resolve()}")
 
     logger.warning(
-        "All done! Consider to change info.txt file and made unique preview.png before uploading to steam or sharing the mod."
+        "All done! Consider to change info.txt file and made unique preview.png "
+        "before uploading to steam or sharing the mod."
     )
 
 
