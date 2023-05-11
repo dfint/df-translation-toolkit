@@ -22,15 +22,16 @@ def create_single_localized_mod(
     destination_encoding: str,
 ) -> Iterator[str]:
     yield from localize_directory(template_path / "objects", dictionaries, source_encoding, destination_encoding)
-    translated_files = len([*(template_path / "objects").glob("*.txt")])
+    translated_files = len(list((template_path / "objects").glob("*.txt")))
     logger.info(f"{template_path.name} -> {template_path.name}: {translated_files} files")
-    create_info(template_path / "info.txt", source_encoding, destination_encoding, dictionaries[0])
+    language_name = dictionaries[0]
+    create_info(template_path / "info.txt", source_encoding, destination_encoding, language_name)
 
     svg_template_path = Path(__file__).parent / "preview_template.svg"
-    generate_preview(svg_template_path, dictionaries[0].upper(), str(template_path.name).replace("_", "\n").title(),
+    generate_preview(svg_template_path, language_name.upper(), str(template_path.name).replace("_", "\n").title(),
                      template_path / "preview.png")
 
-    template_path.rename(template_path.parent / f"{template_path.name}_{dictionaries[0].lower()}")
+    template_path.rename(template_path.parent / f"{template_path.name}_{language_name.lower()}")
 
 
 def localize_directory(
