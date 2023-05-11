@@ -11,7 +11,9 @@
   <text x="50%" y="200" fill="#fcbf49" font-size="72" text-anchor="middle">
     {{ title }}
   </text>
-  <text x="50%" y="320" fill="#fcbf49" font-size="43" text-anchor="middle">
-    {{ description }}
+  <text y="300" fill="#fcbf49" font-size="43" text-anchor="middle">
+    {% for line in description.split('\n') -%}
+      <tspan x="50%" dy="{{ loop.index0 * 1.2 }}em">{{ line }}</tspan>
+    {% endfor -%}
   </text>
 </svg>
