@@ -1,5 +1,6 @@
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterator, Mapping, NewType, Optional, Tuple
+from typing import Iterator, Mapping, Optional, Tuple
 
 import typer
 from babel.messages.pofile import read_po
@@ -12,7 +13,12 @@ from df_gettext_toolkit.translate.translate_plain_text import translate_plain_te
 from df_gettext_toolkit.translate.translate_raws import translate_single_raw_file
 from df_gettext_toolkit.utils.backup import backup
 
-Dictionaries = NewType("Dictionaries", Tuple[str, Mapping[Tuple[str, Optional[str]], str], Mapping[str, str]])
+
+@dataclass
+class Dictionaries:
+    language_name: str
+    dictionary_object: Mapping[Tuple[str, Optional[str]], str]
+    dictionary_textset: Mapping[str, str]
 
 
 def create_single_localized_mod(
@@ -24,7 +30,7 @@ def create_single_localized_mod(
     yield from localize_directory(template_path / "objects", dictionaries, source_encoding, destination_encoding)
     translated_files = len(list((template_path / "objects").glob("*.txt")))
     logger.info(f"{template_path.name} -> {template_path.name}: {translated_files} files")
-    language_name = dictionaries[0]
+    language_name = dictionaries.language_name
     create_info(template_path / "info.txt", source_encoding, destination_encoding, language_name)
 
     svg_template_path = Path(__file__).parent / "preview_template.svg"
@@ -50,10 +56,12 @@ def localize_directory(
             with backup(file_path) as bak_name:
                 if object_type == "TEXT_SET":
                     yield from translate_plain_text_file(
-                        bak_name, file_path, dictionaries[2], destination_encoding, False
+                        bak_name, file_path, dictionaries.dictionary_textset, destination_encoding, False
                     )
                 else:
-                    yield from translate_single_raw_file(bak_name, file_path, dictionaries[1], destination_encoding)
+                    yield from translate_single_raw_file(
+                        bak_name, file_path, dictionaries.dictionary_object, destination_encoding
+                    )
 
 
 INFO_TEMPLATE = """
@@ -119,7 +127,7 @@ def get_dictionaries(translation_path: Path, language: str) -> Dictionaries:
         dictionary_object = {(item.id, item.context): item.string for item in read_po(pofile)}
     with open(po_files["text_set"], "r", encoding="utf-8") as po_file:
         dictionary_textset = {item.id: item.string for item in read_po(po_file) if item.id}
-    return Dictionaries((language.lower(), dictionary_object, dictionary_textset))
+    return Dictionaries(language.lower(), dictionary_object, dictionary_textset)
 
 
 @logger.catch
