@@ -1,14 +1,15 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterator, Mapping, Optional, Tuple
+from typing import Iterator, Mapping, Optional, Tuple, List
 
+import jinja2
 import typer
 from babel.messages.pofile import read_po
 from loguru import logger
 
 from df_gettext_toolkit.create_mod.generate_preview import main as generate_preview
 from df_gettext_toolkit.create_pot.from_steam_text import get_raw_object_type, traverse_vanilla_directories
-from df_gettext_toolkit.parse.parse_raws import join_tag, split_tag, tokenize_raw_file
+from df_gettext_toolkit.parse.parse_raws import split_tag, tokenize_raw_file
 from df_gettext_toolkit.translate.translate_plain_text import translate_plain_text_file
 from df_gettext_toolkit.translate.translate_raws import translate_single_raw_file
 from df_gettext_toolkit.utils.backup import backup
@@ -33,7 +34,7 @@ def create_single_localized_mod(
     language_name = dictionaries.language_name
     create_info(template_path / "info.txt", source_encoding, destination_encoding, language_name)
 
-    svg_template_path = Path(__file__).parent / "preview_template.svg"
+    svg_template_path = Path(__file__).parent / "templates" / "preview_template.svg"
     generate_preview(
         svg_template_path,
         language_name.upper(),
@@ -64,18 +65,14 @@ def localize_directory(
                     )
 
 
-INFO_TEMPLATE = """
-[STEAM_TITLE:{language} {title}]
-[STEAM_DESCRIPTION:{language} translation for {title}]
-[STEAM_TAG:ui]
-[STEAM_TAG:qol]
-[STEAM_TAG:translation]
-[STEAM_TAG:language]
-[STEAM_TAG:{language}]
-[STEAM_KEY_VALUE_TAG:what:isthis?]
-[STEAM_METADATA:andthis?]
-[STEAM_CHANGELOG:Changelog here]
-""".strip()
+def fill_info_template(template_path: Path, **kwargs) -> str:
+    with open(template_path) as template_file:
+        template_text = template_file.read()
+        template = jinja2.Template(template_text)
+
+        rendered = template.render(**kwargs)
+        result = "\n".join(filter(lambda x: bool(x), rendered.splitlines()))
+        return result
 
 
 def create_info(info_file: Path, source_encoding: str, destination_encoding: str, language: str) -> None:
@@ -83,34 +80,42 @@ def create_info(info_file: Path, source_encoding: str, destination_encoding: str
         with open(bak_name, encoding=source_encoding) as src:
             with open(info_file, "w", encoding=destination_encoding) as dest:
                 title = "Vanilla"
+                source_info = dict()
                 for item in tokenize_raw_file(src):
                     if item.is_tag:
-                        object_tag = split_tag(item.text)
-                        if object_tag[0] == "NAME":
-                            title = object_tag[1]
-                        print(join_tag(patch_info_tag(object_tag, language)), file=dest)
+                        tag = split_tag(item.text)
+                        if tag[0] == "NAME":
+                            title = tag[1]
 
-                print(
-                    INFO_TEMPLATE.format(language=language.upper(), title=title),
-                    file=dest,
+                        source_info[tag[0].lower()] = patch_info_tag(tag, language)
+
+                info_template_path = Path(__file__).parent / "templates" / "info_template.txt"
+                rendered = fill_info_template(
+                    info_template_path,
+                    steam_title=f"{language.upper()} {title}",
+                    steam_description=f"{language.upper()} translation for {title}",
+                    steam_tags=["ui", "qol", "translation"],
+                    steam_key_value_tags=dict(language=language),
+                    **source_info,
                 )
+                print(rendered, file=dest)
 
 
 def pretty_directory_name(text: str) -> str:
     return text.replace("_", " ").title()
 
 
-def patch_info_tag(tag: list[str], language: str) -> list[str]:
+def patch_info_tag(tag: List[str], language: str) -> str:
     if tag[0] == "ID":
-        tag[1] = f"{language.lower()}_{tag[1]}"
+        return f"{language.lower()}_{tag[1]}"
     elif tag[0] == "AUTHOR":
-        tag[1] = f"DFINT (Original by {tag[1]})"
+        return f"DFINT (Original by {tag[1]})"
     elif tag[0] == "NAME":
-        tag[1] = f"{tag[1]} ({language.upper()})"
+        return f"{tag[1]} ({language.upper()})"
     elif tag[0] == "DESCRIPTION":
-        tag[1] = f"{tag[1]} (Translated to {language.upper()})"
+        return f"{tag[1]} (Translated to {language.upper()})"
 
-    return tag
+    return tag[1]
 
 
 def get_dictionaries(translation_path: Path, language: str) -> Dictionaries:

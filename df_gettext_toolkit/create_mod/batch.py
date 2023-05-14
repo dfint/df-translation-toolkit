@@ -13,7 +13,7 @@ PO_URL = "https://raw.githubusercontent.com/dfint/translations-backup/main/trans
 
 
 def fetch_po_from_git(language: str, destination_path: Path) -> None:
-    resources: list[str] = ["objects", "text_set"]
+    resources: List[str] = ["objects", "text_set"]
     for resource in resources:
         response = requests.get(f"{PO_URL}/{resource}/{language.lower()}.po")
         response.raise_for_status()

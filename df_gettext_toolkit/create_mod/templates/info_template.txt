@@ -1,0 +1,22 @@
+[ID:{{ id }}]
+[NUMERIC_VERSION:5001]
+[DISPLAYED_VERSION:50.01]
+[EARLIEST_COMPATIBLE_NUMERIC_VERSION:5001]
+[EARLIEST_COMPATIBLE_DISPLAYED_VERSION:50.01]
+[AUTHOR:{{ author }}]
+[NAME:{{ name }}]
+[DESCRIPTION:{{ description }}]
+[STEAM_TITLE:{{ steam_title }}]
+[STEAM_DESCRIPTION:{{ steam_description }}]
+{% for tag in steam_tags %}
+[STEAM_TAG:{{ tag }}]
+{% endfor %}
+{% for key, value in steam_key_value_tags.items() %}
+[STEAM_KEY_VALUE_TAG:{{ key }}:{{ value }}]
+{% endfor %}
+{% if steam_metadata %}
+[STEAM_METADATA:{{ steam_metadata }}]
+{% endif %}
+{% if steam_chagelog %}
+[STEAM_CHANGELOG:{{ steam_chagelog }}]
+{% endif %}
