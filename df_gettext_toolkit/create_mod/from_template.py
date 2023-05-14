@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterator, Mapping, Optional, Tuple
+from typing import Iterator, Mapping, Optional, Tuple, List
 
+import jinja2
 import typer
 from babel.messages.pofile import read_po
 from loguru import logger
@@ -33,7 +34,7 @@ def create_single_localized_mod(
     language_name = dictionaries.language_name
     create_info(template_path / "info.txt", source_encoding, destination_encoding, language_name)
 
-    svg_template_path = Path(__file__).parent / "preview_template.svg"
+    svg_template_path = Path(__file__).parent / "templates" / "preview_template.svg"
     generate_preview(
         svg_template_path,
         language_name.upper(),
@@ -64,18 +65,26 @@ def localize_directory(
                     )
 
 
-INFO_TEMPLATE = """
-[STEAM_TITLE:{language} {title}]
-[STEAM_DESCRIPTION:{language} translation for {title}]
-[STEAM_TAG:ui]
-[STEAM_TAG:qol]
-[STEAM_TAG:translation]
-[STEAM_TAG:language]
-[STEAM_TAG:{language}]
-[STEAM_KEY_VALUE_TAG:what:isthis?]
-[STEAM_METADATA:andthis?]
-[STEAM_CHANGELOG:Changelog here]
-""".strip()
+def fill_info_template(
+        template_path: Path,
+        title: str,
+        description: str,
+        tags: Optional[List[str]] = None,
+        key_value_tags: Optional[Mapping[str, str]] = None,
+) -> str:
+    with open(template_path) as template_file:
+        template_text = template_file.read()
+        template = jinja2.Template(template_text)
+
+        if tags is None:
+            tags = list()
+
+        if key_value_tags is None:
+            key_value_tags = dict()
+
+        rendered = template.render(title=title, description=description, tags=tags, key_value_tags=key_value_tags)
+        result = "\n".join(filter(lambda x: bool(x), rendered.splitlines()))
+        return result
 
 
 def create_info(info_file: Path, source_encoding: str, destination_encoding: str, language: str) -> None:
@@ -90,10 +99,15 @@ def create_info(info_file: Path, source_encoding: str, destination_encoding: str
                             title = object_tag[1]
                         print(join_tag(patch_info_tag(object_tag, language)), file=dest)
 
-                print(
-                    INFO_TEMPLATE.format(language=language.upper(), title=title),
-                    file=dest,
+                info_template_path = Path(__file__).parent / "templates" / "info_template.txt"
+                rendered = fill_info_template(
+                    info_template_path,
+                    title=f"{language.upper()} {title}",
+                    description=f"{language.upper()} translation for {title}",
+                    tags=["ui", "qol", "translation"],
+                    key_value_tags=dict(language=language),
                 )
+                print(rendered, file=dest)
 
 
 def pretty_directory_name(text: str) -> str:
