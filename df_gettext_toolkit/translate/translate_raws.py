@@ -36,7 +36,7 @@ def translate_single_raw_file(
 
 def translate_raws(po_filename: Path, path: Path, encoding: str) -> Iterator[str]:
     with open(po_filename, "r", encoding="utf-8") as pofile:
-        dictionary = {(item.id, item.string): item.translation for item in read_po(pofile)}
+        dictionary = {(item.id, item.context): item.string for item in read_po(pofile)}
 
     for file_path in path.glob("*.txt"):
         if file_path.is_file() and not file_path.name.startswith("language_"):
