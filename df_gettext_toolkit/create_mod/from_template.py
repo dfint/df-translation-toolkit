@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterator, Mapping, Optional, Tuple
+from typing import Iterator, Mapping, Optional, Tuple, List
 
 import jinja2
 import typer
@@ -105,7 +105,7 @@ def pretty_directory_name(text: str) -> str:
     return text.replace("_", " ").title()
 
 
-def patch_info_tag(tag: list[str], language: str) -> str:
+def patch_info_tag(tag: List[str], language: str) -> str:
     if tag[0] == "ID":
         return f"{language.lower()}_{tag[1]}"
     elif tag[0] == "AUTHOR":
