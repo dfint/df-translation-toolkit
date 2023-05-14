@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterator, Mapping, Optional, Tuple, List
+from typing import Iterator, List, Mapping, Optional, Tuple
 
 import jinja2
 import typer
