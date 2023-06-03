@@ -32,7 +32,7 @@ def main(
     for directory in traverse_vanilla_directories(vanilla_path):
         if directory.parent.name not in directories_to_copy:
             continue
-        shutil.copytree(directory.parent, destination_path / directory.parent.name)
+        shutil.copytree(directory.parent, destination_path)
         logger.info(f"Copy {directory.parent.name}")
         total += 1
 
