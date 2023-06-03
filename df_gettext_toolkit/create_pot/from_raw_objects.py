@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import BinaryIO, Iterator
+from typing import BinaryIO, Iterator, Iterable
 
 import typer
 
@@ -14,7 +14,7 @@ def extract_from_raw_file(file_name: Path, source_encoding: str) -> Iterator[Tra
             yield item
 
 
-def extract_translatables_from_raws_batch(raw_files: Iterator[Path], source_encoding: str) -> Iterator[TranslationItem]:
+def extract_translatables_from_raws_batch(raw_files: Iterable[Path], source_encoding: str) -> Iterator[TranslationItem]:
     """
     Read all translatable items from all raw files
     """
@@ -23,7 +23,7 @@ def extract_translatables_from_raws_batch(raw_files: Iterator[Path], source_enco
             yield from extract_from_raw_file(file_name, source_encoding)
 
 
-def create_pot_file(pot_file: BinaryIO, raw_files: Iterator[Path], source_encoding: str):
+def create_pot_file(pot_file: BinaryIO, raw_files: Iterable[Path], source_encoding: str):
     save_pot(
         pot_file,
         extract_translatables_from_raws_batch(raw_files, source_encoding),
