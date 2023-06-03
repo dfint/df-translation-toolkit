@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import BinaryIO, Iterator, Iterable
+from typing import BinaryIO, Iterable, Iterator
 
 import typer
 
