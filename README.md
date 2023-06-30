@@ -23,3 +23,10 @@ poetry run create_pot from_steam_text "./Dwarf Fortress/data/vanilla" ./pot_file
 ```bash
 poetry run create_pot from_string_dump stringdump.txt hardcoded_steam.pot
 ```
+
+## Experimental TUI (Text User Interface)
+
+```
+poetry run python -m df_gettext_toolkit.tui tui
+```
+(not sure if it's possible to run trogon tui command from as a script from pyproject.toml)
