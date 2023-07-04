@@ -3,7 +3,6 @@ from typing import Callable, Iterable, Iterator, NamedTuple, Sequence
 
 import typer
 
-from df_gettext_toolkit.translate.translate_compressed import translate_compressed
 from df_gettext_toolkit.translate.translate_plain_text import translate_plain_text
 from df_gettext_toolkit.translate.translate_raws import translate_raws
 
@@ -16,7 +15,6 @@ class Pattern(NamedTuple):
 
 patterns = [
     Pattern("raw/objects", "raw-objects", translate_raws),
-    Pattern("data", "uncompressed", translate_compressed),
     Pattern("data/speech", "speech", lambda *args: translate_plain_text(*args, join_paragraphs=False)),
     Pattern("raw/objects/text", "text", lambda *args: translate_plain_text(*args, join_paragraphs=False)),
 ]
