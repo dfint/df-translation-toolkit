@@ -9,7 +9,6 @@ license = "MIT"
 python = "^3.8.1"
 typer = "^0.7.0"
 Unidecode = "^1.2.0"
-df_raw_decoder = { url = 'https://github.com/dfint/df_raw_decoder/releases/download/1.1.0/df_raw_decoder-1.1.0-py3-none-any.whl' }
 loguru = "^0.7.0"
 babel = "^2.12.1"
 requests = "^2.31.0"
