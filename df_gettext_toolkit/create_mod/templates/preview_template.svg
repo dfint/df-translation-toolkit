@@ -8,12 +8,10 @@
     ]]>
   </style>
   <rect x="4" y="4" width="492" height="492" fill="#003049" stroke="#fcbf49" stroke-width="8" />
-  <text x="50%" y="200" fill="#fcbf49" font-size="72" text-anchor="middle">
+  <text x="50%" y="270" fill="#fcbf49" font-size="210" text-anchor="middle">
     {{ title }}
   </text>
-  <text y="300" fill="#fcbf49" font-size="43" text-anchor="middle">
-    {% for line in description.split('\n') %}
-      <tspan x="50%" dy="{{ loop.index0 * 1.2 }}em">{{ line }}</tspan>
-    {% endfor %}
+  <text y="400" fill="#fcbf49" font-size="70" text-anchor="middle">
+{% for line in description.split('\n') %}<tspan x="50%" dy="{{ loop.index0 * 1.2 }}em">{{ line }}</tspan>{% endfor %}
   </text>
 </svg>

@@ -17,6 +17,6 @@
 {% if steam_metadata %}
 [STEAM_METADATA:{{ steam_metadata }}]
 {% endif %}
-{% if steam_chagelog %}
-[STEAM_CHANGELOG:{{ steam_chagelog }}]
+{% if steam_changelog %}
+[STEAM_CHANGELOG:{{ steam_changelog }}]
 {% endif %}
