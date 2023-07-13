@@ -1,6 +1,6 @@
 from collections import defaultdict
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Optional, Tuple
 
 import typer
 from loguru import logger
@@ -28,6 +28,34 @@ def get_raw_object_type(file_name: Path, source_encoding: str) -> str:
                 return object_tag[1]
 
 
+def get_translatable_strings(file_path: Path, source_encoding: str) -> Optional[Tuple[str, Iterable[str]]]:
+    object_type = get_raw_object_type(file_path, source_encoding)
+    if object_type in dont_translate:
+        return None
+    elif object_type == "TEXT_SET":
+        key = object_type
+        data = extract_from_vanilla_text(file_path, source_encoding)
+    else:
+        key = "OBJECTS"
+        data = extract_from_raw_file(file_path, source_encoding)
+
+    return key, data
+
+
+def iterable_is_empty(iterable: Iterable):
+    iterator = iter(iterable)
+    try:
+        next(iterator)
+        return False
+    except StopIteration:
+        return True
+
+
+def file_is_translatable(file_path: Path, source_encoding: str) -> bool:
+    result = get_translatable_strings(file_path, source_encoding)
+    return result is not None and not iterable_is_empty(result[1])
+
+
 dont_translate = {"LANGUAGE"}
 
 
@@ -41,15 +69,11 @@ def main(vanilla_path: Path, destination_path: Path, source_encoding: str = "cp4
         logger.info(directory.relative_to(vanilla_path))
         for file_path in sorted(directory.glob("*.txt")):
             if file_path.is_file():
-                object_type = get_raw_object_type(file_path, source_encoding)
-                if object_type in dont_translate:
+                result = get_translatable_strings(file_path, source_encoding)
+                if not result:
                     continue
-                elif object_type == "TEXT_SET":
-                    key = object_type
-                    data = extract_from_vanilla_text(file_path, source_encoding)
                 else:
-                    key = "OBJECTS"
-                    data = extract_from_raw_file(file_path, source_encoding)
+                    key, data = result
 
                 results[key].extend(data)
 
