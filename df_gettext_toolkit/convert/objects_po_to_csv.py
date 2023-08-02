@@ -1,10 +1,49 @@
+from collections import defaultdict
 from pathlib import Path
+from typing import Iterable, TextIO, Tuple
 
 import typer
+from babel.messages.pofile import read_po
+from loguru import logger
+
+from df_gettext_toolkit.parse.parse_raws import split_tag
+from df_gettext_toolkit.utils import csv_utils
+from df_gettext_toolkit.utils.fix_translated_strings import cleanup_string, fix_spaces
 
 
-def convert(pofile, outfile, encoding):
-    pass
+@logger.catch
+def get_translations_from_tag(original_tag, translation_tag):
+    original_parts = split_tag(original_tag)
+    translation_parts = split_tag(translation_tag)
+    assert original_parts[0] == translation_parts[0], "First part of a tag should not be translated"
+    assert len(original_parts) == len(translation_tag), "Tag parts count mismatch"
+    original_parts = original_parts[1:]
+    translation_parts = translation_parts[1:]
+
+    tag_translations = defaultdict(list)
+
+    for original, translation in zip(original_parts, translation_parts):
+        if original:
+            assert translation, "Translation to empty string"
+            tag_translations[original].append(translation)
+
+    for original, translations in tag_translations.items():
+        yield original, translations[0]
+
+
+def prepare_dictionary(dictionary: Iterable[Tuple[str, str]]) -> Iterable[Tuple[str, str]]:
+    for original_string_tag, translation_tag in dictionary:
+        if original_string_tag and translation_tag and translation_tag != original_string_tag:
+            for original_string, translation in get_translations_from_tag(original_string_tag, translation_tag):
+                translation = fix_spaces(original_string, translation)
+                yield original_string, cleanup_string(translation)
+
+
+def convert(po_file: TextIO, csv_file: TextIO):
+    dictionary = [(item.id, item.string) for item in read_po(po_file) if item.id and item.string]
+    csv_writer = csv_utils.writer(csv_file)
+    for original_string, translation in prepare_dictionary(dictionary):
+        csv_writer.writerow([original_string, translation])
 
 
 app = typer.Typer()
@@ -19,7 +58,7 @@ def main(po_file: Path, csv_file: Path, encoding: str, append: bool = False):
     with open(po_file, "r", encoding="utf-8") as pofile:
         mode = "a" if append else "w"
         with open(csv_file, mode, newline="", encoding=encoding, errors="replace") as outfile:
-            convert(pofile, outfile, encoding)
+            convert(pofile, outfile)
 
 
 if __name__ == "__main__":
