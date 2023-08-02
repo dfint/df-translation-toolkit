@@ -25,6 +25,10 @@ def convert(po_file: TextIO, csv_file: TextIO):
         csv_writer.writerow([original_string, translation])
 
 
+app = typer.Typer()
+
+
+@app.command()
 def main(po_file: Path, csv_file: Path, encoding: str):
     """
     Convert a po file into a csv file in a specified encoding
@@ -36,4 +40,4 @@ def main(po_file: Path, csv_file: Path, encoding: str):
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()
