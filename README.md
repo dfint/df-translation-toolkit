@@ -6,6 +6,9 @@
 
 Toolset to convert text to [gettext](https://en.wikipedia.org/wiki/Gettext) format and aback. Includes minimalistic parsers for .po (text) and .mo (binary) formats.
 
+> [!NOTE]
+> There are ready to use csv files for most of languages from transifex: https://github.com/dfint/autobuild
+
 ## Installation:
 
 You need Python 3.8.1 (or higher) and poetry (`pip install poetry`).
