@@ -38,7 +38,7 @@ def parse_plain_text_file(lines: Iterable[str], join_paragraphs=True, start_line
     for line_number, line in enumerate(lines, start_line):
         if join_paragraphs:
             if local_is_translatable(line):
-                if "~" in line or line[0] == "[" and not (paragraph and paragraph[-1][-1].isalpha()):
+                if line.startswith("[") and not (paragraph and paragraph[-1][-1].isalpha()):
                     if paragraph:
                         yield PlainTextFileToken(join_paragraph(paragraph), True, paragraph_start_line)
                         paragraph = []
