@@ -6,7 +6,7 @@
 
 Toolset to convert text to [gettext](https://en.wikipedia.org/wiki/Gettext) format and aback. Includes minimalistic parsers for .po (text) and .mo (binary) formats.
 
-> [!NOTE]
+> **Note**  
 > There are ready to use csv files for most of languages from transifex: https://github.com/dfint/autobuild
 
 ## Installation:
