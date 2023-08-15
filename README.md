@@ -11,7 +11,7 @@ Toolset to convert text to [gettext](https://en.wikipedia.org/wiki/Gettext) form
 
 ## Installation:
 
-You need Python 3.8.1 (or higher) and poetry (`pip install poetry`).
+You need Python 3.10 (or higher) and poetry (`pip install poetry`).
 
 Clone or download the repo, then install dependencies it with `poetry install` command
 
