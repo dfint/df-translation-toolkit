@@ -23,7 +23,7 @@ parameters = [
 
 def main(df_path: Path):
     for function, pot_file_name, source_file_path in parameters:
-        with open(pot_file_name, "wt", encoding="utf-8") as pot_file:
+        with pot_file_name.open("w", encoding="utf-8") as pot_file:
             print(f"Creating {pot_file_name} from {df_path / source_file_path}")
             function(df_path / source_file_path, pot_file)
 

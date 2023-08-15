@@ -15,7 +15,7 @@ requests = "^2.31.0"
 jinja2 = "^3.1.2"
 cairosvg = "^2.7.0"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"
 pytest-cov = "^4.1.0"
 pytest-mock = "^3.11.1"
@@ -24,6 +24,7 @@ black = "^23.3.0"
 isort = "^5.12.0"
 coverage = "^7.2.7"
 refurb = "^1.19.0"
+ruff = "^0.0.284"
 
 [tool.poetry.scripts]
 df_gettext_toolkit = "df_gettext_toolkit.cli:app"
@@ -42,3 +43,9 @@ line-length = 120
 [tool.isort]
 profile = "black"
 line_length = 120
+
+[tool.ruff]
+line-length = 120
+select = ["E", "F", "UP"]
+ignore = ["F401", "UP015"]
+target-version = "py310"
