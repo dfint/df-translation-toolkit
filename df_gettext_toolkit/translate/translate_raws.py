@@ -1,6 +1,6 @@
 import sys
+from collections.abc import Iterator, Mapping
 from pathlib import Path
-from typing import Iterator, Mapping, Optional, Tuple
 
 import typer
 from babel.messages.pofile import read_po
@@ -13,7 +13,7 @@ from df_gettext_toolkit.utils.fix_translated_strings import cleanup_string
 def translate_single_raw_file(
     source_file_path: Path,
     destination_file_path: Path,
-    dictionary: Mapping[Tuple[str, Optional[str]], str],
+    dictionary: Mapping[tuple[str, str | None], str],
     encoding: str,
 ) -> Iterator[str]:
     with source_file_path.open(encoding="cp437") as src:

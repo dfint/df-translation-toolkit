@@ -1,6 +1,5 @@
 import shutil
 from pathlib import Path
-from typing import List
 
 from df_gettext_toolkit.utils import csv_utils
 from df_gettext_toolkit.utils.backup import backup
@@ -16,7 +15,7 @@ def split_right(start, end):
     return mid, end
 
 
-def bisect(file_path: Path, encoding: str, data: List[List[str]]):
+def bisect(file_path: Path, encoding: str, data: list[list[str]]):
     def _bisect(start: int, end: int, bad: bool = False) -> bool:
         """
         returns:

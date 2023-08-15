@@ -1,4 +1,5 @@
-from typing import Iterable, List, NamedTuple
+from collections.abc import Iterable
+from typing import NamedTuple
 
 
 def skip_tags(s):
@@ -24,7 +25,7 @@ def parse_plain_text_file(lines: Iterable[str], join_paragraphs=True, start_line
 
     lines = iter(lines)
 
-    paragraph: List[str] = []
+    paragraph: list[str] = []
 
     # FIXME: join_paragraphs must only affect on paragraph joining, not line skipping
     # so the first line must be skipped before the text is fed to the function

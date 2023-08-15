@@ -1,6 +1,6 @@
 from collections import defaultdict
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable, Optional, Tuple
 
 import typer
 from loguru import logger
@@ -28,7 +28,7 @@ def get_raw_object_type(file_name: Path, source_encoding: str) -> str:
                 return object_tag[1]
 
 
-def get_translatable_strings(file_path: Path, source_encoding: str) -> Optional[Tuple[str, Iterable[str]]]:
+def get_translatable_strings(file_path: Path, source_encoding: str) -> tuple[str, Iterable[str]] | None:
     object_type = get_raw_object_type(file_path, source_encoding)
     if object_type in dont_translate:
         return None

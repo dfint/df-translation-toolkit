@@ -1,5 +1,6 @@
+from collections.abc import Callable, Iterable, Iterator, Sequence
 from pathlib import Path
-from typing import Callable, Iterable, Iterator, NamedTuple, Sequence
+from typing import NamedTuple
 
 import typer
 

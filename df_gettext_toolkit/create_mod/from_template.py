@@ -1,6 +1,6 @@
+from collections.abc import Iterator, Mapping
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterator, List, Mapping, Optional, Tuple
 
 import jinja2
 import typer
@@ -17,7 +17,7 @@ from df_gettext_toolkit.utils.backup import backup
 @dataclass
 class Dictionaries:
     language_name: str
-    dictionary_object: Mapping[Tuple[str, Optional[str]], str]
+    dictionary_object: Mapping[tuple[str, str | None], str]
     dictionary_textset: Mapping[str, str]
 
 
@@ -62,7 +62,7 @@ def localize_directory(
                     )
 
 
-def fill_info_template(template_path: Path, **kwargs: str | List[str] | dict[str, str]) -> str:
+def fill_info_template(template_path: Path, **kwargs: str | list[str] | dict[str, str]) -> str:
     with template_path.open() as template_file:
         template_text = template_file.read()
         template = jinja2.Template(template_text)
@@ -100,7 +100,7 @@ def get_dictionaries(translation_path: Path, language: str) -> Dictionaries:
             raise Exception(f"Unable to find {po_file} po file for language {language}")
 
     with open(po_files["objects"], "r", encoding="utf-8") as pofile:
-        dictionary_object: Mapping[Tuple[str, Optional[str]], str] = {
+        dictionary_object: Mapping[tuple[str, str | None], str] = {
             (item.id, item.context): item.string for item in read_po(pofile)
         }
     with open(po_files["text_set"], "r", encoding="utf-8") as po_file:

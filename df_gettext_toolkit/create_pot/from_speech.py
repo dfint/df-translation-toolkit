@@ -1,6 +1,7 @@
 import sys
+from collections.abc import Iterable, Iterator, Sequence
 from pathlib import Path
-from typing import Iterable, Iterator, Sequence, TextIO
+from typing import TextIO
 
 import typer
 

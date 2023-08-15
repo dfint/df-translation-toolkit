@@ -1,6 +1,7 @@
 #! python3
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable, TextIO, Tuple
+from typing import TextIO
 
 import typer
 from babel.messages.pofile import read_po
@@ -9,7 +10,7 @@ from df_gettext_toolkit.utils import csv_utils
 from df_gettext_toolkit.utils.fix_translated_strings import cleanup_string, fix_spaces
 
 
-def prepare_dictionary(dictionary: Iterable[Tuple[str, str]]) -> Iterable[Tuple[str, str]]:
+def prepare_dictionary(dictionary: Iterable[tuple[str, str]]) -> Iterable[tuple[str, str]]:
     for original_string, translation in dictionary:
         if original_string and translation and translation != original_string:
             translation = fix_spaces(original_string, translation)

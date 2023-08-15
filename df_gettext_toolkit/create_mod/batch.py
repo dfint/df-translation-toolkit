@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import List
 from urllib.error import HTTPError
 
 import requests
@@ -13,7 +12,7 @@ PO_URL = "https://raw.githubusercontent.com/dfint/translations-backup/main/trans
 
 
 def fetch_po_from_git(language: str, destination_path: Path) -> None:
-    resources: List[str] = ["objects", "text_set"]
+    resources: list[str] = ["objects", "text_set"]
     for resource in resources:
         response = requests.get(f"{PO_URL}/{resource}/{language.lower()}.po")
         response.raise_for_status()
@@ -24,7 +23,7 @@ def fetch_po_from_git(language: str, destination_path: Path) -> None:
 
 
 @logger.catch
-def main(vanilla_path: Path, destination_path: Path, encoding: str, languages: List[str]) -> None:
+def main(vanilla_path: Path, destination_path: Path, encoding: str, languages: list[str]) -> None:
     assert vanilla_path.exists(), "Source path doesn't exist"
     assert destination_path.exists(), "Destination path doesn't exist"
 

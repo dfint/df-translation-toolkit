@@ -1,11 +1,11 @@
 import re
-from typing import Callable, List
+from collections.abc import Callable
 
 from df_gettext_toolkit.parse.parse_raws import is_translatable
 
 
 class IgnoringRuleRegistry:
-    all_rules: List[Callable[[str], bool]]
+    all_rules: list[Callable[[str], bool]]
 
     def __init__(self):
         self.all_rules = []

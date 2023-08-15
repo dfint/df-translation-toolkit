@@ -1,9 +1,10 @@
-from typing import Callable, Iterable, Iterator, List, Mapping, NamedTuple, Optional, Sequence, Set, Tuple, TypeVar
+from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
+from typing import NamedTuple, TypeVar
 
 from df_gettext_toolkit.utils.po_utils import TranslationItem
 
 
-def split_tag(s: str) -> List[str]:
+def split_tag(s: str) -> list[str]:
     return s.strip("[]").split(":")
 
 
@@ -59,10 +60,10 @@ def tokenize_raw_file(file: Iterable[str]) -> Iterator[RawFileToken]:
 class FilePartInfo(NamedTuple):
     line_number: int
     translatable: bool
-    context: Optional[str]
-    text: Optional[str] = None
-    tag: Optional[str] = None
-    tag_parts: Optional[Sequence[str]] = None
+    context: str | None
+    text: str | None = None
+    tag: str | None = None
+    tag_parts: Sequence[str] | None = None
 
 
 def parse_raw_file(file: Iterable[str]) -> Iterator[FilePartInfo]:
@@ -90,7 +91,7 @@ def parse_raw_file(file: Iterable[str]) -> Iterator[FilePartInfo]:
 
 
 def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[TranslationItem]:
-    translation_keys: Set[Tuple[str, Tuple[str, ...]]] = set()
+    translation_keys: set[tuple[str, tuple[str, ...]]] = set()
 
     for item in parse_raw_file(file):
         if item.translatable:
@@ -109,17 +110,17 @@ def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[Translation
 
 
 def get_from_dict_with_context(
-    dictionary: Mapping[Tuple[str, Optional[str]], str],
+    dictionary: Mapping[tuple[str, str | None], str],
     key: str,
     context: str,
-) -> Optional[str]:
+) -> str | None:
     if (key, context) in dictionary:
         return dictionary[(key, context)]
     elif (key, None) in dictionary:
         return dictionary[(key, None)]
 
 
-def get_tag_translation(dictionary: Mapping[Tuple[str, Optional[str]], str], item: FilePartInfo):
+def get_tag_translation(dictionary: Mapping[tuple[str, str | None], str], item: FilePartInfo):
     tag = item.tag
     tag_parts = item.tag_parts
     context = item.context
@@ -144,9 +145,9 @@ def get_tag_translation(dictionary: Mapping[Tuple[str, Optional[str]], str], ite
     return tag
 
 
-def translate_raw_file(file: Iterable[str], dictionary: Mapping[Tuple[str, Optional[str]], str]):
+def translate_raw_file(file: Iterable[str], dictionary: Mapping[tuple[str, str | None], str]):
     prev_line_number = 1
-    modified_line_parts: List[str] = []
+    modified_line_parts: list[str] = []
     for item in parse_raw_file(file):
         if item.line_number > prev_line_number:
             yield "".join(modified_line_parts)

@@ -1,6 +1,6 @@
 import sys
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Mapping
 
 import typer
 from babel.messages.pofile import read_po

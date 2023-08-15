@@ -1,5 +1,6 @@
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import BinaryIO, Iterable, Optional
+from typing import BinaryIO
 
 from babel.messages import Catalog
 from babel.messages.pofile import write_po
@@ -9,14 +10,14 @@ from babel.messages.pofile import write_po
 class TranslationItem:
     text: str
     translation: str = ""
-    context: Optional[str] = None
-    source_file: Optional[str] = None
-    line_number: Optional[int] = None
-    translator_comment: Optional[str] = None  # "#"
-    extracted_comment: Optional[str] = None  # "#."
+    context: str | None = None
+    source_file: str | None = None
+    line_number: int | None = None
+    translator_comment: str | None = None  # "#"
+    extracted_comment: str | None = None  # "#."
     # reference: Optional[str] = None  # "#: source_file: line_number
-    flag: Optional[str] = None  # "#,"
-    previous_untranslated_msgid: Optional[str] = None  # "#|"
+    flag: str | None = None  # "#,"
+    previous_untranslated_msgid: str | None = None  # "#|"
 
     def __eq__(self, other):
         return (

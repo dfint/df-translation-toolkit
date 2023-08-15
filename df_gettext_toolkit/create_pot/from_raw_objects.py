@@ -1,5 +1,6 @@
+from collections.abc import Iterable, Iterator
 from pathlib import Path
-from typing import BinaryIO, Iterable, Iterator
+from typing import BinaryIO
 
 import typer
 
