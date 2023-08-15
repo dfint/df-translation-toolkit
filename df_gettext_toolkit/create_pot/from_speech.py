@@ -18,7 +18,7 @@ def extract_translatables(files: Iterable[Path]) -> Iterator[TranslationItem]:
     for file_path in files:
         if file_path.is_file():
             print("File:", file_path.name, file=sys.stderr)
-            with open(file_path) as file:
+            with file_path.open() as file:
                 yield from extract_from_speech_file(file, file_path.name)
 
 

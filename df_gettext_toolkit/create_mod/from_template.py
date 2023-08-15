@@ -63,17 +63,17 @@ def localize_directory(
 
 
 def fill_info_template(template_path: Path, **kwargs: str | List[str] | dict[str, str]) -> str:
-    with open(template_path) as template_file:
+    with template_path.open() as template_file:
         template_text = template_file.read()
         template = jinja2.Template(template_text)
 
         rendered = template.render(**kwargs)
-        result = "\n".join(filter(lambda x: bool(x), rendered.splitlines()))
+        result = "\n".join(filter(bool, rendered.splitlines()))
         return result
 
 
 def create_info(info_file: Path, source_encoding: str, destination_encoding: str, language: str) -> None:
-    with open(info_file, "w", encoding=destination_encoding) as dest:
+    with info_file.open("w", encoding=destination_encoding) as dest:
         info_template_path = Path(__file__).parent / "templates" / "info_template.txt"
         rendered = fill_info_template(
             info_template_path,

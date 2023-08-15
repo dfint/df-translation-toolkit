@@ -35,26 +35,26 @@ def bisect(file_path: Path, encoding: str, data: List[List[str]]):
         else:
             confirmed = input("Is it bad (Y/N)? ").upper() == "Y"
 
-        if confirmed:
-            if start == end - 1:
-                print(f"Found string, line number {start+1}:")
-                print(data[start])
-
-                confirmed = input("Exclude from csv (Y/N)? ").upper() == "Y"
-                if confirmed:
-                    csv_utils.write_csv(file_path, encoding, data[:start] + data[start + 1 :])
-
-                return True
-
-            print("Trying left half")
-            result = _bisect(*split_left(start, end))
-            if result:
-                return result
-
-            print("Trying right half")
-            return _bisect(*split_right(start, end), bad=True)
-        else:
+        if not confirmed:
             return False
+
+        if start == end - 1:
+            print(f"Found string, line number {start+1}:")
+            print(data[start])
+
+            confirmed = input("Exclude from csv (Y/N)? ").upper() == "Y"
+            if confirmed:
+                csv_utils.write_csv(file_path, encoding, data[:start] + data[start + 1 :])
+
+            return True
+
+        print("Trying left half")
+        result = _bisect(*split_left(start, end))
+        if result:
+            return result
+
+        print("Trying right half")
+        return _bisect(*split_right(start, end), bad=True)
 
     _bisect(0, len(data), bad=True)
 

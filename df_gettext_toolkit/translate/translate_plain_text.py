@@ -16,8 +16,8 @@ def translate_plain_text_file(
     encoding: str,
     join_paragraphs: bool,
 ):
-    with open(source_file_path) as source_file:
-        with open(destination_file_path, "w", encoding=encoding) as destination_file:
+    with source_file_path.open() as source_file:
+        with destination_file_path.open("w", encoding=encoding) as destination_file:
             yield destination_file_path.name
             for text_block, is_translatable, _ in parse_plain_text_file(source_file, join_paragraphs):
                 text_block = text_block.rstrip("\n")
@@ -31,7 +31,7 @@ def translate_plain_text_file(
 
 
 def translate_plain_text(po_filename: Path, path: Path, encoding: str, join_paragraphs=True):
-    with open(po_filename, "r", encoding="utf-8") as po_file:
+    with po_filename.open("r", encoding="utf-8") as po_file:
         dictionary = {item.id: item.string for item in read_po(po_file) if item.id}
 
     for path in Path(path).rglob("*.txt"):

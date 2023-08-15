@@ -12,12 +12,12 @@ def reader(file: TextIO, **kwargs):
 
 
 def write_csv(file_path: Path, encoding: str, data: List[List[str]]):
-    with open(file_path, "w", encoding=encoding, newline="") as file:
+    with file_path.open("w", encoding=encoding, newline="") as file:
         csv_writer = writer(file)
         csv_writer.writerows(data)
 
 
 def read_csv(file_path: Path, encoding: str) -> Iterator[List[str]]:
-    with open(file_path, encoding=encoding, newline="") as file:
+    with file_path.open(encoding=encoding, newline="") as file:
         csv_reader = reader(file)
         yield from csv_reader

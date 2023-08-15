@@ -23,6 +23,7 @@ flake8 = "^6.1.0"
 black = "^23.3.0"
 isort = "^5.12.0"
 coverage = "^7.2.7"
+refurb = "^1.19.0"
 
 [tool.poetry.scripts]
 df_gettext_toolkit = "df_gettext_toolkit.cli:app"

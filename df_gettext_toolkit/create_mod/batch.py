@@ -17,7 +17,8 @@ def fetch_po_from_git(language: str, destination_path: Path) -> None:
     for resource in resources:
         response = requests.get(f"{PO_URL}/{resource}/{language.lower()}.po")
         response.raise_for_status()
-        with open(Path(destination_path / f"{resource}_{language.lower()}.po"), "w", encoding="utf-8") as file:
+        file_path = Path(destination_path / f"{resource}_{language.lower()}.po")
+        with file_path.open("w", encoding="utf-8") as file:
             file.write(response.text)
     logger.info(f"PO files for {language.upper()} downloaded")
 

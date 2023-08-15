@@ -15,7 +15,7 @@ def skip_text_set_header(file: TextIO) -> None:
 
 
 def extract_from_vanilla_text(file_name: Path, source_encoding: str):
-    with open(file_name, encoding=source_encoding) as file:
+    with file_name.open(encoding=source_encoding) as file:
         skip_text_set_header(file)
         for item in extract_from_speech_file(file, file_name.name):
             item.source_file = file_name.name

@@ -19,10 +19,12 @@ class TranslationItem:
     previous_untranslated_msgid: Optional[str] = None  # "#|"
 
     def __eq__(self, other):
-        if isinstance(other, TranslationItem):
-            return self.text == other.text and self.translation == other.translation and self.context == other.context
-        else:
-            return False
+        return (
+            isinstance(other, TranslationItem)
+            and self.text == other.text
+            and self.translation == other.translation
+            and self.context == other.context
+        )
 
 
 _default_header = b"""

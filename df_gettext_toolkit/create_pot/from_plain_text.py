@@ -23,7 +23,7 @@ def extract_translatables(files: Iterable[Path], join_paragraphs: bool) -> Itera
     for file_path in files:
         if file_path.is_file():
             print(file_path, file=sys.stderr)
-            with open(file_path) as file:
+            with file_path.open() as file:
                 yield from extract_translatables_from_file(file, file_path, join_paragraphs, keys)
 
 

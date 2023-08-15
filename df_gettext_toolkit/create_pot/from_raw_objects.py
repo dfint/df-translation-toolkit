@@ -8,7 +8,7 @@ from df_gettext_toolkit.utils.po_utils import TranslationItem, save_pot
 
 
 def extract_from_raw_file(file_name: Path, source_encoding: str) -> Iterator[TranslationItem]:
-    with open(file_name, encoding=source_encoding) as file:
+    with file_name.open(encoding=source_encoding) as file:
         for item in extract_translatables_from_raws(file):
             item.source_file = file_name.name
             yield item

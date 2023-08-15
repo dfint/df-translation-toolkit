@@ -12,6 +12,7 @@ updates:
           - "black"
           - "isort"
           - "coverage"
+          - "refurb"
 
   - package-ecosystem: "github-actions"
     directory: "/"

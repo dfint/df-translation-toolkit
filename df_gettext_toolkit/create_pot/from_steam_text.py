@@ -20,7 +20,7 @@ def traverse_vanilla_directories(vanilla_path: Path) -> Iterable[Path]:
 
 
 def get_raw_object_type(file_name: Path, source_encoding: str) -> str:
-    with open(file_name, encoding=source_encoding) as file:
+    with file_name.open(encoding=source_encoding) as file:
         for item in tokenize_raw_file(file):
             if item.is_tag:
                 object_tag = split_tag(item.text)

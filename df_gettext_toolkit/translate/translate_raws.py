@@ -16,8 +16,8 @@ def translate_single_raw_file(
     dictionary: Mapping[Tuple[str, Optional[str]], str],
     encoding: str,
 ) -> Iterator[str]:
-    with open(source_file_path, encoding="cp437") as src:
-        with open(destination_file_path, "w", encoding=encoding) as dest:
+    with source_file_path.open(encoding="cp437") as src:
+        with destination_file_path.open("w", encoding=encoding) as dest:
             yield destination_file_path.name
             for line in translate_raw_file(src, dictionary):
                 line = cleanup_string(line)
@@ -35,7 +35,7 @@ def translate_single_raw_file(
 
 
 def translate_raws(po_filename: Path, path: Path, encoding: str) -> Iterator[str]:
-    with open(po_filename, "r", encoding="utf-8") as pofile:
+    with po_filename.open("r", encoding="utf-8") as pofile:
         dictionary = {(item.id, item.context): item.string for item in read_po(pofile)}
 
     for file_path in path.glob("*.txt"):
