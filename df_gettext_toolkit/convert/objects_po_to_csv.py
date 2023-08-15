@@ -1,6 +1,7 @@
 from collections import defaultdict
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable, TextIO, Tuple
+from typing import TextIO
 
 import typer
 from babel.messages.pofile import read_po
@@ -11,15 +12,7 @@ from df_gettext_toolkit.utils import csv_utils
 from df_gettext_toolkit.utils.fix_translated_strings import cleanup_string, fix_spaces
 
 
-@logger.catch
-def get_translations_from_tag(original_tag, translation_tag):
-    original_parts = split_tag(original_tag)
-    translation_parts = split_tag(translation_tag)
-    assert original_parts[0] == translation_parts[0], "First part of a tag should not be translated"
-    assert len(original_parts) == len(translation_tag), "Tag parts count mismatch"
-    original_parts = original_parts[1:]
-    translation_parts = translation_parts[1:]
-
+def get_translations_from_tag_simple(original_parts: list[str], translation_parts: list[str]):
     tag_translations = defaultdict(list)
 
     for original, translation in zip(original_parts, translation_parts):
@@ -31,7 +24,19 @@ def get_translations_from_tag(original_tag, translation_tag):
         yield original, translations[0]
 
 
-def prepare_dictionary(dictionary: Iterable[Tuple[str, str]]) -> Iterable[Tuple[str, str]]:
+@logger.catch
+def get_translations_from_tag(original_tag: str, translation_tag: str):
+    original_parts = split_tag(original_tag)
+    translation_parts = split_tag(translation_tag)
+    assert original_parts[0] == translation_parts[0], "First part of a tag should not be translated"
+    assert len(original_parts) == len(translation_tag), "Tag parts count mismatch"
+    original_parts = original_parts[1:]
+    translation_parts = translation_parts[1:]
+
+    yield from get_translations_from_tag_simple(original_parts, translation_parts)
+
+
+def prepare_dictionary(dictionary: Iterable[tuple[str, str]]) -> Iterable[tuple[str, str]]:
     for original_string_tag, translation_tag in dictionary:
         if original_string_tag and translation_tag and translation_tag != original_string_tag:
             for original_string, translation in get_translations_from_tag(original_string_tag, translation_tag):
