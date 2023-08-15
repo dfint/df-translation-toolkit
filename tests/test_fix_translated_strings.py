@@ -37,7 +37,7 @@ def test_cleanup_string(original, fixed):
     ],
 )
 def test_fix_leading_spaces(text, translation, fixed):
-    assert fix_leading_spaces(text, translation, set()) == fixed
+    assert fix_leading_spaces(text, translation) == fixed
 
 
 @pytest.mark.parametrize(
@@ -48,7 +48,7 @@ def test_fix_leading_spaces(text, translation, fixed):
     ],
 )
 def test_fix_trailing_spaces(text, translation, fixed):
-    assert fix_trailing_spaces(text, translation, set()) == fixed
+    assert fix_trailing_spaces(text, translation) == fixed
 
 
 @pytest.mark.parametrize(

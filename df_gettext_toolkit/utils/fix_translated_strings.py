@@ -1,12 +1,11 @@
-from typing import Optional
-
 from unidecode import unidecode_expect_nonascii as unidecode
 
 
-def fix_leading_spaces(original_string: str, translation: str, exclusions: set):
-    if original_string in exclusions:
-        return translation
-
+def fix_leading_spaces(original_string: str, translation: str):
+    """
+    Adds missing space in the beginning of the translation.
+    Removes extra spaces, if the translation starts with "." or ",".
+    """
     if original_string.startswith(" ") and not translation.startswith(" "):
         translation = " " + translation
 
@@ -16,26 +15,22 @@ def fix_leading_spaces(original_string: str, translation: str, exclusions: set):
     return translation
 
 
-def fix_trailing_spaces(original_string: str, translation: str, exclusions: set):
-    if original_string in exclusions:
-        return translation
-
+def fix_trailing_spaces(original_string: str, translation: str):
+    """
+    Adds a missing trailing space.
+    """
     if original_string.endswith(" ") and not translation.endswith(" "):
         translation += " "
 
     return translation
 
 
-def fix_spaces(
-    original_string: str,
-    translation: str,
-    exclusions_leading: Optional[set] = None,
-    exclusions_trailing: Optional[set] = None,
-):
-    exclusions_leading = exclusions_leading or set()
-    exclusions_trailing = exclusions_trailing or set()
-    translation = fix_leading_spaces(original_string, translation, exclusions_leading)
-    translation = fix_trailing_spaces(original_string, translation, exclusions_trailing)
+def fix_spaces(original_string: str, translation: str):
+    """
+    Fixes leading and trailing spaces of the translation string
+    """
+    translation = fix_leading_spaces(original_string, translation)
+    translation = fix_trailing_spaces(original_string, translation)
     return translation
 
 
