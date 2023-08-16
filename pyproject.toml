@@ -47,5 +47,6 @@ line_length = 120
 [tool.ruff]
 line-length = 120
 select = ["E", "F", "UP"]
-ignore = ["F401", "UP015"]
+ignore = ["UP015"]
+unfixable = ["F401"]
 target-version = "py310"
