@@ -78,7 +78,7 @@ def prepare_dictionary(dictionary: Iterable[tuple[str, str]]) -> Iterable[tuple[
 def convert(po_file: TextIO, csv_file: TextIO):
     dictionary = [(item.id, item.string) for item in read_po(po_file) if item.id and item.string]
     csv_writer = csv_utils.writer(csv_file)
-    for original_string, translation in prepare_dictionary(dictionary):
+    for original_string, translation in dict(prepare_dictionary(dictionary)).items():
         csv_writer.writerow([original_string, translation])
 
 
