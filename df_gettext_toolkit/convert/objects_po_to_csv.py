@@ -19,14 +19,22 @@ def all_caps(string: str):
 def get_translations_from_tag_simple(original_parts: list[str], translation_parts: list[str]):
     tag_translations = defaultdict(list)
 
+    prev_original = None
+    prev_translation = None
     for original, translation in zip(original_parts, translation_parts):
-        if all_caps(original):
-            # don't translate caps parts like NP, SINGULAR, PLURAL, etc.
-            # (except for STP, but it is handled separately)
-            pass
+        original: str
+        if all_caps(original) or original.isdecimal():
+            valid = original == translation or original in ("STP", "NP", "SINGULAR", "PLURAL")
+            assert valid, f"Part {original!r} should not be translated"
+
+            if original == "STP" and translation != original and not all_caps(translation):
+                tag_translations[prev_original + "s"].append(translation)
+                tag_translations[prev_translation + "s"].append(translation)
         elif original:
             assert translation, "Translation should not be empty"
             tag_translations[original].append(translation)
+            prev_original = original
+            prev_translation = translation
 
     for original, translations in tag_translations.items():
         yield original, translations[0]
@@ -60,10 +68,10 @@ def get_translations_from_tag(original_tag: str, translation_tag: str):
     original_parts = original_parts[1:]
     translation_parts = translation_parts[1:]
 
-    if len(original_parts) == 2 and original_parts[1] == "STP":
-        yield from get_translations_from_tag_stp(original_parts, translation_parts)
-    else:
-        yield from get_translations_from_tag_simple(original_parts, translation_parts)
+    # if original_parts[1] == "STP":
+    #     yield from get_translations_from_tag_stp(original_parts, translation_parts)
+    # else:
+    yield from get_translations_from_tag_simple(original_parts, translation_parts)
 
 
 def prepare_dictionary(dictionary: Iterable[tuple[str, str]]) -> Iterable[tuple[str, str]]:
