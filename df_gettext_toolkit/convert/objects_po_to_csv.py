@@ -51,6 +51,9 @@ def get_translations_from_tag_stp(original_parts: list[str], translation_parts: 
 
 @logger.catch
 def get_translations_from_tag(original_tag: str, translation_tag: str):
+    assert translation_tag.startswith("[") and translation_tag.endswith("]"), "Wrong tag translation format"
+    assert all(char not in translation_tag[1:-1] for char in "[]"), "Wrong tag translation format"
+
     original_parts = split_tag(original_tag)
     translation_parts = split_tag(translation_tag)
     assert original_parts[0] == translation_parts[0], "First part of a tag should not be translated"
