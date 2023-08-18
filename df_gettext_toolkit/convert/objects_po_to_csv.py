@@ -24,6 +24,20 @@ def get_translations_from_tag_simple(original_parts: list[str], translation_part
         yield original, translations[0]
 
 
+def get_translations_from_tag_stp(original_parts: list[str], translation_parts: list[str]):
+    original = original_parts[0]
+    singular_translation = translation_parts[0]
+
+    yield original, singular_translation
+
+    plural_translation = translation_parts[1]
+    if plural_translation in ("STP", "NP"):
+        return
+
+    yield original + "s", plural_translation
+    yield singular_translation + "s", plural_translation
+
+
 @logger.catch
 def get_translations_from_tag(original_tag: str, translation_tag: str):
     original_parts = split_tag(original_tag)
@@ -33,7 +47,10 @@ def get_translations_from_tag(original_tag: str, translation_tag: str):
     original_parts = original_parts[1:]
     translation_parts = translation_parts[1:]
 
-    yield from get_translations_from_tag_simple(original_parts, translation_parts)
+    if len(original_parts) == 2 and original_parts[1] == "STP":
+        yield from get_translations_from_tag_stp(original_parts, translation_parts)
+    else:
+        yield from get_translations_from_tag_simple(original_parts, translation_parts)
 
 
 def prepare_dictionary(dictionary: Iterable[tuple[str, str]]) -> Iterable[tuple[str, str]]:
