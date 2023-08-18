@@ -28,7 +28,8 @@ ruff = "^0.0.284"
 
 [tool.poetry.scripts]
 df_gettext_toolkit = "df_gettext_toolkit.cli:app"
-convert = "df_gettext_toolkit.convert.cli:app"
+convert_hardcoded = "df_gettext_toolkit.convert.hardcoded_po_to_csv:app"
+convert_objects = "df_gettext_toolkit.convert.objects_po_to_csv:app"
 create_pot = "df_gettext_toolkit.create_pot.cli:app"
 create_mod = "df_gettext_toolkit.create_mod.cli:app"
 csv_bisect = "df_gettext_toolkit.csv_bisect.cli:app"
