@@ -57,7 +57,7 @@ def get_translations_from_tag(original_tag: str, translation_tag: str):
     original_parts = split_tag(original_tag)
     translation_parts = split_tag(translation_tag)
     assert original_parts[0] == translation_parts[0], "First part of a tag should not be translated"
-    assert len(original_parts) == len(translation_tag), "Tag parts count mismatch"
+    assert len(original_parts) == len(translation_parts), "Tag parts count mismatch"
     original_parts = original_parts[1:]
     translation_parts = translation_parts[1:]
 
