@@ -68,9 +68,6 @@ def get_translations_from_tag(original_tag: str, translation_tag: str):
     original_parts = original_parts[1:]
     translation_parts = translation_parts[1:]
 
-    # if original_parts[1] == "STP":
-    #     yield from get_translations_from_tag_stp(original_parts, translation_parts)
-    # else:
     yield from get_translations_from_tag_simple(original_parts, translation_parts)
 
 
