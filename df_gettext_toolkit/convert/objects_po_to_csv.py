@@ -12,12 +12,20 @@ from df_gettext_toolkit.utils import csv_utils
 from df_gettext_toolkit.utils.fix_translated_strings import cleanup_string, fix_spaces
 
 
+def all_caps(string: str):
+    return len(string) > 1 and string.isupper()
+
+
 def get_translations_from_tag_simple(original_parts: list[str], translation_parts: list[str]):
     tag_translations = defaultdict(list)
 
     for original, translation in zip(original_parts, translation_parts):
-        if original:
-            assert translation, "Translation to empty string"
+        if all_caps(original):
+            # don't translate caps parts like NP, SINGULAR, PLURAL, etc.
+            # (except for STP, but it is handled separately)
+            pass
+        elif original:
+            assert translation, "Translation should not be empty"
             tag_translations[original].append(translation)
 
     for original, translations in tag_translations.items():
@@ -25,6 +33,9 @@ def get_translations_from_tag_simple(original_parts: list[str], translation_part
 
 
 def get_translations_from_tag_stp(original_parts: list[str], translation_parts: list[str]):
+    """
+    Handle STP (standard plural) case
+    """
     original = original_parts[0]
     singular_translation = translation_parts[0]
 
