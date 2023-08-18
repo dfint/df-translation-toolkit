@@ -49,7 +49,6 @@ def get_translations_from_tag_stp(original_parts: list[str], translation_parts: 
     yield singular_translation + "s", plural_translation
 
 
-@logger.catch
 def get_translations_from_tag(original_tag: str, translation_tag: str):
     assert translation_tag.startswith("[") and translation_tag.endswith("]"), "Wrong tag translation format"
     assert all(char not in translation_tag[1:-1] for char in "[]"), "Wrong tag translation format"
@@ -70,9 +69,12 @@ def get_translations_from_tag(original_tag: str, translation_tag: str):
 def prepare_dictionary(dictionary: Iterable[tuple[str, str]]) -> Iterable[tuple[str, str]]:
     for original_string_tag, translation_tag in dictionary:
         if original_string_tag and translation_tag and translation_tag != original_string_tag:
-            for original_string, translation in get_translations_from_tag(original_string_tag, translation_tag):
-                translation = fix_spaces(original_string, translation)
-                yield original_string, cleanup_string(translation)
+            try:
+                for original_string, translation in get_translations_from_tag(original_string_tag, translation_tag):
+                    translation = fix_spaces(original_string, translation)
+                    yield original_string, cleanup_string(translation)
+            except AssertionError as ex:
+                logger.error(f"\nTag pair: {original_string_tag!r}, {translation_tag!r}\nError: {ex}")
 
 
 def convert(po_file: TextIO, csv_file: TextIO):
