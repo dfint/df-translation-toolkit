@@ -71,7 +71,7 @@ def get_translations_from_tag(original_tag: str, translation_tag: str):
     yield from get_translations_from_tag_simple(original_parts, translation_parts)
 
 
-def prepare_dictionary(dictionary: Iterable[tuple[str, str]]) -> Iterable[tuple[str, str]]:
+def prepare_dictionary(dictionary: Iterable[tuple[str, str]], errors_file: TextIO) -> Iterable[tuple[str, str]]:
     for original_string_tag, translation_tag in dictionary:
         if original_string_tag and translation_tag and translation_tag != original_string_tag:
             try:
@@ -79,13 +79,16 @@ def prepare_dictionary(dictionary: Iterable[tuple[str, str]]) -> Iterable[tuple[
                     translation = fix_spaces(original_string, translation)
                     yield original_string, cleanup_string(translation)
             except AssertionError as ex:
-                logger.error(f"\nTag pair: {original_string_tag!r}, {translation_tag!r}\nError: {ex}")
+                error_text = f"Tag pair: {original_string_tag!r}, {translation_tag!r}\nError: {ex}"
+                logger.error("\n" + error_text)
+                if errors_file:
+                    print(error_text, file=errors_file)
 
 
-def convert(po_file: TextIO, csv_file: TextIO):
+def convert(po_file: TextIO, csv_file: TextIO, error_file: TextIO = None):
     dictionary = [(item.id, item.string) for item in read_po(po_file) if item.id and item.string]
     csv_writer = csv_utils.writer(csv_file)
-    for original_string, translation in dict(prepare_dictionary(dictionary)).items():
+    for original_string, translation in dict(prepare_dictionary(dictionary, error_file)).items():
         csv_writer.writerow([original_string, translation])
 
 
@@ -93,7 +96,7 @@ app = typer.Typer()
 
 
 @app.command()
-def main(po_file: Path, csv_file: Path, encoding: str, append: bool = False):
+def main(po_file: Path, csv_file: Path, encoding: str, append: bool = False, errors_file: Path = None):
     """
     Convert a po file into a csv file in a specified encoding
     """
@@ -101,7 +104,11 @@ def main(po_file: Path, csv_file: Path, encoding: str, append: bool = False):
     with open(po_file, "r", encoding="utf-8") as pofile:
         mode = "a" if append else "w"
         with open(csv_file, mode, newline="", encoding=encoding, errors="replace") as outfile:
-            convert(pofile, outfile)
+            if errors_file:
+                errors_file = errors_file.open("w", encoding="utf-8")
+            convert(pofile, outfile, errors_file)
+            if errors_file:
+                errors_file.close()
 
 
 if __name__ == "__main__":
