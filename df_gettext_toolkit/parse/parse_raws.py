@@ -4,6 +4,10 @@ from typing import NamedTuple, TypeVar
 from df_gettext_toolkit.utils.po_utils import TranslationItem
 
 
+def all_caps(string: str):
+    return len(string) > 1 and string.isupper()
+
+
 def split_tag(s: str) -> list[str]:
     return s.strip("[]").split(":")
 

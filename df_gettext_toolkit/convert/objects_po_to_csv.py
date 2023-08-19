@@ -7,17 +7,14 @@ import typer
 from babel.messages.pofile import read_po
 from loguru import logger
 
-from df_gettext_toolkit.parse.parse_raws import split_tag
+from df_gettext_toolkit.parse.parse_raws import all_caps, split_tag
 from df_gettext_toolkit.utils import csv_utils
 from df_gettext_toolkit.utils.fix_translated_strings import cleanup_string, fix_spaces
 from df_gettext_toolkit.utils.maybe_open import maybe_open
+from df_gettext_toolkit.validation.validate_objects import validate_tag
 
 
-def all_caps(string: str):
-    return len(string) > 1 and string.isupper()
-
-
-def get_translations_from_tag_simple(original_parts: list[str], translation_parts: list[str]):
+def get_translations_from_tag_parts(original_parts: list[str], translation_parts: list[str]):
     tag_translations = defaultdict(list)
 
     prev_original = None
@@ -28,17 +25,10 @@ def get_translations_from_tag_simple(original_parts: list[str], translation_part
             valid = original == translation or original in ("STP", "NP", "SINGULAR", "PLURAL")
             assert valid, f"Part {original!r} should not be translated"
 
-            if original == "STP":
-                assert translation != "STP", (
-                    "Replace STP with a translation of the previous word in the tag in a plural form "
-                    "(otherwise, the game will create a plural form with adding -s at the end)"
-                )
-
-                if translation != original and not all_caps(translation):
-                    tag_translations[prev_original + "s"].append(translation)
-                    tag_translations[prev_translation + "s"].append(translation)
+            if original == "STP" and translation != original and not all_caps(translation):
+                tag_translations[prev_original + "s"].append(translation)
+                tag_translations[prev_translation + "s"].append(translation)
         elif original:
-            assert translation, "Translation should not be empty"
             tag_translations[original].append(translation)
             prev_original = original
             prev_translation = translation
@@ -47,23 +37,15 @@ def get_translations_from_tag_simple(original_parts: list[str], translation_part
         yield original, translations[0]
 
 
-def validate_brackets(tag: str):
-    return tag.startswith("[") and tag.endswith("]") and tag.count("[") == 1 and tag.count("]") == 1
-
-
 def get_translations_from_tag(original_tag: str, translation_tag: str):
-    assert len(translation_tag) > 2, "Too short or empty translation"
-    assert original_tag.strip() == original_tag, "Extra spaces at the beginning or at the end of the translation"
-    assert validate_brackets(translation_tag), "Wrong tag translation format"
+    validate_tag(original_tag, translation_tag)
 
     original_parts = split_tag(original_tag)
     translation_parts = split_tag(translation_tag)
-    assert original_parts[0] == translation_parts[0], "First part of a tag should not be translated"
-    assert len(original_parts) == len(translation_parts), "Tag parts count mismatch"
     original_parts = original_parts[1:]
     translation_parts = translation_parts[1:]
 
-    yield from get_translations_from_tag_simple(original_parts, translation_parts)
+    yield from get_translations_from_tag_parts(original_parts, translation_parts)
 
 
 def prepare_dictionary(dictionary: Iterable[tuple[str, str]], errors_file: TextIO) -> Iterable[tuple[str, str]]:

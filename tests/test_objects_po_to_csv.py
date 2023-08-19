@@ -1,6 +1,6 @@
 import pytest
 
-from df_gettext_toolkit.convert.objects_po_to_csv import get_translations_from_tag_simple
+from df_gettext_toolkit.convert.objects_po_to_csv import get_translations_from_tag_parts
 
 
 @pytest.mark.parametrize(
@@ -25,4 +25,4 @@ from df_gettext_toolkit.convert.objects_po_to_csv import get_translations_from_t
     ],
 )
 def test_get_translations_from_tag(original_parts, translation_parts, result):
-    assert list(get_translations_from_tag_simple(original_parts, translation_parts)) == result
+    assert list(get_translations_from_tag_parts(original_parts, translation_parts)) == result
