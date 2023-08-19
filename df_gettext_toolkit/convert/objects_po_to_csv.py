@@ -28,9 +28,15 @@ def get_translations_from_tag_simple(original_parts: list[str], translation_part
             valid = original == translation or original in ("STP", "NP", "SINGULAR", "PLURAL")
             assert valid, f"Part {original!r} should not be translated"
 
-            if original == "STP" and translation != original and not all_caps(translation):
-                tag_translations[prev_original + "s"].append(translation)
-                tag_translations[prev_translation + "s"].append(translation)
+            if original == "STP":
+                assert translation != "STP", (
+                    "Replace STP with a translation of the previous word in the tag in a plural form "
+                    "(otherwise, the game will create a plural form with adding -s at the end)"
+                )
+
+                if translation != original and not all_caps(translation):
+                    tag_translations[prev_original + "s"].append(translation)
+                    tag_translations[prev_translation + "s"].append(translation)
         elif original:
             assert translation, "Translation should not be empty"
             tag_translations[original].append(translation)
@@ -41,26 +47,14 @@ def get_translations_from_tag_simple(original_parts: list[str], translation_part
         yield original, translations[0]
 
 
-def get_translations_from_tag_stp(original_parts: list[str], translation_parts: list[str]):
-    """
-    Handle STP (standard plural) case
-    """
-    original = original_parts[0]
-    singular_translation = translation_parts[0]
-
-    yield original, singular_translation
-
-    plural_translation = translation_parts[1]
-    if plural_translation in ("STP", "NP"):
-        return
-
-    yield original + "s", plural_translation
-    yield singular_translation + "s", plural_translation
+def validate_brackets(tag: str):
+    return tag.startswith("[") and tag.endswith("]") and tag.count("[") == 1 and tag.count("]") == 1
 
 
 def get_translations_from_tag(original_tag: str, translation_tag: str):
-    assert translation_tag.startswith("[") and translation_tag.endswith("]"), "Wrong tag translation format"
-    assert all(char not in translation_tag[1:-1] for char in "[]"), "Wrong tag translation format"
+    assert len(translation_tag) > 2, "Too short or empty translation"
+    assert original_tag.strip() == original_tag, "Extra spaces at the beginning or at the end of the translation"
+    assert validate_brackets(translation_tag), "Wrong tag translation format"
 
     original_parts = split_tag(original_tag)
     translation_parts = split_tag(translation_tag)
@@ -80,10 +74,10 @@ def prepare_dictionary(dictionary: Iterable[tuple[str, str]], errors_file: TextI
                     translation = fix_spaces(original_string, translation)
                     yield original_string, cleanup_string(translation)
             except AssertionError as ex:
-                error_text = f"Tag pair: {original_string_tag!r}, {translation_tag!r}\nError: {ex}"
+                error_text = f"Error: {ex}\nProblematic tag pair: {original_string_tag!r}, {translation_tag!r}"
                 logger.error("\n" + error_text)
                 if errors_file:
-                    print(error_text, file=errors_file)
+                    print(error_text, sep="\n", file=errors_file)
 
 
 def convert(po_file: TextIO, csv_file: TextIO, error_file: TextIO = None):
