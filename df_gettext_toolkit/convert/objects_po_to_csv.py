@@ -10,6 +10,7 @@ from loguru import logger
 from df_gettext_toolkit.parse.parse_raws import split_tag
 from df_gettext_toolkit.utils import csv_utils
 from df_gettext_toolkit.utils.fix_translated_strings import cleanup_string, fix_spaces
+from df_gettext_toolkit.utils.maybe_open import maybe_open
 
 
 def all_caps(string: str):
@@ -104,11 +105,8 @@ def main(po_file: Path, csv_file: Path, encoding: str, append: bool = False, err
     with open(po_file, "r", encoding="utf-8") as pofile:
         mode = "a" if append else "w"
         with open(csv_file, mode, newline="", encoding=encoding, errors="replace") as outfile:
-            if errors_file:
-                errors_file = errors_file.open("w", encoding="utf-8")
-            convert(pofile, outfile, errors_file)
-            if errors_file:
-                errors_file.close()
+            with maybe_open(errors_file, "w", encoding="utf-8") as errors_file:
+                convert(pofile, outfile, errors_file)
 
 
 if __name__ == "__main__":
