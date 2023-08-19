@@ -23,10 +23,13 @@ def validate_tag_parts(original_parts: list[str], translation_parts: list[str]):
             assert valid, f"Part {original!r} should not be translated"
 
             if original == "STP":
-                assert translation != "STP", (
-                    "Replace STP with a translation of the previous word in the tag in a plural form, "
-                    "otherwise, the game will create a plural form with adding -s at the end. "
-                    "If the translation with adding -s at the end is valid for your language, just ignore this message."
-                )
+                # TODO: this should be a warning, not error
+                # assert translation != "STP", (
+                #     "Replace STP with a translation of the previous word in the tag in a plural form, "
+                #     "otherwise, the game will create a plural form with adding -s at the end. "
+                #     "If the translation with adding -s at the end is valid for your language, "
+                #     "just ignore this message."
+                # )
+                pass
         elif original:
             assert translation, "Translation should not be empty"
