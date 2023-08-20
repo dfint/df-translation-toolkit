@@ -22,9 +22,6 @@ def get_translations_from_tag_parts(original_parts: list[str], translation_parts
     for original, translation in zip(original_parts, translation_parts):
         original: str
         if all_caps(original) or original.isdecimal():
-            valid = original == translation or original in ("STP", "NP", "SINGULAR", "PLURAL")
-            assert valid, f"Part {original!r} should not be translated"
-
             if original == "STP" and translation != original and not all_caps(translation):
                 tag_translations[prev_original + "s"].append(translation)
                 tag_translations[prev_translation + "s"].append(translation)
@@ -59,7 +56,7 @@ def prepare_dictionary(dictionary: Iterable[tuple[str, str]], errors_file: TextI
                 error_text = f"Error: {ex}\nProblematic tag pair: {original_string_tag!r}, {translation_tag!r}"
                 logger.error("\n" + error_text)
                 if errors_file:
-                    print(error_text, sep="\n", file=errors_file)
+                    print(error_text, end="\n\n", file=errors_file)
 
 
 def convert(po_file: TextIO, csv_file: TextIO, error_file: TextIO = None):
