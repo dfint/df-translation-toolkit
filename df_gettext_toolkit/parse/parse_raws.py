@@ -23,11 +23,11 @@ def iterate_tags(s: str) -> Iterator[str]:
             tag_start = None
 
 
-translatable_tags = {"SINGULAR", "PLURAL", "STP", "NO_SUB", "NP", "NA"}
+translatable_tags = {"SINGULAR", "PLURAL", "STP", "NO_SUB", "NP"}
 
 
 def is_translatable(string: str) -> bool:
-    return string in translatable_tags or any("a" <= char <= "z" for char in string)
+    return string in translatable_tags or (any("a" <= char <= "z" for char in string) and string != "n/a")
 
 
 def join_tag(tag: Iterable[str]) -> str:
