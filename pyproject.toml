@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "df-gettext-toolkit"
-version = "0.6.3"
+version = "0.6.4"
 description = "Toolset to convert text extracted from DF to gettext format and aback"
 authors = ["insolor <insolor@gmail.com>", "aNNiPAk <annipak@yandex.ru>", "shevernitskiy <hwork@list.ru>"]
 license = "MIT"
