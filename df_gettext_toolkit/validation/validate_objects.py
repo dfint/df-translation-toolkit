@@ -22,6 +22,11 @@ def validate_tag_parts(original_parts: list[str], translation_parts: list[str]):
             valid = original == translation or original in ("STP", "NP", "SINGULAR", "PLURAL")
             assert valid, f"Part {original!r} should not be translated"
 
+            if original in {"SINGULAR", "PLURAL"}:
+                assert translation in {"SINGULAR", "PLURAL"}, (
+                    "SINGULAR can be changed only to PLURAL, and PLURAL can be changed only to SINGULAR",
+                )
+
             if original == "STP":
                 # TODO: this should be a warning, not error
                 # assert translation != "STP", (
