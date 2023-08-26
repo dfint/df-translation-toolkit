@@ -19,6 +19,9 @@ def validate_tag(original_tag: str, translation_tag: str):
 def validate_tag_parts(original_parts: list[str], translation_parts: list[str]):
     for original, translation in zip(original_parts, translation_parts):
         if all_caps(original) or original.isdecimal():
+            valid = not (original != translation and original == translation.strip())
+            assert valid, "Don't add extra spaces at the beginning or at the end of a tag part"
+
             valid = original == translation or original in ("STP", "NP", "SINGULAR", "PLURAL")
             assert valid, f"Part {original!r} should not be translated"
 
