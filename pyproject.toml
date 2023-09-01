@@ -24,7 +24,7 @@ black = "^23.3.0"
 isort = "^5.12.0"
 coverage = "^7.2.7"
 refurb = "^1.19.0"
-ruff = "^0.0.284"
+ruff = "^0.0.286"
 
 [tool.poetry.scripts]
 df_gettext_toolkit = "df_gettext_toolkit.cli:app"
