@@ -1,8 +1,8 @@
-# df-gettext-toolkit
+# df-translation-toolkit
 
-[![Test](https://github.com/dfint/df-gettext-toolkit/actions/workflows/test.yml/badge.svg)](https://github.com/dfint/df-gettext-toolkit/actions/workflows/test.yml)
-[![Coverage Status](https://coveralls.io/repos/github/dfint/df-gettext-toolkit/badge.svg?branch=master)](https://coveralls.io/github/dfint/df-gettext-toolkit?branch=master)
-[![Maintainability](https://api.codeclimate.com/v1/badges/8f5de82303b55de3b930/maintainability)](https://codeclimate.com/github/dfint/df-gettext-toolkit/maintainability)
+[![Test](https://github.com/dfint/df-translation-toolkit/actions/workflows/test.yml/badge.svg)](https://github.com/dfint/df-translation-toolkit/actions/workflows/test.yml)
+[![Coverage Status](https://coveralls.io/repos/github/dfint/df-translation-toolkit/badge.svg?branch=master)](https://coveralls.io/github/dfint/df-translation-toolkit?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/8f5de82303b55de3b930/maintainability)](https://codeclimate.com/github/dfint/df-translation-toolkit/maintainability)
 
 Toolset to convert text from DF between different formats and prepare it for use in the game
 

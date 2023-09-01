@@ -1,9 +1,9 @@
-# `python -m df_gettext_toolkit`
+# `python -m df_translation_toolkit`
 
 **Usage**:
 
 ```console
-$ python -m df_gettext_toolkit [OPTIONS] COMMAND [ARGS]...
+$ python -m df_translation_toolkit [OPTIONS] COMMAND [ARGS]...
 ```
 
 **Options**:
@@ -17,12 +17,12 @@ $ python -m df_gettext_toolkit [OPTIONS] COMMAND [ARGS]...
 * `convert`
 * `create_pot`
 
-## `python -m df_gettext_toolkit convert`
+## `python -m df_translation_toolkit convert`
 
 **Usage**:
 
 ```console
-$ python -m df_gettext_toolkit convert [OPTIONS] COMMAND [ARGS]...
+$ python -m df_translation_toolkit convert [OPTIONS] COMMAND [ARGS]...
 ```
 
 **Options**:
@@ -33,14 +33,14 @@ $ python -m df_gettext_toolkit convert [OPTIONS] COMMAND [ARGS]...
 
 * `hardcoded_to_csv`: Convert a po file into a csv file in a...
 
-### `python -m df_gettext_toolkit convert po_to_csv`
+### `python -m df_translation_toolkit convert po_to_csv`
 
 Convert a po file into a csv file in a specified encoding
 
 **Usage**:
 
 ```console
-$ python -m df_gettext_toolkit convert po_to_csv [OPTIONS] PO_FILE CSV_FILE ENCODING
+$ python -m df_translation_toolkit convert po_to_csv [OPTIONS] PO_FILE CSV_FILE ENCODING
 ```
 
 **Arguments**:
@@ -53,12 +53,12 @@ $ python -m df_gettext_toolkit convert po_to_csv [OPTIONS] PO_FILE CSV_FILE ENCO
 
 * `--help`: Show this message and exit.
 
-## `python -m df_gettext_toolkit create_pot`
+## `python -m df_translation_toolkit create_pot`
 
 **Usage**:
 
 ```console
-$ python -m df_gettext_toolkit create_pot [OPTIONS] COMMAND [ARGS]...
+$ python -m df_translation_toolkit create_pot [OPTIONS] COMMAND [ARGS]...
 ```
 
 **Options**:
@@ -70,12 +70,12 @@ $ python -m df_gettext_toolkit create_pot [OPTIONS] COMMAND [ARGS]...
 * `from_steam_text`
 * `from_string_dump`
 
-### `python -m df_gettext_toolkit create_pot from_steam_text`
+### `python -m df_translation_toolkit create_pot from_steam_text`
 
 **Usage**:
 
 ```console
-$ python -m df_gettext_toolkit create_pot from_steam_text [OPTIONS] VANILLA_PATH DESTINATION_PATH
+$ python -m df_translation_toolkit create_pot from_steam_text [OPTIONS] VANILLA_PATH DESTINATION_PATH
 ```
 
 **Arguments**:
@@ -88,12 +88,12 @@ $ python -m df_gettext_toolkit create_pot from_steam_text [OPTIONS] VANILLA_PATH
 * `--source-encoding TEXT`: [default: cp437]
 * `--help`: Show this message and exit.
 
-### `python -m df_gettext_toolkit create_pot from_string_dump`
+### `python -m df_translation_toolkit create_pot from_string_dump`
 
 **Usage**:
 
 ```console
-$ python -m df_gettext_toolkit create_pot from_string_dump [OPTIONS] SOURCE_FILE DESTINATION_FILE
+$ python -m df_translation_toolkit create_pot from_string_dump [OPTIONS] SOURCE_FILE DESTINATION_FILE
 ```
 
 **Arguments**:
