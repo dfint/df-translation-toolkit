@@ -1,6 +1,6 @@
 import pytest
 
-from df_gettext_toolkit.utils.fix_translated_strings import (
+from df_translation_toolkit.utils.fix_translated_strings import (
     cleanup_string,
     fix_leading_spaces,
     fix_spaces,

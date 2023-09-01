@@ -1,6 +1,6 @@
 import pytest
 
-from df_gettext_toolkit.convert.objects_po_to_csv import get_translations_from_tag_parts
+from df_translation_toolkit.convert.objects_po_to_csv import get_translations_from_tag_parts
 
 
 @pytest.mark.parametrize(
