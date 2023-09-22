@@ -73,9 +73,9 @@ def main(vanilla_path: Path, destination_path: Path, source_encoding: str = "cp4
                 if not result:
                     continue
                 else:
-                    key, data = result
+                    group, data = result
 
-                results[key].extend(data)
+                results[group].extend(data)
 
         for group, data in results.items():
             if data:
