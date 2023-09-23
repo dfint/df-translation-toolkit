@@ -32,7 +32,7 @@ def bisect(file_path: Path, encoding: str, data: list[list[str]]):
         if bad:
             confirmed = True
         else:
-            confirmed = input("Is it bad (Y/N)? ").upper() == "Y"
+            confirmed = input("Is it bad (y/n)? ").upper() == "y"
 
         if not confirmed:
             return False
@@ -41,7 +41,7 @@ def bisect(file_path: Path, encoding: str, data: list[list[str]]):
             print(f"Found string, line number {start+1}:")
             print(data[start])
 
-            confirmed = input("Exclude from csv (Y/N)? ").upper() == "Y"
+            confirmed = input("Exclude from csv (y/n)? ").upper() == "y"
             if confirmed:
                 csv_utils.write_csv(file_path, encoding, data[:start] + data[start + 1 :])
 
@@ -66,6 +66,6 @@ def main(csv_file: Path, encoding: str):
             data = list(csv_utils.read_csv(backup_path, encoding))
             bisect(csv_file, encoding, data)
     finally:
-        confirmed = input("Restore from backup (Y/N)? ").upper() == "Y"
+        confirmed = input("Restore from backup (y/n)? ").upper() == "y"
         if confirmed:
             shutil.copy(backup_path, csv_file)
