@@ -24,7 +24,7 @@ black = "^23.9.1"
 isort = "^5.12.0"
 coverage = "^7.3.1"
 refurb = "^1.21.0"
-ruff = "^0.0.286"
+ruff = "^0.0.291"
 
 [tool.poetry.scripts]
 df_translation_toolkit = "df_translation_toolkit.cli:app"
