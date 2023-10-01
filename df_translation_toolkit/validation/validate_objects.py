@@ -7,8 +7,8 @@ def validate_brackets(tag: str) -> bool:
 
 def validate_tag(original_tag: str, translation_tag: str):
     assert len(translation_tag) > 2, "Too short or empty translation"
+    assert validate_brackets(translation_tag.strip()), "Wrong tag translation format (fix square brackets)"
     assert translation_tag.strip() == translation_tag, "Extra spaces at the beginning or at the end of the translation"
-    assert validate_brackets(translation_tag), "Wrong tag translation format"
 
     original_parts = split_tag(original_tag)
     translation_parts = split_tag(translation_tag)
