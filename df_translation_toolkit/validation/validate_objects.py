@@ -1,7 +1,7 @@
 from df_translation_toolkit.parse.parse_raws import all_caps, split_tag
 
 
-def validate_brackets(tag: str):
+def validate_brackets(tag: str) -> bool:
     return tag.startswith("[") and tag.endswith("]") and tag.count("[") == 1 and tag.count("]") == 1
 
 
