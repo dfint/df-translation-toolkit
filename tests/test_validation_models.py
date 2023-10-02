@@ -43,5 +43,5 @@ def test_validation_problem_contains_errors(test_data, expected):
         ([ValidationProblem("Warning message", ProblemSeverity.WARNING)], "Warning: Warning message"),
     ]
 )
-def test_validation_problem_contains_errors(test_data, expected):
+def test_validation_exception_str(test_data, expected):
     assert str(ValidationException(test_data)) == expected
