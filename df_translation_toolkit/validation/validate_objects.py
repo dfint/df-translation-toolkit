@@ -1,41 +1,61 @@
+from typing import Iterator
+
 from df_translation_toolkit.parse.parse_raws import all_caps, split_tag
+from df_translation_toolkit.validation.validation_models import ProblemSeverity, ValidationProblem
 
 
 def validate_brackets(tag: str) -> bool:
     return tag.startswith("[") and tag.endswith("]") and tag.count("[") == 1 and tag.count("]") == 1
 
 
-def validate_tag(original_tag: str, translation_tag: str):
-    assert len(translation_tag) > 2, "Too short or empty translation"
-    assert validate_brackets(translation_tag.strip()), "Wrong tag translation format (fix square brackets)"
-    assert translation_tag.strip() == translation_tag, "Extra spaces at the beginning or at the end of the translation"
+def validate_tag(original_tag: str, translation_tag: str) -> Iterator[ValidationProblem]:
+    if len(translation_tag) <= 2:
+        yield ValidationProblem("Too short or empty translation")
+        return
+
+    if not translation_tag.strip() == translation_tag:
+        yield ValidationProblem("Extra spaces at the beginning or at the end of the translation")
+        translation_tag = translation_tag.strip()
+        # No return to check issues with brackets after stripping spaces
+
+    if not validate_brackets(translation_tag):
+        yield ValidationProblem("Wrong tag translation format (fix square brackets)")
+        return
 
     original_parts = split_tag(original_tag)
     translation_parts = split_tag(translation_tag)
-    assert len(original_parts) == len(translation_parts), "Tag parts count mismatch"
-    validate_tag_parts(original_parts, translation_parts)
+
+    if len(original_parts) != len(translation_parts):
+        yield ValidationProblem("Tag parts count mismatch")
+        return
+
+    yield from validate_tag_parts(original_parts, translation_parts)
 
 
-def validate_tag_parts(original_parts: list[str], translation_parts: list[str]):
+def validate_tag_parts(original_parts: list[str], translation_parts: list[str]) -> Iterator[ValidationProblem]:
     for original, translation in zip(original_parts, translation_parts):
         if all_caps(original) or original.isdecimal():
             valid = not (original != translation and original == translation.strip())
-            assert valid, "Don't add extra spaces at the beginning or at the end of a tag part"
+            if not valid:
+                yield ValidationProblem("Don't add extra spaces at the beginning or at the end of a tag part")
 
             valid = original == translation or original in ("STP", "NP", "SINGULAR", "PLURAL")
-            assert valid, f"Part {original!r} should not be translated"
+            if not valid:
+                yield ValidationProblem(f"Part {original!r} should not be translated")
 
             valid = original not in {"SINGULAR", "PLURAL"} or translation in {"SINGULAR", "PLURAL"}
-            assert valid, "SINGULAR can be changed only to PLURAL, and PLURAL can be changed only to SINGULAR"
+            if not valid:
+                yield ValidationProblem(
+                    "SINGULAR can be changed only to PLURAL, and PLURAL can be changed only to SINGULAR"
+                )
 
-            if original == "STP":
-                # TODO: this should be a warning, not error
-                # assert translation != "STP", (
-                #     "Replace STP with a translation of the previous word in the tag in a plural form, "
-                #     "otherwise, the game will create a plural form with adding -s at the end. "
-                #     "If the translation with adding -s at the end is valid for your language, "
-                #     "just ignore this message."
-                # )
-                pass
-        elif original:
-            assert translation, "Translation should not be empty"
+            if original == "STP" and translation == "STP":
+                yield ValidationProblem(
+                    "Replace STP with a translation of the previous word in the tag in a plural form, "
+                    "otherwise, the game will create a plural form with adding -s at the end. "
+                    "If the translation with adding -s at the end is valid for your language, "
+                    "just ignore this message.",
+                    ProblemSeverity.WARNING,
+                )
+        elif original and not translation:
+            yield ValidationProblem("Translation should not be empty")

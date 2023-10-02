@@ -12,6 +12,7 @@ from df_translation_toolkit.utils import csv_utils
 from df_translation_toolkit.utils.fix_translated_strings import cleanup_string, fix_spaces
 from df_translation_toolkit.utils.maybe_open import maybe_open
 from df_translation_toolkit.validation.validate_objects import validate_tag
+from df_translation_toolkit.validation.validation_models import ValidationException, ValidationProblem
 
 
 def get_translations_from_tag_parts(original_parts: list[str], translation_parts: list[str]):
@@ -35,7 +36,9 @@ def get_translations_from_tag_parts(original_parts: list[str], translation_parts
 
 
 def get_translations_from_tag(original_tag: str, translation_tag: str):
-    validate_tag(original_tag, translation_tag)
+    validation_problems = list(validate_tag(original_tag, translation_tag))
+    if ValidationProblem.contains_errors(validation_problems):
+        raise ValidationException(validation_problems)
 
     original_parts = split_tag(original_tag)
     translation_parts = split_tag(translation_tag)
@@ -43,6 +46,7 @@ def get_translations_from_tag(original_tag: str, translation_tag: str):
     translation_parts = translation_parts[1:]
 
     yield from get_translations_from_tag_parts(original_parts, translation_parts)
+    raise ValidationException(validation_problems)  # pass warnings
 
 
 def prepare_dictionary(dictionary: Iterable[tuple[str, str]], errors_file: TextIO) -> Iterable[tuple[str, str]]:
@@ -52,8 +56,8 @@ def prepare_dictionary(dictionary: Iterable[tuple[str, str]], errors_file: TextI
                 for original_string, translation in get_translations_from_tag(original_string_tag, translation_tag):
                     translation = fix_spaces(original_string, translation)
                     yield original_string, cleanup_string(translation)
-            except AssertionError as ex:
-                error_text = f"Error: {ex}\nProblematic tag pair: {original_string_tag!r}, {translation_tag!r}"
+            except ValidationException as ex:
+                error_text = f"Problematic tag pair: {original_string_tag!r}, {translation_tag!r}\nProblems:\n{ex}"
                 logger.error("\n" + error_text)
                 if errors_file:
                     print(error_text, end="\n\n", file=errors_file)
