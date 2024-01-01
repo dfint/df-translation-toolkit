@@ -16,15 +16,15 @@ jinja2 = "^3.1.2"
 cairosvg = "^2.7.0"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.4.3"
+pytest = "^7.4.4"
 pytest-cov = "^4.1.0"
 pytest-mock = "^3.12.0"
 flake8 = "^6.1.0"
-black = "^23.11.0"
-isort = "^5.12.0"
-coverage = "^7.3.2"
-refurb = "^1.24.0"
-ruff = "^0.1.6"
+black = "^23.12.1"
+isort = "^5.13.2"
+coverage = "^7.4.0"
+refurb = "^1.26.0"
+ruff = "^0.1.9"
 
 [tool.poetry.scripts]
 df_translation_toolkit = "df_translation_toolkit.cli:app"
