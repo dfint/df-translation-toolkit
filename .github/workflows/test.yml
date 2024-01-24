@@ -46,3 +46,5 @@ jobs:
 
     - name: Upload coverage data to coveralls.io
       uses: coverallsapp/github-action@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
