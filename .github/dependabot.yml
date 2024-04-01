@@ -20,6 +20,6 @@ updates:
     schedule:
       interval: "monthly"
     groups:
-      all:
+      github-pages:
         patterns:
           - "*"
