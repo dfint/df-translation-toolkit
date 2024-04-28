@@ -4,13 +4,13 @@ from pathlib import Path
 from typing import TextIO
 
 import typer
-from babel.messages.pofile import read_po
 from loguru import logger
 
 from df_translation_toolkit.parse.parse_raws import all_caps, split_tag
 from df_translation_toolkit.utils import csv_utils
 from df_translation_toolkit.utils.fix_translated_strings import cleanup_string, fix_spaces
 from df_translation_toolkit.utils.maybe_open import maybe_open
+from df_translation_toolkit.utils.po_utils import simple_read_po
 from df_translation_toolkit.validation.validate_objects import validate_tag
 from df_translation_toolkit.validation.validation_models import ValidationException, ValidationProblem
 
@@ -64,8 +64,9 @@ def prepare_dictionary(dictionary: Iterable[tuple[str, str]], errors_file: TextI
 
 
 def convert(po_file: TextIO, csv_file: TextIO, error_file: TextIO = None):
-    dictionary = [(item.id, item.string) for item in read_po(po_file) if item.id and item.string]
+    dictionary = simple_read_po(po_file)
     csv_writer = csv_utils.writer(csv_file)
+
     for original_string, translation in dict(prepare_dictionary(dictionary, error_file)).items():
         csv_writer.writerow([original_string, translation])
 

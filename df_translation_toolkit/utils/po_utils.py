@@ -3,7 +3,8 @@ from dataclasses import dataclass
 from typing import BinaryIO
 
 from babel.messages import Catalog
-from babel.messages.pofile import write_po
+from babel.messages.pofile import read_po, write_po
+from typing_extensions import TextIO
 
 
 @dataclass
@@ -44,3 +45,7 @@ def save_pot(po_file: BinaryIO, template: Iterable[TranslationItem]):
 
     po_file.write(_default_header + b"\n\n")
     write_po(po_file, catalog, omit_header=True)
+
+
+def simple_read_po(po_file: TextIO) -> list[tuple[str, str]]:
+    return [(item.id, item.string) for item in read_po(po_file) if item.id and item.string]
