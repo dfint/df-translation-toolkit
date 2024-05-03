@@ -32,7 +32,6 @@ convert_hardcoded = "df_translation_toolkit.convert.hardcoded_po_to_csv:app"
 convert_objects = "df_translation_toolkit.convert.objects_po_to_csv:app"
 create_pot = "df_translation_toolkit.create_pot.cli:app"
 create_mod = "df_translation_toolkit.create_mod.cli:app"
-csv_bisect = "df_translation_toolkit.csv_bisect.cli:app"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
