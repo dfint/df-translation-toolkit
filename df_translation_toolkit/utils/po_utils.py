@@ -4,7 +4,7 @@ from typing import BinaryIO
 
 from babel.messages import Catalog
 from babel.messages.pofile import read_po, write_po
-from typing_extensions import TextIO
+from typing import TextIO
 
 
 @dataclass

@@ -1,4 +1,4 @@
-from typing import Iterator
+from collections.abc import Iterator
 
 from df_translation_toolkit.parse.parse_raws import all_caps, split_tag
 from df_translation_toolkit.validation.validation_models import ProblemSeverity, ValidationProblem
