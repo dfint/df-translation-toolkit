@@ -39,8 +39,7 @@ def translate_files(
                     po_file_path = po_directory / po_filename
 
                     if translate:
-                        for filename in function(po_file_path, cur_dir, encoding):
-                            yield filename
+                        yield from function(po_file_path, cur_dir, encoding)
 
 
 def main(
