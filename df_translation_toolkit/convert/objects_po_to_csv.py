@@ -46,7 +46,8 @@ def get_translations_from_tag(original_tag: str, translation_tag: str):
     translation_parts = translation_parts[1:]
 
     yield from get_translations_from_tag_parts(original_parts, translation_parts)
-    raise ValidationException(validation_problems)  # pass warnings
+    if validation_problems:
+        raise ValidationException(validation_problems)  # pass warnings
 
 
 def prepare_dictionary(dictionary: Iterable[tuple[str, str]], errors_file: TextIO) -> Iterable[tuple[str, str]]:
