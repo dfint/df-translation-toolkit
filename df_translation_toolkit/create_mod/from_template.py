@@ -104,7 +104,7 @@ def get_dictionaries(translation_path: Path, language: str) -> Dictionaries:
             if file.is_file() and file.stat().st_mtime > mtime:
                 po_files[po_file] = file
         if not po_files[po_file].is_file():
-            raise Exception(f"Unable to find {po_file} po file for language {language}")
+            raise ValueError(f"Unable to find {po_file} po file for language {language}")
 
     with open(po_files["objects"], encoding="utf-8") as pofile:
         dictionary_object: Mapping[tuple[str, str | None], str] = {

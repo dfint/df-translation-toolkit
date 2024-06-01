@@ -31,7 +31,7 @@ def parse_plain_text_file(
 
     paragraph: list[str] = []
 
-    # FIXME: join_paragraphs must only affect on paragraph joining, not line skipping
+    # FIXME(@insolor): join_paragraphs must only affect on paragraph joining, not line skipping
     # so the first line must be skipped before the text is fed to the function
     if join_paragraphs:
         # The first line contains file name, skip it
