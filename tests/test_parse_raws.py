@@ -72,7 +72,7 @@ from tests.strip_margin import strip_margin
                 |[TWO_HANDED:27500]
                 |[MINIMUM_SIZE:22500]
                 |[MATERIAL_SIZE:1]
-                |[ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:5000] - 5000 is not translatable 
+                |[ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:5000] - 5000 is not translatable
                 |    [ATTACK_PREPARE_AND_RECOVER:4:4]
                 |    [ATTACK_FLAG_BAD_MULTIATTACK]
                 """,

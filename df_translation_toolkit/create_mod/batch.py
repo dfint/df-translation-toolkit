@@ -31,7 +31,7 @@ def main(vanilla_path: Path, destination_path: Path, encoding: str, languages: l
         try:
             fetch_po_from_git(language, destination_path)
         except HTTPError as e:
-            raise Exception(f"Unable to download po file for language {language}. Error: {e.code}, {e.reason}")
+            raise Exception(f"Unable to download po file for language {language}. Error: {e.code}, {e.reason}") from e
         Path.mkdir(destination_path / language.lower(), parents=True, exist_ok=True)
         template_from_vanilla(vanilla_path, destination_path / language.lower())
         from_template(destination_path / language.lower(), destination_path, language, encoding)

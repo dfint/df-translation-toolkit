@@ -15,7 +15,7 @@ def translate_plain_text_file(
     dictionary: Mapping[str, str],
     encoding: str,
     join_paragraphs: bool,
-):
+) -> None:
     with source_file_path.open() as source_file:
         with destination_file_path.open("w", encoding=encoding) as destination_file:
             yield destination_file_path.name

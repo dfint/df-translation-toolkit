@@ -1,8 +1,8 @@
-from collections.abc import Iterable
+from collections.abc import Iterable, Iterator
 from typing import NamedTuple
 
 
-def skip_tags(s):
+def skip_tags(s: str) -> Iterator[str]:
     opened = 0
     for char in s:
         if char == "[":
@@ -14,13 +14,17 @@ def skip_tags(s):
 
 
 class PlainTextFileToken(NamedTuple):
-    test: str
+    text: str
     is_translatable: bool
     line_number: int
 
 
-def parse_plain_text_file(lines: Iterable[str], join_paragraphs=True, start_line=1) -> Iterable[PlainTextFileToken]:
-    def local_is_translatable(s):
+def parse_plain_text_file(
+    lines: Iterable[str],
+    join_paragraphs: bool = True,
+    start_line: int = 1,
+) -> Iterable[PlainTextFileToken]:
+    def local_is_translatable(s: str) -> bool:
         return any(char.islower() for char in skip_tags(s))
 
     lines = iter(lines)
@@ -31,7 +35,7 @@ def parse_plain_text_file(lines: Iterable[str], join_paragraphs=True, start_line
     # so the first line must be skipped before the text is fed to the function
     if join_paragraphs:
         # The first line contains file name, skip it
-        yield PlainTextFileToken(next(lines), False, start_line)
+        yield PlainTextFileToken(text=next(lines), is_translatable=False, line_number=start_line)
         start_line += 1
 
     paragraph_start_line = start_line
@@ -41,29 +45,41 @@ def parse_plain_text_file(lines: Iterable[str], join_paragraphs=True, start_line
             if local_is_translatable(line):
                 if line.startswith("[") and not (paragraph and paragraph[-1][-1].isalpha()):
                     if paragraph:
-                        yield PlainTextFileToken(join_paragraph(paragraph), True, paragraph_start_line)
+                        yield PlainTextFileToken(
+                            text=join_paragraph(paragraph),
+                            is_translatable=True,
+                            line_number=paragraph_start_line,
+                        )
                         paragraph = []
                         paragraph_start_line = line_number
 
                     if line.rstrip().endswith("]"):
-                        yield PlainTextFileToken(line, True, line_number)
+                        yield PlainTextFileToken(text=line, is_translatable=True, line_number=line_number)
                     else:
                         paragraph.append(line)
                 else:
                     paragraph.append(line)
             else:
                 if paragraph:
-                    yield PlainTextFileToken(join_paragraph(paragraph), True, paragraph_start_line)
+                    yield PlainTextFileToken(
+                        text=join_paragraph(paragraph),
+                        is_translatable=True,
+                        line_number=paragraph_start_line,
+                    )
                     paragraph = []
                     paragraph_start_line = line_number
 
-                yield PlainTextFileToken(line, False, line_number)  # Not translatable line
+                yield PlainTextFileToken(
+                    text=line,
+                    is_translatable=False,
+                    line_number=line_number,
+                )  # Not translatable line
         else:
-            yield PlainTextFileToken(line, local_is_translatable(line), line_number)
+            yield PlainTextFileToken(text=line, is_translatable=local_is_translatable(line), line_number=line_number)
 
     if paragraph:
-        yield PlainTextFileToken(join_paragraph(paragraph), True, paragraph_start_line)
+        yield PlainTextFileToken(text=join_paragraph(paragraph), is_translatable=True, line_number=paragraph_start_line)
 
 
-def join_paragraph(paragraph):
+def join_paragraph(paragraph: Iterable[str]) -> str:
     return "\n".join(paragraph)

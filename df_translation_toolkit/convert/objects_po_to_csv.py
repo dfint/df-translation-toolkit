@@ -1,5 +1,5 @@
 from collections import defaultdict
-from collections.abc import Iterable
+from collections.abc import Iterable, Iterator
 from pathlib import Path
 from typing import TextIO
 
@@ -15,7 +15,9 @@ from df_translation_toolkit.validation.validate_objects import validate_tag
 from df_translation_toolkit.validation.validation_models import ValidationException, ValidationProblem
 
 
-def get_translations_from_tag_parts(original_parts: list[str], translation_parts: list[str]):
+def get_translations_from_tag_parts(
+    original_parts: list[str], translation_parts: list[str]
+) -> Iterator[tuple[str, str]]:
     tag_translations = defaultdict(list)
 
     prev_original = None

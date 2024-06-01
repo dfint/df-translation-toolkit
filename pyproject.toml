@@ -53,6 +53,9 @@ select = ["ALL"]
 ignore = [
     "D",
     "RUF001",
+    "ANN101",
+    "PTH123",
+    "T201",
 ]
 fixable = ["ALL"]
 unfixable = ["F401"]
