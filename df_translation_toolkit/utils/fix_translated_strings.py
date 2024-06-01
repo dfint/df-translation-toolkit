@@ -46,7 +46,7 @@ _character_translation_table = str.maketrans(
         "\ufeff": None,
         "\u200b": None,
         "—": "-",  # Replace Em Dash with the standard dash (unidecode replaces it with two dash symbols)
-    }
+    },
 )
 
 

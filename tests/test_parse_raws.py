@@ -108,7 +108,7 @@ from tests.strip_margin import strip_margin
                 |        [DEFAULT_RELSIZE:2000]
                 |    [BP:UB:body:bodies][UPPERBODY][LOWERBODY][HEAD][THOUGHT][CATEGORY:BODY][FLIER]  # Duplicate entry - must be ignored
                 |        [DEFAULT_RELSIZE:2000]
-                """
+                """,
             ).strip(),
             [
                 TranslationItem(context="BODY:BASIC_1PARTBODY", text="[BP:UB:body:bodies]"),
