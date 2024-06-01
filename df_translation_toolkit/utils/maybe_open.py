@@ -3,7 +3,7 @@ from pathlib import Path
 
 
 @contextmanager
-def maybe_open(file_name: str | Path, *args, **kwargs):
+def maybe_open(file_name: str | Path, *args, **kwargs) -> None:
     file = None
     try:
         if file_name:

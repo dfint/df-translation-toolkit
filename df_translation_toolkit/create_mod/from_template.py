@@ -54,11 +54,18 @@ def localize_directory(
             with backup(file_path) as bak_name:
                 if object_type == "TEXT_SET":
                     yield from translate_plain_text_file(
-                        bak_name, file_path, dictionaries.dictionary_textset, destination_encoding, False,
+                        bak_name,
+                        file_path,
+                        dictionaries.dictionary_textset,
+                        destination_encoding,
+                        False,
                     )
                 else:
                     yield from translate_single_raw_file(
-                        bak_name, file_path, dictionaries.dictionary_object, destination_encoding,
+                        bak_name,
+                        file_path,
+                        dictionaries.dictionary_object,
+                        destination_encoding,
                     )
 
 
@@ -116,8 +123,11 @@ def main(
     destination_encoding: str,
     source_encoding: str = "cp437",
 ) -> None:
-    assert template_path.exists(), "Source path doesn't exist"
-    assert translation_path.exists(), "Translation path doesn't exist"
+    if not template_path.exists():
+        raise ValueError("Source path doesn't exist")
+
+    if not translation_path.exists():
+        raise ValueError("Translation path doesn't exist")
 
     dictionaries = get_dictionaries(translation_path, language)
 

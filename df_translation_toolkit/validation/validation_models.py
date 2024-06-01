@@ -25,7 +25,7 @@ class ValidationProblem(NamedTuple):
 
 
 class ValidationException(Exception):
-    def __init__(self, problems: list[ValidationProblem]):
+    def __init__(self, problems: list[ValidationProblem]) -> None:
         self.problems = problems
 
     def __str__(self) -> str:

@@ -17,7 +17,7 @@ def prepare_dictionary(dictionary: Iterable[tuple[str, str]]) -> Iterable[tuple[
             yield original_string, cleanup_string(translation)
 
 
-def convert(po_file: TextIO, csv_file: TextIO):
+def convert(po_file: TextIO, csv_file: TextIO) -> None:
     dictionary = simple_read_po(po_file)
     csv_writer = csv_utils.writer(csv_file)
 
@@ -29,7 +29,7 @@ app = typer.Typer()
 
 
 @app.command()
-def main(po_file: Path, csv_file: Path, encoding: str):
+def main(po_file: Path, csv_file: Path, encoding: str) -> None:
     """
     Convert a po file into a csv file in a specified encoding
     """

@@ -44,7 +44,7 @@ def translate_raws(po_filename: Path, path: Path, encoding: str) -> Iterator[str
                 yield from translate_single_raw_file(bak_name, file_path, dictionary, encoding)
 
 
-def main(po_filename: Path, path: Path, encoding: str):
+def main(po_filename: Path, path: Path, encoding: str) -> str:
     for filename in translate_raws(po_filename, path, encoding):
         print(filename, file=sys.stderr)
 

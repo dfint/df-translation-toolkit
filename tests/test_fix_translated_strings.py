@@ -44,7 +44,6 @@ def test_fix_leading_spaces(text, translation, fixed):
     "text,translation,fixed",
     [
         ("test ", "test", "test "),
-        # ("test", "test ", "test"),
     ],
 )
 def test_fix_trailing_spaces(text, translation, fixed):
