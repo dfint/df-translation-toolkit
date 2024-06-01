@@ -7,7 +7,7 @@ from df_translation_toolkit.convert.objects_po_to_csv import get_translations_fr
     "original_parts,translation_parts,result",
     [
         (
-            # TODO: replace this test with a hypothesis test
+            # TODO(@insolor): replace this test with a hypothesis test
             ["abc", "cde", "def"],
             ["wefw", "rtt", "jty"],
             [("abc", "wefw"), ("cde", "rtt"), ("def", "jty")],

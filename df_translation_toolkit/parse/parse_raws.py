@@ -75,23 +75,23 @@ def parse_raw_file(file: Iterable[str]) -> Iterator[FilePartInfo]:
     context = None
     for token in tokenize_raw_file(file):
         if not token.is_tag:
-            yield FilePartInfo(token.line_number, False, context, text=token.text)
+            yield FilePartInfo(line_number=token.line_number, translatable=False, context=context, text=token.text)
         else:
             tag = token.text
             tag_parts = split_tag(tag)
 
             if tag_parts[0] == "OBJECT":
                 object_name = tag_parts[1]
-                yield FilePartInfo(token.line_number, False, context, tag=tag)
+                yield FilePartInfo(line_number=token.line_number, translatable=False, context=context, tag=tag)
             elif object_name and (
                 tag_parts[0] == object_name
                 or (object_name in {"ITEM", "BUILDING"} and tag_parts[0].startswith(object_name))
                 or object_name.endswith("_" + tag_parts[0])
             ):
                 context = ":".join(tag_parts)
-                yield FilePartInfo(token.line_number, False, context, tag=tag)
+                yield FilePartInfo(token.line_number, translatable=False, context=context, tag=tag)
             else:
-                yield FilePartInfo(token.line_number, True, context, tag=tag, tag_parts=tag_parts)
+                yield FilePartInfo(token.line_number, translatable=True, context=context, tag=tag, tag_parts=tag_parts)
 
 
 def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[TranslationItem]:
