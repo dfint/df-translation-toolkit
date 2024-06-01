@@ -1,6 +1,6 @@
 from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Any, BinaryIO, TextIO
+from typing import BinaryIO, TextIO
 
 from babel.messages import Catalog
 from babel.messages.pofile import read_po, write_po

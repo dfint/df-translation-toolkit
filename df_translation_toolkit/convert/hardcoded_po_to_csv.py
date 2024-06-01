@@ -32,9 +32,11 @@ def main(po_file: Path, csv_file: Path, encoding: str) -> None:
     Convert a po file into a csv file in a specified encoding
     """
 
-    with po_file.open("r", encoding="utf-8") as pofile:
-        with csv_file.open("w", newline="", encoding=encoding, errors="replace") as outfile:
-            convert(pofile, outfile)
+    with (
+        po_file.open("r", encoding="utf-8") as pofile,
+        csv_file.open("w", newline="", encoding=encoding, errors="replace") as outfile,
+    ):
+        convert(pofile, outfile)
 
 
 if __name__ == "__main__":

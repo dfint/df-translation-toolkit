@@ -38,7 +38,7 @@ def get_translations_from_tag_parts(
         yield original, translations[0]
 
 
-def get_translations_from_tag(original_tag: str, translation_tag: str):
+def get_translations_from_tag(original_tag: str, translation_tag: str) -> Iterator[tuple[str, str]]:
     validation_problems = list(validate_tag(original_tag, translation_tag))
     if ValidationProblem.contains_errors(validation_problems):
         raise ValidationException(validation_problems)
@@ -58,8 +58,7 @@ def prepare_dictionary(dictionary: Iterable[tuple[str, str]], errors_file: TextI
         if original_string_tag and translation_tag and translation_tag != original_string_tag:
             try:
                 for original_string, translation in get_translations_from_tag(original_string_tag, translation_tag):
-                    translation = fix_spaces(original_string, translation)
-                    yield original_string, cleanup_string(translation)
+                    yield original_string, cleanup_string(fix_spaces(original_string, translation))
             except ValidationException as ex:
                 error_text = f"Problematic tag pair: {original_string_tag!r}, {translation_tag!r}\nProblems:\n{ex}"
                 logger.error("\n" + error_text)
@@ -86,9 +85,11 @@ def main(po_file: Path, csv_file: Path, encoding: str, append: bool = False, err
 
     with open(po_file, encoding="utf-8") as pofile:
         mode = "a" if append else "w"
-        with open(csv_file, mode, newline="", encoding=encoding, errors="replace") as outfile:
-            with maybe_open(errors_file, "w", encoding="utf-8") as errors_file:
-                convert(pofile, outfile, errors_file)
+        with (
+            open(csv_file, mode, newline="", encoding=encoding, errors="replace") as outfile,
+            maybe_open(errors_file, "w", encoding="utf-8") as errors_file,
+        ):
+            convert(pofile, outfile, errors_file)
 
 
 if __name__ == "__main__":

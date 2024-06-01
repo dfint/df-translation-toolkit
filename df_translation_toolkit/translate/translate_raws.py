@@ -19,18 +19,18 @@ def translate_single_raw_file(
     with source_file_path.open(encoding="cp437") as src, destination_file_path.open("w", encoding=encoding) as dest:
         yield destination_file_path.name
         for line in translate_raw_file(src, dictionary):
-            line = cleanup_string(line)
+            cleaned_text = cleanup_string(line)
             try:
-                print(line, file=dest)
+                print(cleaned_text, file=dest)
             except UnicodeEncodeError:
-                line = line.encode(encoding, errors="backslashreplace").decode(encoding)
+                cleaned_text = cleaned_text.encode(encoding, errors="backslashreplace").decode(encoding)
                 print(
-                    f"Some characters of this line: {line!r} "
+                    f"Some characters of this line: {cleaned_text!r} "
                     f"cannot be represented in {encoding} encoding. Using backslashreplace mode.",
                     file=sys.stderr,
                 )
 
-                print(line, file=dest)
+                print(cleaned_text, file=dest)
 
 
 def translate_raws(po_filename: Path, path: Path, encoding: str) -> Iterator[str]:
