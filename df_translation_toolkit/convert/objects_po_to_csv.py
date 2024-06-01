@@ -20,7 +20,7 @@ def get_translations_from_tag_parts(original_parts: list[str], translation_parts
 
     prev_original = None
     prev_translation = None
-    for original, translation in zip(original_parts, translation_parts):
+    for original, translation in zip(original_parts, translation_parts, strict=False):
         original: str
         if all_caps(original) or original.isdecimal():
             if original == "STP" and translation != original and not all_caps(translation):
@@ -81,7 +81,7 @@ def main(po_file: Path, csv_file: Path, encoding: str, append: bool = False, err
     Convert a po file into a csv file in a specified encoding
     """
 
-    with open(po_file, "r", encoding="utf-8") as pofile:
+    with open(po_file, encoding="utf-8") as pofile:
         mode = "a" if append else "w"
         with open(csv_file, mode, newline="", encoding=encoding, errors="replace") as outfile:
             with maybe_open(errors_file, "w", encoding="utf-8") as errors_file:

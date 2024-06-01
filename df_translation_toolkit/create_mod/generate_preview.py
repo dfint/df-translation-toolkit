@@ -3,7 +3,6 @@ from pathlib import Path
 import jinja2
 import typer
 
-
 # from cairosvg import svg2png
 
 

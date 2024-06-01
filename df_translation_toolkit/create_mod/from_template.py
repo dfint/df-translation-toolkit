@@ -54,11 +54,11 @@ def localize_directory(
             with backup(file_path) as bak_name:
                 if object_type == "TEXT_SET":
                     yield from translate_plain_text_file(
-                        bak_name, file_path, dictionaries.dictionary_textset, destination_encoding, False
+                        bak_name, file_path, dictionaries.dictionary_textset, destination_encoding, False,
                     )
                 else:
                     yield from translate_single_raw_file(
-                        bak_name, file_path, dictionaries.dictionary_object, destination_encoding
+                        bak_name, file_path, dictionaries.dictionary_object, destination_encoding,
                     )
 
 
@@ -99,11 +99,11 @@ def get_dictionaries(translation_path: Path, language: str) -> Dictionaries:
         if not po_files[po_file].is_file():
             raise Exception(f"Unable to find {po_file} po file for language {language}")
 
-    with open(po_files["objects"], "r", encoding="utf-8") as pofile:
+    with open(po_files["objects"], encoding="utf-8") as pofile:
         dictionary_object: Mapping[tuple[str, str | None], str] = {
             (item.id, item.context): item.string for item in read_po(pofile)
         }
-    with open(po_files["text_set"], "r", encoding="utf-8") as po_file:
+    with open(po_files["text_set"], encoding="utf-8") as po_file:
         dictionary_textset: Mapping[str, str] = {item.id: item.string for item in read_po(po_file) if item.id}
     return Dictionaries(language.lower(), dictionary_object, dictionary_textset)
 
@@ -138,7 +138,7 @@ def main(
     template_path.rename(template_path.parent / f"{template_path.name}_translation")
     logger.warning(
         "All done! Consider to change info.txt file and made unique preview.png "
-        "before uploading to steam or sharing the mod."
+        "before uploading to steam or sharing the mod.",
     )
 
 

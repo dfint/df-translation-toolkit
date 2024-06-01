@@ -41,8 +41,7 @@ def last_suitable(parts: Sequence[T], func: Callable[[T], bool]) -> int:
     for i in range(len(parts) - 1, -1, -1):
         if func(parts[i]):
             return i + 1  # if the last element is suitable, then return len(s), so that s[:i] gives full list
-    else:
-        return 0  # if there aren't suitable elements, then return 0, so that s[:i] gives empty list
+    return 0  # if there aren't suitable elements, then return 0, so that s[:i] gives empty list
 
 
 class RawFileToken(NamedTuple):

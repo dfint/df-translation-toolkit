@@ -1,10 +1,9 @@
 from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import BinaryIO
+from typing import BinaryIO, TextIO
 
 from babel.messages import Catalog
 from babel.messages.pofile import read_po, write_po
-from typing import TextIO
 
 
 @dataclass
