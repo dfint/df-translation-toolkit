@@ -4,7 +4,7 @@ from typing import NamedTuple, TypeVar
 from df_translation_toolkit.utils.po_utils import TranslationItem
 
 
-def all_caps(string: str):
+def all_caps(string: str) -> bool:
     return len(string) > 1 and string.isupper()
 
 
@@ -119,11 +119,14 @@ def get_from_dict_with_context(
 ) -> str | None:
     if (key, context) in dictionary:
         return dictionary[(key, context)]
-    elif (key, None) in dictionary:
+
+    if (key, None) in dictionary:
         return dictionary[(key, None)]
 
+    return None
 
-def get_tag_translation(dictionary: Mapping[tuple[str, str | None], str], item: FilePartInfo):
+
+def get_tag_translation(dictionary: Mapping[tuple[str, str | None], str], item: FilePartInfo) -> str:
     tag = item.tag
     tag_parts = item.tag_parts
     context = item.context
@@ -148,7 +151,7 @@ def get_tag_translation(dictionary: Mapping[tuple[str, str | None], str], item: 
     return tag
 
 
-def translate_raw_file(file: Iterable[str], dictionary: Mapping[tuple[str, str | None], str]):
+def translate_raw_file(file: Iterable[str], dictionary: Mapping[tuple[str, str | None], str]) -> Iterator[str]:
     prev_line_number = 1
     modified_line_parts: list[str] = []
     for item in parse_raw_file(file):

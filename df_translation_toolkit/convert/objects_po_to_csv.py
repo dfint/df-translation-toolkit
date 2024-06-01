@@ -16,7 +16,8 @@ from df_translation_toolkit.validation.validation_models import ValidationExcept
 
 
 def get_translations_from_tag_parts(
-    original_parts: list[str], translation_parts: list[str]
+    original_parts: list[str],
+    translation_parts: list[str],
 ) -> Iterator[tuple[str, str]]:
     tag_translations = defaultdict(list)
 
@@ -66,7 +67,7 @@ def prepare_dictionary(dictionary: Iterable[tuple[str, str]], errors_file: TextI
                     print(error_text, end="\n\n", file=errors_file)
 
 
-def convert(po_file: TextIO, csv_file: TextIO, error_file: TextIO = None):
+def convert(po_file: TextIO, csv_file: TextIO, error_file: TextIO | None = None) -> None:
     dictionary = simple_read_po(po_file)
     csv_writer = csv_utils.writer(csv_file)
 
