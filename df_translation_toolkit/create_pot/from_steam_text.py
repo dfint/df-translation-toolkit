@@ -26,6 +26,7 @@ def get_raw_object_type(file_name: Path, source_encoding: str) -> str:
                 object_tag = split_tag(item.text)
                 assert object_tag[0] == "OBJECT"
                 return object_tag[1]
+        return None
 
 
 def get_translatable_strings(file_path: Path, source_encoding: str) -> tuple[str, Iterable[str]] | None:

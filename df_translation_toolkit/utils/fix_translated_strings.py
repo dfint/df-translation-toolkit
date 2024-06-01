@@ -30,8 +30,7 @@ def fix_spaces(original_string: str, translation: str) -> str:
     Fixes leading and trailing spaces of the translation string
     """
     translation = fix_leading_spaces(original_string, translation)
-    translation = fix_trailing_spaces(original_string, translation)
-    return translation
+    return fix_trailing_spaces(original_string, translation)
 
 
 _exclusions = "¿¡"

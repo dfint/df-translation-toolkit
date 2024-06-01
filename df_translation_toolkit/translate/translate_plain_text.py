@@ -45,7 +45,7 @@ def main(
     path: Path,
     encoding: str,
     split: bool = False,
-):
+) -> None:
     join_paragraphs = not split
     for filename in translate_plain_text(po_filename, path, encoding, join_paragraphs):
         print(filename, file=sys.stderr)

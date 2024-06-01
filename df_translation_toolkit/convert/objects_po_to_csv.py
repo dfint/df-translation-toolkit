@@ -79,7 +79,7 @@ app = typer.Typer()
 
 
 @app.command()
-def main(po_file: Path, csv_file: Path, encoding: str, append: bool = False, errors_file: Path = None):
+def main(po_file: Path, csv_file: Path, encoding: str, append: bool = False, errors_file: Path | None = None) -> None:
     """
     Convert a po file into a csv file in a specified encoding
     """

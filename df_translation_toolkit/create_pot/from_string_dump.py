@@ -10,7 +10,7 @@ def main(
     source_file: typer.FileText,
     destination_file: typer.FileBinaryWrite,
     no_ignore: bool = False,
-):
+) -> None:
     template = (line.rstrip("\n") for line in source_file)
     ignore_rules = dont_ignore if no_ignore else all_ignore_rules
     file_name = Path(source_file.name).name

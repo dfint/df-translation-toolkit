@@ -48,7 +48,7 @@ def main(
     encoding: str,
     po_name_postfix: str = "",
     translate: bool = True,
-):
+) -> None:
     for message in translate_files(base_path, po_directory, encoding, po_name_postfix, translate):
         print(message)
 
