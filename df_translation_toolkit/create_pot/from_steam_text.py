@@ -26,13 +26,15 @@ def get_raw_object_type(file_name: Path, source_encoding: str) -> str:
                 object_tag = split_tag(item.text)
                 assert object_tag[0] == "OBJECT"
                 return object_tag[1]
+        return None
 
 
 def get_translatable_strings(file_path: Path, source_encoding: str) -> tuple[str, Iterable[str]] | None:
     object_type = get_raw_object_type(file_path, source_encoding)
     if object_type in dont_translate:
         return None
-    elif object_type == "TEXT_SET":
+
+    if object_type == "TEXT_SET":
         key = object_type
         data = extract_from_vanilla_text(file_path, source_encoding)
     else:
@@ -42,13 +44,14 @@ def get_translatable_strings(file_path: Path, source_encoding: str) -> tuple[str
     return key, data
 
 
-def iterable_is_empty(iterable: Iterable):
+def iterable_is_empty(iterable: Iterable) -> bool:
     iterator = iter(iterable)
     try:
         next(iterator)
-        return False
     except StopIteration:
         return True
+
+    return False
 
 
 def file_is_translatable(file_path: Path, source_encoding: str) -> bool:
@@ -59,7 +62,7 @@ def file_is_translatable(file_path: Path, source_encoding: str) -> bool:
 dont_translate = {"LANGUAGE"}
 
 
-def main(vanilla_path: Path, destination_path: Path, source_encoding: str = "cp437"):
+def main(vanilla_path: Path, destination_path: Path, source_encoding: str = "cp437") -> None:
     assert vanilla_path.exists(), "Source path doesn't exist"
     assert destination_path.exists(), "Destination path doesn't exist"
 
@@ -72,9 +75,8 @@ def main(vanilla_path: Path, destination_path: Path, source_encoding: str = "cp4
                 result = get_translatable_strings(file_path, source_encoding)
                 if not result:
                     continue
-                else:
-                    group, data = result
 
+                group, data = result
                 results[group].extend(data)
 
         for group, data in results.items():

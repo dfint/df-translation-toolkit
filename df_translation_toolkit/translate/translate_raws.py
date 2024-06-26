@@ -16,22 +16,21 @@ def translate_single_raw_file(
     dictionary: Mapping[tuple[str, str | None], str],
     encoding: str,
 ) -> Iterator[str]:
-    with source_file_path.open(encoding="cp437") as src:
-        with destination_file_path.open("w", encoding=encoding) as dest:
-            yield destination_file_path.name
-            for line in translate_raw_file(src, dictionary):
-                line = cleanup_string(line)
-                try:
-                    print(line, file=dest)
-                except UnicodeEncodeError:
-                    line = line.encode(encoding, errors="backslashreplace").decode(encoding)
-                    print(
-                        f"Some characters of this line: {line!r} "
-                        f"cannot be represented in {encoding} encoding. Using backslashreplace mode.",
-                        file=sys.stderr,
-                    )
+    with source_file_path.open(encoding="cp437") as src, destination_file_path.open("w", encoding=encoding) as dest:
+        yield destination_file_path.name
+        for line in translate_raw_file(src, dictionary):
+            cleaned_text = cleanup_string(line)
+            try:
+                print(cleaned_text, file=dest)
+            except UnicodeEncodeError:
+                cleaned_text = cleaned_text.encode(encoding, errors="backslashreplace").decode(encoding)
+                print(
+                    f"Some characters of this line: {cleaned_text!r} "
+                    f"cannot be represented in {encoding} encoding. Using backslashreplace mode.",
+                    file=sys.stderr,
+                )
 
-                    print(line, file=dest)
+                print(cleaned_text, file=dest)
 
 
 def translate_raws(po_filename: Path, path: Path, encoding: str) -> Iterator[str]:
@@ -44,7 +43,7 @@ def translate_raws(po_filename: Path, path: Path, encoding: str) -> Iterator[str
                 yield from translate_single_raw_file(bak_name, file_path, dictionary, encoding)
 
 
-def main(po_filename: Path, path: Path, encoding: str):
+def main(po_filename: Path, path: Path, encoding: str) -> str:
     for filename in translate_raws(po_filename, path, encoding):
         print(filename, file=sys.stderr)
 

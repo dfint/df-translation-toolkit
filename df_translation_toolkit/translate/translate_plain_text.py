@@ -15,11 +15,11 @@ def translate_plain_text_file(
     dictionary: Mapping[str, str],
     encoding: str,
     join_paragraphs: bool,
-):
+) -> None:
     with source_file_path.open() as source_file:
         with destination_file_path.open("w", encoding=encoding) as destination_file:
             yield destination_file_path.name
-            for text_block, is_translatable, _ in parse_plain_text_file(source_file, join_paragraphs):
+            for text_block, _, _ in parse_plain_text_file(source_file, join_paragraphs):
                 text_block = text_block.rstrip("\n")
                 if text_block in dictionary:
                     translation = dictionary[text_block]
@@ -45,7 +45,7 @@ def main(
     path: Path,
     encoding: str,
     split: bool = False,
-):
+) -> None:
     join_paragraphs = not split
     for filename in translate_plain_text(po_filename, path, encoding, join_paragraphs):
         print(filename, file=sys.stderr)

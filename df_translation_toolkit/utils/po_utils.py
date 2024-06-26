@@ -1,10 +1,9 @@
 from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import BinaryIO
+from typing import BinaryIO, TextIO
 
 from babel.messages import Catalog
 from babel.messages.pofile import read_po, write_po
-from typing import TextIO
 
 
 @dataclass
@@ -16,11 +15,10 @@ class TranslationItem:
     line_number: int | None = None
     translator_comment: str | None = None  # "#"
     extracted_comment: str | None = None  # "#."
-    # reference: Optional[str] = None  # "#: source_file: line_number
     flag: str | None = None  # "#,"
     previous_untranslated_msgid: str | None = None  # "#|"
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         return (
             isinstance(other, TranslationItem)
             and self.text == other.text
@@ -37,7 +35,7 @@ msgstr ""
 """.strip()
 
 
-def save_pot(po_file: BinaryIO, template: Iterable[TranslationItem]):
+def save_pot(po_file: BinaryIO, template: Iterable[TranslationItem]) -> None:
     catalog = Catalog()
 
     for item in template:

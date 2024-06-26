@@ -7,7 +7,7 @@ from df_translation_toolkit.parse.parse_raws import is_translatable
 class IgnoringRuleRegistry:
     all_rules: list[Callable[[str], bool]]
 
-    def __init__(self):
+    def __init__(self) -> str:
         self.all_rules = []
 
     def register(self, function: Callable[[str], bool]) -> Callable[[str], bool]:
@@ -422,5 +422,5 @@ def all_ignore_rules(string: str) -> bool:
     return rules.check_ignore(string)
 
 
-def dont_ignore(_string) -> bool:
+def dont_ignore(_string: str) -> bool:
     return False

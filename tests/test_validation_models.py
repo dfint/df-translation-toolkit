@@ -1,6 +1,6 @@
 import pytest
 
-from df_translation_toolkit.validation.validation_models import ProblemSeverity, ValidationProblem, ValidationException
+from df_translation_toolkit.validation.validation_models import ProblemSeverity, ValidationException, ValidationProblem
 
 
 @pytest.mark.parametrize(

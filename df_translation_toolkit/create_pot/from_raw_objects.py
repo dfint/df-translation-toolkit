@@ -24,14 +24,14 @@ def extract_translatables_from_raws_batch(raw_files: Iterable[Path], source_enco
             yield from extract_from_raw_file(file_name, source_encoding)
 
 
-def create_pot_file(pot_file: BinaryIO, raw_files: Iterable[Path], source_encoding: str):
+def create_pot_file(pot_file: BinaryIO, raw_files: Iterable[Path], source_encoding: str) -> None:
     save_pot(
         pot_file,
         extract_translatables_from_raws_batch(raw_files, source_encoding),
     )
 
 
-def main(raws_path: Path, pot_file: typer.FileBinaryWrite, source_encoding: str = "cp437"):
+def main(raws_path: Path, pot_file: typer.FileBinaryWrite, source_encoding: str = "cp437") -> None:
     raw_files = (file for file in raws_path.glob("*.txt") if not file.name.startswith("language_"))
     create_pot_file(pot_file, sorted(raw_files), source_encoding)
 
