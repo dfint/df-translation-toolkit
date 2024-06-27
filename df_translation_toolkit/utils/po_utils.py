@@ -41,7 +41,8 @@ def save_pot(po_file: BinaryIO, template: Iterable[TranslationItem]):
     catalog = Catalog()
 
     for item in template:
-        catalog.add(item.text, context=item.context, locations=[(item.source_file, item.line_number)])
+        locations = [(item.source_file, item.line_number)] if item.source_file else ()
+        catalog.add(item.text, context=item.context, locations=locations)
 
     po_file.write(_default_header + b"\n\n")
     write_po(po_file, catalog, omit_header=True)
