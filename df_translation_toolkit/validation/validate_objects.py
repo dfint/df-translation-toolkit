@@ -3,17 +3,19 @@ from collections.abc import Iterator
 from df_translation_toolkit.parse.parse_raws import all_caps, split_tag
 from df_translation_toolkit.validation.validation_models import ProblemSeverity, ValidationProblem
 
+MINIMAL_TRANSLATION_LENGTH = 3
+
 
 def validate_brackets(tag: str) -> bool:
     return tag.startswith("[") and tag.endswith("]") and tag.count("[") == 1 and tag.count("]") == 1
 
 
 def validate_tag(original_tag: str, translation_tag: str) -> Iterator[ValidationProblem]:
-    if len(translation_tag) <= 2:
+    if len(translation_tag) < MINIMAL_TRANSLATION_LENGTH:
         yield ValidationProblem("Too short or empty translation")
         return
 
-    if not translation_tag.strip() == translation_tag:
+    if translation_tag.strip() != translation_tag:
         yield ValidationProblem("Extra spaces at the beginning or at the end of the translation")
         translation_tag = translation_tag.strip()
         # No return to check issues with brackets after stripping spaces
@@ -33,7 +35,7 @@ def validate_tag(original_tag: str, translation_tag: str) -> Iterator[Validation
 
 
 def validate_tag_parts(original_parts: list[str], translation_parts: list[str]) -> Iterator[ValidationProblem]:
-    for original, translation in zip(original_parts, translation_parts):
+    for original, translation in zip(original_parts, translation_parts, strict=False):
         if all_caps(original) or original.isdecimal():
             valid = not (original != translation and original == translation.strip())
             if not valid:
@@ -46,7 +48,7 @@ def validate_tag_parts(original_parts: list[str], translation_parts: list[str]) 
             valid = original not in {"SINGULAR", "PLURAL"} or translation in {"SINGULAR", "PLURAL"}
             if not valid:
                 yield ValidationProblem(
-                    "SINGULAR can be changed only to PLURAL, and PLURAL can be changed only to SINGULAR"
+                    "SINGULAR can be changed only to PLURAL, and PLURAL can be changed only to SINGULAR",
                 )
 
             if original == "STP" and translation == "STP":

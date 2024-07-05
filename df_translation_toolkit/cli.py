@@ -1,7 +1,6 @@
 import typer
 
-import df_translation_toolkit.convert as convert
-from df_translation_toolkit import create_pot
+from df_translation_toolkit import convert, create_pot
 
 app = typer.Typer()
 app.add_typer(convert.cli.app, name="convert")

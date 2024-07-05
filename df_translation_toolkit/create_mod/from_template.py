@@ -31,7 +31,7 @@ def create_single_localized_mod(
     translated_files = len(list((template_path / "objects").glob("*.txt")))
     logger.info(f"Translated: {translated_files} files")
     language_name = dictionaries.language_name
-    create_info(template_path / "info.txt", source_encoding, destination_encoding, language_name)
+    create_info(template_path / "info.txt", destination_encoding, language_name)
 
     svg_template_path = Path(__file__).parent / "templates" / "preview_template.svg"
     generate_preview(
@@ -54,11 +54,18 @@ def localize_directory(
             with backup(file_path) as bak_name:
                 if object_type == "TEXT_SET":
                     yield from translate_plain_text_file(
-                        bak_name, file_path, dictionaries.dictionary_textset, destination_encoding, False
+                        bak_name,
+                        file_path,
+                        dictionaries.dictionary_textset,
+                        destination_encoding,
+                        join_paragraphs=False,
                     )
                 else:
                     yield from translate_single_raw_file(
-                        bak_name, file_path, dictionaries.dictionary_object, destination_encoding
+                        bak_name,
+                        file_path,
+                        dictionaries.dictionary_object,
+                        destination_encoding,
                     )
 
 
@@ -68,11 +75,10 @@ def fill_info_template(template_path: Path, **kwargs: str | list[str] | dict[str
         template = jinja2.Template(template_text)
 
         rendered = template.render(**kwargs)
-        result = "\n".join(filter(bool, rendered.splitlines()))
-        return result
+        return "\n".join(filter(bool, rendered.splitlines()))
 
 
-def create_info(info_file: Path, source_encoding: str, destination_encoding: str, language: str) -> None:
+def create_info(info_file: Path, destination_encoding: str, language: str) -> None:
     with info_file.open("w", encoding=destination_encoding) as dest:
         info_template_path = Path(__file__).parent / "templates" / "info_template.txt"
         rendered = fill_info_template(
@@ -84,7 +90,7 @@ def create_info(info_file: Path, source_encoding: str, destination_encoding: str
             steam_title=f"{language.upper()} Translation",
             steam_description=f"Translation to {language.upper()} language for vanilla mods",
             steam_tags=["ui", "qol", "translation"],
-            steam_key_value_tags=dict(language=language),
+            steam_key_value_tags={"language": language},
         )
         print(rendered, file=dest)
 
@@ -97,13 +103,14 @@ def get_dictionaries(translation_path: Path, language: str) -> Dictionaries:
             if file.is_file() and file.stat().st_mtime > mtime:
                 po_files[po_file] = file
         if not po_files[po_file].is_file():
-            raise Exception(f"Unable to find {po_file} po file for language {language}")
+            msg = f"Unable to find {po_file} po file for language {language}"
+            raise ValueError(msg)
 
-    with open(po_files["objects"], "r", encoding="utf-8") as pofile:
+    with open(po_files["objects"], encoding="utf-8") as pofile:
         dictionary_object: Mapping[tuple[str, str | None], str] = {
             (item.id, item.context): item.string for item in read_po(pofile)
         }
-    with open(po_files["text_set"], "r", encoding="utf-8") as po_file:
+    with open(po_files["text_set"], encoding="utf-8") as po_file:
         dictionary_textset: Mapping[str, str] = {item.id: item.string for item in read_po(po_file) if item.id}
     return Dictionaries(language.lower(), dictionary_object, dictionary_textset)
 
@@ -116,8 +123,13 @@ def main(
     destination_encoding: str,
     source_encoding: str = "cp437",
 ) -> None:
-    assert template_path.exists(), "Source path doesn't exist"
-    assert translation_path.exists(), "Translation path doesn't exist"
+    if not template_path.exists():
+        msg = "Source path doesn't exist"
+        raise ValueError(msg)
+
+    if not translation_path.exists():
+        msg = "Translation path doesn't exist"
+        raise ValueError(msg)
 
     dictionaries = get_dictionaries(translation_path, language)
 
@@ -132,13 +144,13 @@ def main(
     for bak_file in template_path.glob("**/*.bak"):
         try:
             bak_file.unlink()
-        except Exception:
+        except Exception:  # noqa: PERF203, BLE001
             logger.error(f"Error occurred while removing {bak_file.resolve()}")
 
     template_path.rename(template_path.parent / f"{template_path.name}_translation")
     logger.warning(
         "All done! Consider to change info.txt file and made unique preview.png "
-        "before uploading to steam or sharing the mod."
+        "before uploading to steam or sharing the mod.",
     )
 
 

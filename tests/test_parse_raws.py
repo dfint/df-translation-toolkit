@@ -32,7 +32,7 @@ from tests.strip_margin import strip_margin
                 |[GENERAL_CHILD_NAME:cardinal hatchling:cardinal hatchlings]
                 |[CREATURE_TILE:144][COLOR:4:0:1]
                 |[PETVALUE:30][NATURAL][PET]
-                """
+                """,
             ).strip(),
             [
                 TranslationItem(
@@ -72,10 +72,10 @@ from tests.strip_margin import strip_margin
                 |[TWO_HANDED:27500]
                 |[MINIMUM_SIZE:22500]
                 |[MATERIAL_SIZE:1]
-                |[ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:5000] - 5000 is not translatable 
+                |[ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:5000] - 5000 is not translatable
                 |    [ATTACK_PREPARE_AND_RECOVER:4:4]
                 |    [ATTACK_FLAG_BAD_MULTIATTACK]
-                """
+                """,
             ).strip(),
             [
                 TranslationItem(context="ITEM_WEAPON:ITEM_WEAPON_WHIP", text="[NAME:whip:whips]"),
@@ -108,7 +108,7 @@ from tests.strip_margin import strip_margin
                 |        [DEFAULT_RELSIZE:2000]
                 |    [BP:UB:body:bodies][UPPERBODY][LOWERBODY][HEAD][THOUGHT][CATEGORY:BODY][FLIER]  # Duplicate entry - must be ignored
                 |        [DEFAULT_RELSIZE:2000]
-                """
+                """,
             ).strip(),
             [
                 TranslationItem(context="BODY:BASIC_1PARTBODY", text="[BP:UB:body:bodies]"),
@@ -139,7 +139,7 @@ def test_extract_translatables_from_raws(content, expected):
                 |                    Some comment
                 |                    [MATERIAL_SIZE:1]  trailing comments are trimmed
                 |            [ATTACK:BLUNT:1:10:lash:lashes:NO_SUB:5000]
-                """
+                """,
             ).strip(),
             {
                 (
@@ -164,9 +164,9 @@ def test_extract_translatables_from_raws(content, expected):
                 |                    Some comment
                 |                    [MATERIAL_SIZE:1]
                 |            [ATTACK:BLUNT:1:10:Lash:Lashes:NO_SUB:5000]
-                """
+                """,
             ).strip(),
-        )
+        ),
     ],
 )
 def test_translate_raw_file(content, dictionary, result):

@@ -21,11 +21,12 @@ patterns = [
 ]
 
 
-def translate_files(
+def translate_files(  # noqa: PLR0913
     base_path: Path,
     po_directory: Path,
     encoding: str,
     po_name_postfix: str = "",
+    *,
     translate: bool = True,
     directory_patterns: Sequence[Pattern] = tuple(patterns),
 ) -> Iterator[str]:
@@ -35,8 +36,8 @@ def translate_files(
                 if cur_dir.match("*/" + directory):
                     yield f"Matched {directory} pattern"
 
-                    po_filename = f"{po_filename}_{po_name_postfix}.po"
-                    po_file_path = po_directory / po_filename
+                    filename = f"{po_filename}_{po_name_postfix}.po"
+                    po_file_path = po_directory / filename
 
                     if translate:
                         yield from function(po_file_path, cur_dir, encoding)
@@ -47,8 +48,8 @@ def main(
     po_directory: Path,
     encoding: str,
     po_name_postfix: str = "",
-    translate: bool = True,
-):
+    translate: bool = True,  # noqa: FBT001, FBT002
+) -> None:
     for message in translate_files(base_path, po_directory, encoding, po_name_postfix, translate):
         print(message)
 

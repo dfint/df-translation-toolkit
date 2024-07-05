@@ -4,15 +4,15 @@ from pathlib import Path
 from typing import TextIO
 
 
-def writer(file: TextIO, **kwargs):
+def writer(file: TextIO, **kwargs):  # noqa: ANN201
     return csv.writer(file, dialect="unix", lineterminator="\r\n", **kwargs)
 
 
-def reader(file: TextIO, **kwargs):
+def reader(file: TextIO, **kwargs):  # noqa: ANN201
     return csv.reader(file, dialect="unix", lineterminator="\r\n", **kwargs)
 
 
-def write_csv(file_path: Path, encoding: str, data: list[list[str]]):
+def write_csv(file_path: Path, encoding: str, data: list[list[str]]) -> None:
     with file_path.open("w", encoding=encoding, newline="") as file:
         csv_writer = writer(file)
         csv_writer.writerows(data)

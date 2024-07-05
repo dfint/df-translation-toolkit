@@ -24,8 +24,13 @@ def main(
     vanilla_path: Path,
     destination_path: Path,
 ) -> None:
-    assert vanilla_path.exists(), "Source path doesn't exist"
-    assert destination_path.exists(), "Destination path doesn't exist"
+    if not vanilla_path.exists():
+        msg = "Source path doesn't exist"
+        raise ValueError(msg)
+
+    if not destination_path.exists():
+        msg = "Destination path doesn't exist"
+        raise ValueError(msg)
 
     total_dirs = 0
     total_files = 0

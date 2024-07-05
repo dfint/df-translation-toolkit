@@ -4,17 +4,13 @@ import jinja2
 import typer
 
 
-# from cairosvg import svg2png
-
-
-def generate_preview(template_text: str, title: str, description: str, destination_path: Path):
+def generate_preview(template_text: str, title: str, description: str, destination_path: Path) -> None:
     template = jinja2.Template(template_text)
     result_svg = template.render(title=title, description=description)
-    # svg2png(bytestring=result_svg, write_to=str(destination_path))
     destination_path.write_text(result_svg)
 
 
-def main(template_path: Path, title: str, description: str, destination_path: Path):
+def main(template_path: Path, title: str, description: str, destination_path: Path) -> None:
     with template_path.open() as template_file:
         template = template_file.read()
         generate_preview(template, title, description, destination_path)

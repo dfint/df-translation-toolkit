@@ -17,13 +17,13 @@ def test_translate_files():
     directory_mock = Mock("directory")
     directory_mock.is_dir = lambda: True
     directory_mock.match = lambda pattern: pattern == "*/" + directory_name
-    base_dir_mock.rglob = lambda *args: [directory_mock]
+    base_dir_mock.rglob = lambda *_args: [directory_mock]
     po_directory = PurePath("po_directory")
     encoding = "utf-8"
     postfix = "postfix"
 
     assert list(
-        translate_files(base_dir_mock, po_directory, encoding, po_name_postfix=postfix, directory_patterns=patterns)
+        translate_files(base_dir_mock, po_directory, encoding, po_name_postfix=postfix, directory_patterns=patterns),
     ) == [
         f"Matched {directory_name} pattern",
         (po_directory / f"{po_filename}_{postfix}.po", directory_mock, encoding),

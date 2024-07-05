@@ -1,10 +1,11 @@
 import shutil
+from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
 
 
 @contextmanager
-def backup(file: str | Path, overwrite: bool = False):
+def backup(file: str | Path, *, overwrite: bool = False) -> Iterator[Path]:
     file = Path(file)
     backup_path = file.with_suffix(".bak")
 

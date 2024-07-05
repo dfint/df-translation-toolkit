@@ -4,7 +4,7 @@ from typing import NamedTuple, TypeVar
 from df_translation_toolkit.utils.po_utils import TranslationItem
 
 
-def all_caps(string: str):
+def all_caps(string: str) -> bool:
     return len(string) > 1 and string.isupper()
 
 
@@ -41,8 +41,7 @@ def last_suitable(parts: Sequence[T], func: Callable[[T], bool]) -> int:
     for i in range(len(parts) - 1, -1, -1):
         if func(parts[i]):
             return i + 1  # if the last element is suitable, then return len(s), so that s[:i] gives full list
-    else:
-        return 0  # if there aren't suitable elements, then return 0, so that s[:i] gives empty list
+    return 0  # if there aren't suitable elements, then return 0, so that s[:i] gives empty list
 
 
 class RawFileToken(NamedTuple):
@@ -75,23 +74,23 @@ def parse_raw_file(file: Iterable[str]) -> Iterator[FilePartInfo]:
     context = None
     for token in tokenize_raw_file(file):
         if not token.is_tag:
-            yield FilePartInfo(token.line_number, False, context, text=token.text)
+            yield FilePartInfo(line_number=token.line_number, translatable=False, context=context, text=token.text)
         else:
             tag = token.text
             tag_parts = split_tag(tag)
 
             if tag_parts[0] == "OBJECT":
                 object_name = tag_parts[1]
-                yield FilePartInfo(token.line_number, False, context, tag=tag)
+                yield FilePartInfo(line_number=token.line_number, translatable=False, context=context, tag=tag)
             elif object_name and (
                 tag_parts[0] == object_name
                 or (object_name in {"ITEM", "BUILDING"} and tag_parts[0].startswith(object_name))
                 or object_name.endswith("_" + tag_parts[0])
             ):
                 context = ":".join(tag_parts)
-                yield FilePartInfo(token.line_number, False, context, tag=tag)
+                yield FilePartInfo(token.line_number, translatable=False, context=context, tag=tag)
             else:
-                yield FilePartInfo(token.line_number, True, context, tag=tag, tag_parts=tag_parts)
+                yield FilePartInfo(token.line_number, translatable=True, context=context, tag=tag, tag_parts=tag_parts)
 
 
 def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[TranslationItem]:
@@ -120,11 +119,14 @@ def get_from_dict_with_context(
 ) -> str | None:
     if (key, context) in dictionary:
         return dictionary[(key, context)]
-    elif (key, None) in dictionary:
+
+    if (key, None) in dictionary:
         return dictionary[(key, None)]
 
+    return None
 
-def get_tag_translation(dictionary: Mapping[tuple[str, str | None], str], item: FilePartInfo):
+
+def get_tag_translation(dictionary: Mapping[tuple[str, str | None], str], item: FilePartInfo) -> str:
     tag = item.tag
     tag_parts = item.tag_parts
     context = item.context
@@ -149,7 +151,7 @@ def get_tag_translation(dictionary: Mapping[tuple[str, str | None], str], item: 
     return tag
 
 
-def translate_raw_file(file: Iterable[str], dictionary: Mapping[tuple[str, str | None], str]):
+def translate_raw_file(file: Iterable[str], dictionary: Mapping[tuple[str, str | None], str]) -> Iterator[str]:
     prev_line_number = 1
     modified_line_parts: list[str] = []
     for item in parse_raw_file(file):
