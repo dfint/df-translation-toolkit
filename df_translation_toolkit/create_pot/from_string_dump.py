@@ -13,7 +13,7 @@ def main(
 ) -> None:
     template = (line.rstrip("\n") for line in source_file)
     ignore_rules = dont_ignore if no_ignore else all_ignore_rules
-    file_name = Path(source_file.name).name
+    Path(source_file.name).name
     filtered_lines = (
         TranslationItem(text=line)
         for line in template

@@ -75,8 +75,7 @@ def fill_info_template(template_path: Path, **kwargs: str | list[str] | dict[str
         template = jinja2.Template(template_text)
 
         rendered = template.render(**kwargs)
-        result = "\n".join(filter(bool, rendered.splitlines()))
-        return result
+        return "\n".join(filter(bool, rendered.splitlines()))
 
 
 def create_info(info_file: Path, source_encoding: str, destination_encoding: str, language: str) -> None:
@@ -104,7 +103,8 @@ def get_dictionaries(translation_path: Path, language: str) -> Dictionaries:
             if file.is_file() and file.stat().st_mtime > mtime:
                 po_files[po_file] = file
         if not po_files[po_file].is_file():
-            raise ValueError(f"Unable to find {po_file} po file for language {language}")
+            msg = f"Unable to find {po_file} po file for language {language}"
+            raise ValueError(msg)
 
     with open(po_files["objects"], encoding="utf-8") as pofile:
         dictionary_object: Mapping[tuple[str, str | None], str] = {
@@ -124,10 +124,12 @@ def main(
     source_encoding: str = "cp437",
 ) -> None:
     if not template_path.exists():
-        raise ValueError("Source path doesn't exist")
+        msg = "Source path doesn't exist"
+        raise ValueError(msg)
 
     if not translation_path.exists():
-        raise ValueError("Translation path doesn't exist")
+        msg = "Translation path doesn't exist"
+        raise ValueError(msg)
 
     dictionaries = get_dictionaries(translation_path, language)
 
