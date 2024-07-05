@@ -24,7 +24,11 @@ def get_raw_object_type(file_name: Path, source_encoding: str) -> str:
         for item in tokenize_raw_file(file):
             if item.is_tag:
                 object_tag = split_tag(item.text)
-                assert object_tag[0] == "OBJECT"
+
+                if object_tag[0] != "OBJECTS":
+                    msg = f"Unexpected tag: {object_tag[0]}"
+                    raise ValueError(msg)
+
                 return object_tag[1]
         return None
 
@@ -63,8 +67,13 @@ dont_translate = {"LANGUAGE"}
 
 
 def main(vanilla_path: Path, destination_path: Path, source_encoding: str = "cp437") -> None:
-    assert vanilla_path.exists(), "Source path doesn't exist"
-    assert destination_path.exists(), "Destination path doesn't exist"
+    if not vanilla_path.exists():
+        msg = "Source path doesn't exist"
+        raise ValueError(msg)
+
+    if not destination_path.exists():
+        msg = "Destination path doesn't exist"
+        raise ValueError(msg)
 
     results = defaultdict(list)
 

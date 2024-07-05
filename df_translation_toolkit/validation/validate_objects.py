@@ -3,13 +3,15 @@ from collections.abc import Iterator
 from df_translation_toolkit.parse.parse_raws import all_caps, split_tag
 from df_translation_toolkit.validation.validation_models import ProblemSeverity, ValidationProblem
 
+MINIMAL_TRANSLATION_LENGTH = 3
+
 
 def validate_brackets(tag: str) -> bool:
     return tag.startswith("[") and tag.endswith("]") and tag.count("[") == 1 and tag.count("]") == 1
 
 
 def validate_tag(original_tag: str, translation_tag: str) -> Iterator[ValidationProblem]:
-    if len(translation_tag) <= 2:
+    if len(translation_tag) < MINIMAL_TRANSLATION_LENGTH:
         yield ValidationProblem("Too short or empty translation")
         return
 

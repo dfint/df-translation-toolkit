@@ -11,7 +11,11 @@ def skip_text_set_header(file: TextIO) -> None:
     for item in tokenize_raw_file(file):
         if item.is_tag:
             object_tag = split_tag(item.text)
-            assert object_tag[0] in {"OBJECT", "TEXT_SET"}
+
+            if object_tag not in {"OBJECT", "TEXT_SET"}:
+                msg = f"Unexpected tag: {object_tag[0]}"
+                raise ValueError(msg)
+
             if object_tag[0] == "TEXT_SET":
                 return
 

@@ -19,8 +19,9 @@ class PlainTextFileToken(NamedTuple):
     line_number: int
 
 
-def parse_plain_text_file(
+def parse_plain_text_file(  # noqa: C901, PLR0912
     lines: Iterable[str],
+    *,
     join_paragraphs: bool = True,
     start_line: int = 1,
 ) -> Iterable[PlainTextFileToken]:

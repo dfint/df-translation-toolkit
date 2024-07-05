@@ -4,11 +4,11 @@ from pathlib import Path
 from typing import TextIO
 
 
-def writer(file: TextIO, **kwargs):
+def writer(file: TextIO, **kwargs):  # noqa: ANN201
     return csv.writer(file, dialect="unix", lineterminator="\r\n", **kwargs)
 
 
-def reader(file: TextIO, **kwargs):
+def reader(file: TextIO, **kwargs):  # noqa: ANN201
     return csv.reader(file, dialect="unix", lineterminator="\r\n", **kwargs)
 
 

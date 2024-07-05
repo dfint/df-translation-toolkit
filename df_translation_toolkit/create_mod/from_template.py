@@ -31,7 +31,7 @@ def create_single_localized_mod(
     translated_files = len(list((template_path / "objects").glob("*.txt")))
     logger.info(f"Translated: {translated_files} files")
     language_name = dictionaries.language_name
-    create_info(template_path / "info.txt", source_encoding, destination_encoding, language_name)
+    create_info(template_path / "info.txt", destination_encoding, language_name)
 
     svg_template_path = Path(__file__).parent / "templates" / "preview_template.svg"
     generate_preview(
@@ -58,7 +58,7 @@ def localize_directory(
                         file_path,
                         dictionaries.dictionary_textset,
                         destination_encoding,
-                        False,
+                        join_paragraphs=False,
                     )
                 else:
                     yield from translate_single_raw_file(
@@ -78,7 +78,7 @@ def fill_info_template(template_path: Path, **kwargs: str | list[str] | dict[str
         return "\n".join(filter(bool, rendered.splitlines()))
 
 
-def create_info(info_file: Path, source_encoding: str, destination_encoding: str, language: str) -> None:
+def create_info(info_file: Path, destination_encoding: str, language: str) -> None:
     with info_file.open("w", encoding=destination_encoding) as dest:
         info_template_path = Path(__file__).parent / "templates" / "info_template.txt"
         rendered = fill_info_template(
@@ -90,7 +90,7 @@ def create_info(info_file: Path, source_encoding: str, destination_encoding: str
             steam_title=f"{language.upper()} Translation",
             steam_description=f"Translation to {language.upper()} language for vanilla mods",
             steam_tags=["ui", "qol", "translation"],
-            steam_key_value_tags=dict(language=language),
+            steam_key_value_tags={"language": language},
         )
         print(rendered, file=dest)
 
@@ -144,7 +144,7 @@ def main(
     for bak_file in template_path.glob("**/*.bak"):
         try:
             bak_file.unlink()
-        except Exception:
+        except Exception:  # noqa: PERF203, BLE001
             logger.error(f"Error occurred while removing {bak_file.resolve()}")
 
     template_path.rename(template_path.parent / f"{template_path.name}_translation")

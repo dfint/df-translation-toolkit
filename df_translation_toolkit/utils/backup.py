@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 @contextmanager
-def backup(file: str | Path, overwrite: bool = False) -> Iterator[Path]:
+def backup(file: str | Path, *, overwrite: bool = False) -> Iterator[Path]:
     file = Path(file)
     backup_path = file.with_suffix(".bak")
 

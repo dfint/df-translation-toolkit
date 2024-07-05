@@ -3,6 +3,9 @@ from collections.abc import Callable
 
 from df_translation_toolkit.parse.parse_raws import is_translatable
 
+MINIMAL_TRANSLATABLE_WORD_LENGTH = 3
+MINMAL_TAG_LENGTH = 3
+
 
 class IgnoringRuleRegistry:
     all_rules: list[Callable[[str], bool]]
@@ -67,7 +70,7 @@ ignore_tags_exceptions = {"CLT"}
 
 @rules.register
 def ignore_tags(string: str) -> bool:
-    return len(string) > 2 and string not in ignore_tags_exceptions and re.fullmatch("[A-Z_]+", string)
+    return len(string) >= MINMAL_TAG_LENGTH and string not in ignore_tags_exceptions and re.fullmatch("[A-Z_]+", string)
 
 
 @rules.register
@@ -407,7 +410,7 @@ allowed_short_words = {
 
 @rules.register
 def ignore_short_words(string: str) -> bool:
-    return len(string) <= 2 and string.strip() not in allowed_short_words
+    return len(string) <= MINIMAL_TRANSLATABLE_WORD_LENGTH and string.strip() not in allowed_short_words
 
 
 blacklisted_substrings = {"placed out of bounds", "set to default", "Patched save"}
