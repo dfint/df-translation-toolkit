@@ -8,7 +8,6 @@ updates:
       dev-dependencies:
         patterns:
           - "pytest*"
-          - "flake8*"
           - "black"
           - "isort"
           - "coverage"
