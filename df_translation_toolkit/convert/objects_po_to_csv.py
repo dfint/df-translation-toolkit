@@ -78,7 +78,13 @@ app = typer.Typer()
 
 
 @app.command()
-def main(po_file: Path, csv_file: Path, encoding: str, append: bool = False, errors_file: Path | None = None) -> None:  # noqa: FBT001, FBT002
+def main(
+    po_file: Path,
+    csv_file: Path,
+    encoding: str,
+    append: bool = False,  # noqa: FBT001, FBT002
+    errors_file_path: Path | None = None,
+) -> None:
     """
     Convert a po file into a csv file in a specified encoding
     """
@@ -87,7 +93,7 @@ def main(po_file: Path, csv_file: Path, encoding: str, append: bool = False, err
         mode = "a" if append else "w"
         with (
             open(csv_file, mode, newline="", encoding=encoding, errors="replace") as outfile,
-            maybe_open(errors_file, "w", encoding="utf-8") as errors_file,
+            maybe_open(errors_file_path, "w", encoding="utf-8") as errors_file,
         ):
             convert(pofile, outfile, errors_file)
 
