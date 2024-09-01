@@ -8,10 +8,7 @@ updates:
       dev-dependencies:
         patterns:
           - "pytest*"
-          - "black"
-          - "isort"
           - "coverage"
-          - "refurb"
           - "ruff"
 
   - package-ecosystem: "github-actions"
