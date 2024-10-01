@@ -16,11 +16,11 @@ jinja2 = "^3.1.4"
 cairosvg = "^2.7.0"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.3.2"
+pytest = "^8.3.3"
 pytest-cov = "^5.0.0"
 pytest-mock = "^3.14.0"
 coverage = "^7.6.1"
-ruff = "^0.6.3"
+ruff = "^0.6.8"
 
 [tool.poetry.scripts]
 df_translation_toolkit = "df_translation_toolkit.cli:app"
