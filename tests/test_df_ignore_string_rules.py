@@ -66,6 +66,7 @@ import df_translation_toolkit.utils.df_ignore_string_rules as rules
         (rules.ignore_underline_separated_words, "init_sound returned false!", True),
         (rules.ignore_dash_prepended_strings, "-world_sites_and_pops", True),
         (rules.ignore_dash_prepended_strings, "-site_map-", True),
+        (rules.ignore_dash_prepended_strings, "-beta23", True),
         (
             rules.ignore_by_blacklisted_words,
             "*** Error(s) finalizing the creature ",

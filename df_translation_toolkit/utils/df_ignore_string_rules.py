@@ -99,7 +99,7 @@ def ignore_underline_separated_words(string: str) -> bool:
 
 @rules.register
 def ignore_dash_prepended_strings(string: str) -> bool:
-    return re.fullmatch(r"-[a-z_]+-?", string) is not None
+    return re.fullmatch(r"-[a-z0-9_]+-?", string) is not None
 
 
 @rules.register
@@ -113,6 +113,7 @@ def ignore_word_with_number(string: str) -> bool:
 
 
 forbidden_starts = {
+    "Crash",
     "String:",
     "Adventure:",
     "Hotkey:",
