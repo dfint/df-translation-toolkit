@@ -8,17 +8,26 @@ MINMAL_TAG_LENGTH = 3
 
 
 class IgnoringRuleRegistry:
-    all_rules: list[Callable[[str], bool]]
+    all_rules: dict[str, Callable[[str], bool]]
 
     def __init__(self) -> str:
-        self.all_rules = []
+        self.all_rules = {}
 
     def register(self, function: Callable[[str], bool]) -> Callable[[str], bool]:
-        self.all_rules.append(function)
+        self.all_rules[function.__name__] = function
         return function
 
-    def check_ignore(self, string: str) -> bool:
-        return any(rule(string) for rule in self.all_rules)
+    def check_ignore(self, string: str) -> str | None:
+        """
+        Check if string should be ignored
+        :param string: string to check
+        :return: name of the rule if string should be ignored or None if string should be translated
+        """
+        for name, rule in self.all_rules.items():
+            if rule(string):
+                return name
+
+        return None
 
 
 rules = IgnoringRuleRegistry()
@@ -410,7 +419,7 @@ allowed_short_words = {
 
 @rules.register
 def ignore_short_words(string: str) -> bool:
-    return len(string) <= MINIMAL_TRANSLATABLE_WORD_LENGTH and string.strip() not in allowed_short_words
+    return len(string) < MINIMAL_TRANSLATABLE_WORD_LENGTH and string.strip() not in allowed_short_words
 
 
 blacklisted_substrings = {"placed out of bounds", "set to default", "Patched save"}
@@ -421,7 +430,7 @@ def ignore_by_blacklisted_substrings(string: str) -> bool:
     return any(substring in string for substring in blacklisted_substrings)
 
 
-def all_ignore_rules(string: str) -> bool:
+def all_ignore_rules(string: str) -> str:
     return rules.check_ignore(string)
 
 
