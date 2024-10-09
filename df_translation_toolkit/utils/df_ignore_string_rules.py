@@ -414,6 +414,10 @@ allowed_short_words = {
     "It",
     "No",
     "s]",
+    "/N",
+    "/S",
+    "/E",
+    "/W",
 }
 
 
