@@ -175,6 +175,9 @@ forbidden_starts = {
     "Patched save:",
     "vector",
     "?_",
+    "ill-sized",
+    "Item creation failed:",
+    "Item submission failed:",
 }
 
 
