@@ -94,7 +94,7 @@ def ignore_gl(string: str) -> bool:
 
 @rules.register
 def ignore_underline_separated_words(string: str) -> bool:
-    return re.fullmatch(r"_*[A-Za-z\d]+_\w*", string) is not None
+    return re.fullmatch(r"_*[A-Za-z\d]+_.*", string) is not None
 
 
 @rules.register
