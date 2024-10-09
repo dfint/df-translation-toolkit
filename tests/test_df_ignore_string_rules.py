@@ -63,6 +63,7 @@ import df_translation_toolkit.utils.df_ignore_string_rules as rules
         (rules.ignore_underline_separated_words, "index1_11", True),
         (rules.ignore_underline_separated_words, "_Thrd_id", True),
         (rules.ignore_underline_separated_words, "_initterm_e", True),
+        (rules.ignore_underline_separated_words, "init_sound returned false!", True),
         (rules.ignore_dash_prepended_strings, "-world_sites_and_pops", True),
         (rules.ignore_dash_prepended_strings, "-site_map-", True),
         (
