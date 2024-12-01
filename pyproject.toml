@@ -20,7 +20,7 @@ pytest = "^8.3.3"
 pytest-cov = "^6.0.0"
 pytest-mock = "^3.14.0"
 coverage = "^7.6.4"
-ruff = "^0.7.1"
+ruff = "^0.8.1"
 
 [tool.poetry.scripts]
 df_translation_toolkit = "df_translation_toolkit.cli:app"
@@ -44,7 +44,6 @@ ignore = [
     "RUF001",
     "ANN002",
     "ANN003",
-    "ANN101",
     "PTH123",
     "T201",
     "FIX001",
@@ -52,6 +51,7 @@ ignore = [
     "TD001",
     "TD003",
     "N818",
+    "PLC0206",
 ]
 fixable = ["ALL"]
 unfixable = ["F401"]
