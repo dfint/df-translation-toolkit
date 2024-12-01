@@ -112,7 +112,7 @@ def ignore_dash_separated_words(string: str) -> bool:
 
     parts = string.split("-")
     for part in parts:
-        if not part or not part.islower():
+        if not part or not (part.islower() or part.isnumeric()):
             return False
 
     if len(parts) >= 3:  # noqa: PLR2004
