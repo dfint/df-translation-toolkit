@@ -102,7 +102,8 @@ def get_dictionaries(translation_path: Path, language: str) -> Dictionaries:
         for file in translation_path.glob(f"*{po_file}*{language}.po"):
             if file.is_file() and file.stat().st_mtime > mtime:
                 po_files[po_file] = file
-        if not po_files[po_file].is_file():
+
+        if po_file not in po_files:
             msg = f"Unable to find {po_file} po file for language {language}"
             raise ValueError(msg)
 
