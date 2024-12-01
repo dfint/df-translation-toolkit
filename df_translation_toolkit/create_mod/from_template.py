@@ -96,8 +96,8 @@ def create_info(info_file: Path, destination_encoding: str, language: str) -> No
 
 
 def get_dictionaries(translation_path: Path, language: str) -> Dictionaries:
-    po_files = {"objects": Path(), "text_set": Path()}
-    for po_file in po_files:
+    po_files: dict[str, Path] = {}
+    for po_file in ["objects", "text_set"]:
         mtime = 0
         for file in translation_path.glob(f"*{po_file}*{language}.po"):
             if file.is_file() and file.stat().st_mtime > mtime:
