@@ -107,8 +107,7 @@ def ignore_dash_separated_words(string: str) -> bool:
     if " " in string:
         return False
 
-    dash_index = string.index("-")
-    if dash_index < 1:
+    if "-" not in string:
         return False
 
     parts = string.split("-")
