@@ -23,8 +23,8 @@ cairosvg = "^2.7.0"
 pytest = "^8.3.3"
 pytest-cov = "^6.0.0"
 pytest-mock = "^3.14.0"
-coverage = "^7.6.10"
-ruff = "^0.9.4"
+coverage = "^7.6.12"
+ruff = "^0.9.9"
 
 [tool.poetry.scripts]
 df_translation_toolkit = "df_translation_toolkit.cli:app"
