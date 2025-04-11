@@ -12,7 +12,7 @@ def skip_text_set_header(file: TextIO) -> None:
         if item.is_tag:
             object_tag = split_tag(item.text)
 
-            if object_tag not in {"OBJECT", "TEXT_SET"}:
+            if object_tag[0] not in ("OBJECT", "TEXT_SET"):
                 msg = f"Unexpected tag: {object_tag[0]}"
                 raise ValueError(msg)
 
