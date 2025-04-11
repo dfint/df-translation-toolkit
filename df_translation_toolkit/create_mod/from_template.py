@@ -97,22 +97,22 @@ def create_info(info_file: Path, destination_encoding: str, language: str) -> No
 
 def get_dictionaries(translation_path: Path, language: str) -> Dictionaries:
     po_files: dict[str, Path] = {}
-    for po_file in ["objects", "text_set"]:
+    for po_file_type in ["objects", "text_set"]:
         mtime = 0
-        for file in translation_path.glob(f"*{po_file}*{language}.po"):
+        for file in translation_path.glob(f"*{po_file_type}*{language}.po"):
             if file.is_file() and file.stat().st_mtime > mtime:
-                po_files[po_file] = file
+                po_files[po_file_type] = file
 
-        if po_file not in po_files:
-            msg = f"Unable to find {po_file} po file for language {language}"
+        if po_file_type not in po_files:
+            msg = f"Unable to find {po_file_type} po file for language {language}"
             raise ValueError(msg)
 
-    with open(po_files["objects"], encoding="utf-8") as pofile:
+    with open(po_files["objects"], encoding="utf-8") as po_file:
         dictionary_object: Mapping[tuple[str, str | None], str] = {
-            (item.id, item.context): item.string for item in read_po(pofile)
+            (str(item.id), str(item.context) if item.context else None): str(item.string) for item in read_po(po_file)
         }
     with open(po_files["text_set"], encoding="utf-8") as po_file:
-        dictionary_textset: Mapping[str, str] = {item.id: item.string for item in read_po(po_file) if item.id}
+        dictionary_textset: Mapping[str, str] = {str(item.id): str(item.string) for item in read_po(po_file) if item.id}
     return Dictionaries(language.lower(), dictionary_object, dictionary_textset)
 
 

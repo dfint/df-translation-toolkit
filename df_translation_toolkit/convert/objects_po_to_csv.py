@@ -21,10 +21,9 @@ def get_translations_from_tag_parts(
 ) -> Iterator[tuple[str, str]]:
     tag_translations = defaultdict(list)
 
-    prev_original = None
-    prev_translation = None
+    prev_original = ""
+    prev_translation = ""
     for original, translation in zip(original_parts, translation_parts, strict=False):
-        original: str
         if all_caps(original) or original.isdecimal():
             if original == "STP" and translation != original and not all_caps(translation):
                 tag_translations[prev_original + "s"].append(translation)
@@ -53,7 +52,7 @@ def get_translations_from_tag(original_tag: str, translation_tag: str) -> Iterat
         raise ValidationException(validation_problems)  # pass warnings
 
 
-def prepare_dictionary(dictionary: Iterable[tuple[str, str]], errors_file: TextIO) -> Iterable[tuple[str, str]]:
+def prepare_dictionary(dictionary: Iterable[tuple[str, str]], errors_file: TextIO | None) -> Iterable[tuple[str, str]]:
     for original_string_tag, translation_tag in dictionary:
         if original_string_tag and translation_tag and translation_tag != original_string_tag:
             try:

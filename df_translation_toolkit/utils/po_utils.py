@@ -39,7 +39,7 @@ def save_pot(po_file: BinaryIO, template: Iterable[TranslationItem]) -> None:
     catalog = Catalog()
 
     for item in template:
-        locations = [(item.source_file, item.line_number)] if item.source_file else ()
+        locations = [(item.source_file, item.line_number)] if item.source_file and item.line_number else ()
         catalog.add(item.text, context=item.context, locations=locations)
 
     po_file.write(_default_header + b"\n\n")
@@ -47,4 +47,4 @@ def save_pot(po_file: BinaryIO, template: Iterable[TranslationItem]) -> None:
 
 
 def simple_read_po(po_file: TextIO) -> list[tuple[str, str]]:
-    return [(item.id, item.string) for item in read_po(po_file) if item.id and item.string]
+    return [(str(item.id), str(item.string)) for item in read_po(po_file) if item.id and item.string]
