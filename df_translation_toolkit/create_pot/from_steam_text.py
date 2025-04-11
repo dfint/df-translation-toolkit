@@ -25,7 +25,7 @@ def get_raw_object_type(file_name: Path, source_encoding: str) -> str:
             if item.is_tag:
                 object_tag = split_tag(item.text)
 
-                if object_tag[0] != "OBJECTS":
+                if object_tag[0] not in ("OBJECTS", "OBJECT"):
                     msg = f"Unexpected tag: {object_tag[0]}"
                     raise ValueError(msg)
 
