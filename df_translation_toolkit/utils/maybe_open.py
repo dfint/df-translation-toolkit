@@ -5,7 +5,7 @@ from typing import Any
 
 
 @contextmanager
-def maybe_open(file_name: str | Path, *args, **kwargs) -> Generator[Any, Any, None]:
+def maybe_open(file_name: str | Path | None, *args, **kwargs) -> Generator[Any, Any, None]:
     file = None
     try:
         if file_name:

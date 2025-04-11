@@ -64,8 +64,8 @@ class FilePartInfo(NamedTuple):
     line_number: int
     translatable: bool
     context: str | None
-    text: str | None = None
-    tag: str | None = None
+    text: str = ""
+    tag: str = ""
     tag_parts: Sequence[str] = ()
 
 
@@ -75,26 +75,27 @@ def parse_raw_file(file: Iterable[str]) -> Iterator[FilePartInfo]:
     for token in tokenize_raw_file(file):
         if not token.is_tag:
             yield FilePartInfo(line_number=token.line_number, translatable=False, context=context, text=token.text)
-        else:
-            tag = token.text
-            tag_parts = split_tag(tag)
+            continue
 
-            if tag_parts[0] == "OBJECT":
-                object_name = tag_parts[1]
-                yield FilePartInfo(line_number=token.line_number, translatable=False, context=context, tag=tag)
-            elif object_name and (
-                tag_parts[0] == object_name
-                or (object_name in {"ITEM", "BUILDING"} and tag_parts[0].startswith(object_name))
-                or object_name.endswith("_" + tag_parts[0])
-            ):
-                context = ":".join(tag_parts)
-                yield FilePartInfo(token.line_number, translatable=False, context=context, tag=tag)
-            else:
-                yield FilePartInfo(token.line_number, translatable=True, context=context, tag=tag, tag_parts=tag_parts)
+        tag = token.text
+        tag_parts = split_tag(tag)
+
+        if tag_parts[0] == "OBJECT":
+            object_name = tag_parts[1]
+            yield FilePartInfo(line_number=token.line_number, translatable=False, context=context, tag=tag)
+        elif object_name and (
+            tag_parts[0] == object_name
+            or (object_name in {"ITEM", "BUILDING"} and tag_parts[0].startswith(object_name))
+            or object_name.endswith("_" + tag_parts[0])
+        ):
+            context = ":".join(tag_parts)
+            yield FilePartInfo(token.line_number, translatable=False, context=context, tag=tag)
+        else:
+            yield FilePartInfo(token.line_number, translatable=True, context=context, tag=tag, tag_parts=tag_parts)
 
 
 def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[TranslationItem]:
-    translation_keys: set[tuple[str, tuple[str, ...]]] = set()
+    translation_keys: set[tuple[str | None, tuple[str, ...]]] = set()
 
     for item in parse_raw_file(file):
         if not item.translatable:
@@ -108,7 +109,7 @@ def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[Translation
         ):
             if not is_translatable(tag_parts[-1]):
                 last = last_suitable(tag_parts, is_translatable)
-                tag_parts = tag_parts[:last]
+                tag_parts = list(tag_parts[:last])
                 tag_parts.append("")  # Add an empty element to the tag to mark the tag as not completed
             translation_keys.add((item.context, tuple(tag_parts)))
             yield TranslationItem(context=item.context, text=join_tag(tag_parts), line_number=item.line_number)
@@ -117,7 +118,7 @@ def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[Translation
 def get_from_dict_with_context(
     dictionary: Mapping[tuple[str, str | None], str],
     key: str,
-    context: str,
+    context: str | None,
 ) -> str | None:
     if (key, context) in dictionary:
         return dictionary[(key, context)]
@@ -130,7 +131,7 @@ def get_from_dict_with_context(
 
 def get_tag_translation(dictionary: Mapping[tuple[str, str | None], str], item: FilePartInfo) -> str:
     tag = item.tag
-    tag_parts = item.tag_parts
+    tag_parts = list(item.tag_parts)
     context = item.context
     new_tag = get_from_dict_with_context(dictionary, tag, context)
 
@@ -162,7 +163,7 @@ def translate_raw_file(file: Iterable[str], dictionary: Mapping[tuple[str, str |
             modified_line_parts = []
             prev_line_number = item.line_number
 
-        if item.text is not None:
+        if item.text:
             modified_line_parts.append(item.text)
         elif item.translatable and any(is_translatable(s) for s in item.tag_parts[1:]):
             translation = get_tag_translation(dictionary, item)

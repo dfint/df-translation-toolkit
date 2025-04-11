@@ -47,4 +47,4 @@ def save_pot(po_file: BinaryIO, template: Iterable[TranslationItem]) -> None:
 
 
 def simple_read_po(po_file: TextIO) -> list[tuple[str, str]]:
-    return [(item.id, item.string) for item in read_po(po_file) if item.id and item.string]
+    return [(str(item.id), str(item.string)) for item in read_po(po_file) if item.id and item.string]

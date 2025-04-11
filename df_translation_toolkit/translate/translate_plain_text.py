@@ -38,12 +38,18 @@ def translate_plain_text(
     join_paragraphs: bool = True,
 ) -> Iterator[str]:
     with po_filename.open("r", encoding="utf-8") as po_file:
-        dictionary = {item.id: item.string for item in read_po(po_file) if item.id}
+        dictionary = {str(item.id): str(item.string) for item in read_po(po_file) if item.id}
 
     for item in Path(path).rglob("*.txt"):
         if item.is_file():
             with backup(item) as backup_file:
-                yield from translate_plain_text_file(backup_file, item, dictionary, encoding, join_paragraphs)
+                yield from translate_plain_text_file(
+                    backup_file,
+                    item,
+                    dictionary,
+                    encoding,
+                    join_paragraphs=join_paragraphs,
+                )
 
 
 def main(
@@ -53,7 +59,7 @@ def main(
     split: bool = False,  # noqa: FBT001, FBT002
 ) -> None:
     join_paragraphs = not split
-    for filename in translate_plain_text(po_filename, path, encoding, join_paragraphs):
+    for filename in translate_plain_text(po_filename, path, encoding, join_paragraphs=join_paragraphs):
         print(filename, file=sys.stderr)
 
 

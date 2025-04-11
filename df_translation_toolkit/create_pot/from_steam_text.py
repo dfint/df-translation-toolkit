@@ -75,7 +75,7 @@ def main(vanilla_path: Path, destination_path: Path, source_encoding: str = "cp4
         msg = "Destination path doesn't exist"
         raise ValueError(msg)
 
-    results = defaultdict(list)
+    results: dict[str, list[TranslationItem]] = defaultdict(list)
 
     for directory in traverse_vanilla_directories(vanilla_path):
         logger.info(directory.relative_to(vanilla_path))
@@ -91,8 +91,8 @@ def main(vanilla_path: Path, destination_path: Path, source_encoding: str = "cp4
         for group, data in results.items():
             if data:
                 pot_path = destination_path / (group.lower() + ".pot")
-                with pot_path.open("wb") as file_path:
-                    save_pot(file_path, data)
+                with pot_path.open("wb") as pot_file:
+                    save_pot(pot_file, data)
 
 
 if __name__ == "__main__":

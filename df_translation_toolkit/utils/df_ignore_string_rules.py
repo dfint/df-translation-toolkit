@@ -10,7 +10,7 @@ MINMAL_TAG_LENGTH = 3
 class IgnoringRuleRegistry:
     all_rules: dict[str, Callable[[str], bool]]
 
-    def __init__(self) -> str:
+    def __init__(self) -> None:
         self.all_rules = {}
 
     def register(self, function: Callable[[str], bool]) -> Callable[[str], bool]:
@@ -79,7 +79,11 @@ ignore_tags_exceptions = {"CLT"}
 
 @rules.register
 def ignore_tags(string: str) -> bool:
-    return len(string) >= MINMAL_TAG_LENGTH and string not in ignore_tags_exceptions and re.fullmatch("[A-Z_]+", string)
+    return (
+        len(string) >= MINMAL_TAG_LENGTH
+        and string not in ignore_tags_exceptions
+        and bool(re.fullmatch("[A-Z_]+", string))
+    )
 
 
 @rules.register
@@ -458,7 +462,7 @@ def ignore_by_blacklisted_substrings(string: str) -> bool:
     return any(substring in string for substring in blacklisted_substrings)
 
 
-def all_ignore_rules(string: str) -> str:
+def all_ignore_rules(string: str) -> str | None:
     return rules.check_ignore(string)
 
 
