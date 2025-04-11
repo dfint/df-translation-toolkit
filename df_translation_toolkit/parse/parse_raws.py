@@ -66,7 +66,7 @@ class FilePartInfo(NamedTuple):
     context: str | None
     text: str | None = None
     tag: str | None = None
-    tag_parts: Sequence[str] | None = None
+    tag_parts: Sequence[str] = ()
 
 
 def parse_raw_file(file: Iterable[str]) -> Iterator[FilePartInfo]:
@@ -97,19 +97,21 @@ def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[Translation
     translation_keys: set[tuple[str, tuple[str, ...]]] = set()
 
     for item in parse_raw_file(file):
-        if item.translatable:
-            tag_parts = item.tag_parts
-            if (
-                "TILE" not in tag_parts[0]
-                and any(is_translatable(s) for s in tag_parts[1:])
-                and (item.context, tuple(tag_parts)) not in translation_keys  # Don't add duplicate items to translate
-            ):
-                if not is_translatable(tag_parts[-1]):
-                    last = last_suitable(tag_parts, is_translatable)
-                    tag_parts = tag_parts[:last]
-                    tag_parts.append("")  # Add an empty element to the tag to mark the tag as not completed
-                translation_keys.add((item.context, tuple(tag_parts)))
-                yield TranslationItem(context=item.context, text=join_tag(tag_parts), line_number=item.line_number)
+        if not item.translatable:
+            continue
+
+        tag_parts = item.tag_parts
+        if (
+            "TILE" not in tag_parts[0]
+            and any(is_translatable(s) for s in tag_parts[1:])
+            and (item.context, tuple(tag_parts)) not in translation_keys  # Don't add duplicate items to translate
+        ):
+            if not is_translatable(tag_parts[-1]):
+                last = last_suitable(tag_parts, is_translatable)
+                tag_parts = tag_parts[:last]
+                tag_parts.append("")  # Add an empty element to the tag to mark the tag as not completed
+            translation_keys.add((item.context, tuple(tag_parts)))
+            yield TranslationItem(context=item.context, text=join_tag(tag_parts), line_number=item.line_number)
 
 
 def get_from_dict_with_context(
@@ -162,11 +164,11 @@ def translate_raw_file(file: Iterable[str], dictionary: Mapping[tuple[str, str |
 
         if item.text is not None:
             modified_line_parts.append(item.text)
-        elif not item.translatable or not any(is_translatable(s) for s in item.tag_parts[1:]):
-            modified_line_parts.append(item.tag)
-        else:
+        elif item.translatable and any(is_translatable(s) for s in item.tag_parts[1:]):
             translation = get_tag_translation(dictionary, item)
             modified_line_parts.append(translation)
+        else:
+            modified_line_parts.append(item.tag)
 
     if modified_line_parts:
         yield "".join(modified_line_parts)

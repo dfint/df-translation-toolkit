@@ -19,7 +19,7 @@ def translate_plain_text_file(
 ) -> Iterator[str]:
     with source_file_path.open() as source_file, destination_file_path.open("w", encoding=encoding) as destination_file:
         yield destination_file_path.name
-        for text_block, _, _ in parse_plain_text_file(source_file, join_paragraphs):
+        for text_block, _, _ in parse_plain_text_file(source_file, join_paragraphs=join_paragraphs):
             clean_text_block = text_block.rstrip("\n")
             if clean_text_block in dictionary:
                 translation = dictionary[clean_text_block]

@@ -8,7 +8,7 @@ from loguru import logger
 from df_translation_toolkit.create_pot.from_raw_objects import extract_from_raw_file
 from df_translation_toolkit.parse.parse_raws import split_tag, tokenize_raw_file
 from df_translation_toolkit.parse.parse_text_set import extract_from_vanilla_text
-from df_translation_toolkit.utils.po_utils import save_pot
+from df_translation_toolkit.utils.po_utils import TranslationItem, save_pot
 
 
 def traverse_vanilla_directories(vanilla_path: Path) -> Iterable[Path]:
@@ -19,7 +19,7 @@ def traverse_vanilla_directories(vanilla_path: Path) -> Iterable[Path]:
                 yield objects
 
 
-def get_raw_object_type(file_name: Path, source_encoding: str) -> str:
+def get_raw_object_type(file_name: Path, source_encoding: str) -> str | None:
     with file_name.open(encoding=source_encoding) as file:
         for item in tokenize_raw_file(file):
             if item.is_tag:
@@ -33,7 +33,7 @@ def get_raw_object_type(file_name: Path, source_encoding: str) -> str:
         return None
 
 
-def get_translatable_strings(file_path: Path, source_encoding: str) -> tuple[str, Iterable[str]] | None:
+def get_translatable_strings(file_path: Path, source_encoding: str) -> tuple[str, Iterable[TranslationItem]] | None:
     object_type = get_raw_object_type(file_path, source_encoding)
     if object_type in dont_translate:
         return None
