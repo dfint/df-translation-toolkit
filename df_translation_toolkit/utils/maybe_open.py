@@ -1,11 +1,11 @@
 from collections.abc import Generator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any
+from typing import TextIO
 
 
 @contextmanager
-def maybe_open(file_name: str | Path | None, *args, **kwargs) -> Generator[Any, Any, None]:
+def maybe_open(file_name: str | Path | None, *args, **kwargs) -> Generator[TextIO | None, None, None]:
     file = None
     try:
         if file_name:

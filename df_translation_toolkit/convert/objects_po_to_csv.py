@@ -1,7 +1,7 @@
 from collections import defaultdict
 from collections.abc import Iterable, Iterator
 from pathlib import Path
-from typing import TextIO
+from typing import IO, TextIO
 
 import typer
 from loguru import logger
@@ -65,7 +65,7 @@ def prepare_dictionary(dictionary: Iterable[tuple[str, str]], errors_file: TextI
                     print(error_text, end="\n\n", file=errors_file)
 
 
-def convert(po_file: TextIO, csv_file: TextIO, error_file: TextIO | None = None) -> None:
+def convert(po_file: TextIO, csv_file: IO[str], error_file: TextIO | None = None) -> None:
     dictionary = simple_read_po(po_file)
     csv_writer = csv_utils.writer(csv_file)
 
