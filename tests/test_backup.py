@@ -13,7 +13,7 @@ def test_backup_doesnt_exist(mocker: MockerFixture) -> None:
     backup_name = "file.bak"
     with backup(file_name) as backup_file:
         assert Path(backup_file).name == backup_name
-        shutil.copy.assert_called_once_with(Path(file_name), Path(backup_name))
+        shutil.copy.assert_called_once_with(Path(file_name), Path(backup_name))  # type: ignore[attr-defined]
 
 
 def test_backup_exists(mocker: MockerFixture) -> None:
@@ -23,4 +23,4 @@ def test_backup_exists(mocker: MockerFixture) -> None:
     backup_name = "file.bak"
     with backup(file_name) as backup_file:
         assert Path(backup_file).name == backup_name
-        shutil.copy.assert_not_called()
+        shutil.copy.assert_not_called()  # type: ignore[attr-defined]

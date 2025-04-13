@@ -41,7 +41,7 @@ jobs:
     - name: Check with mypy
       run: |
         poetry run mypy --install-types --non-interactive
-        poetry run mypy .
+        poetry run mypy . --strict
 
     - name: Test with pytest
       run: |

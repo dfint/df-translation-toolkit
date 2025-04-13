@@ -13,11 +13,11 @@ class CSVReader(Protocol):
     def __iter__(self) -> Iterator[list[str]]: ...
 
 
-def writer(file: IO[str], **kwargs) -> CSVWriter:
+def writer(file: IO[str], **kwargs) -> CSVWriter:  # type: ignore[no-untyped-def]
     return csv.writer(file, dialect="unix", lineterminator="\r\n", **kwargs)
 
 
-def reader(file: TextIO, **kwargs) -> CSVReader:
+def reader(file: TextIO, **kwargs) -> CSVReader:  # type: ignore[no-untyped-def]
     return csv.reader(file, dialect="unix", lineterminator="\r\n", **kwargs)
 
 
