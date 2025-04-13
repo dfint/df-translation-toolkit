@@ -1,6 +1,7 @@
 from collections import defaultdict
 from collections.abc import Iterable
 from pathlib import Path
+from typing import Any
 
 import typer
 from loguru import logger
@@ -48,7 +49,7 @@ def get_translatable_strings(file_path: Path, source_encoding: str) -> tuple[str
     return key, data
 
 
-def iterable_is_empty(iterable: Iterable) -> bool:
+def iterable_is_empty(iterable: Iterable[Any]) -> bool:
     iterator = iter(iterable)
     try:
         next(iterator)

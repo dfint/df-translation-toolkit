@@ -1,3 +1,4 @@
+from typing import Callable
 import pytest
 
 import df_translation_toolkit.utils.df_ignore_string_rules as rules
@@ -104,6 +105,6 @@ import df_translation_toolkit.utils.df_ignore_string_rules as rules
         (rules.all_ignore_rules, "/N", False),
     ],
 )
-def test_ignore_rules(rule, string, ignore):
+def test_ignore_rules(rule: Callable[[str], bool], string: str, ignore: bool) -> None:  # noqa: FBT001
     rule_name = rule(string)
     assert bool(rule_name) is ignore, rule_name

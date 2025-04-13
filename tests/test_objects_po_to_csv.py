@@ -24,5 +24,9 @@ from df_translation_toolkit.convert.objects_po_to_csv import get_translations_fr
         ),
     ],
 )
-def test_get_translations_from_tag(original_parts, translation_parts, result):
+def test_get_translations_from_tag(
+    original_parts: list[str],
+    translation_parts: list[str],
+    result: list[tuple[str, str]],
+) -> None:
     assert list(get_translations_from_tag_parts(original_parts, translation_parts)) == result

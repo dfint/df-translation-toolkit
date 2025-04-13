@@ -1,10 +1,12 @@
 import shutil
 from pathlib import Path
 
+from pytest_mock import MockerFixture
+
 from df_translation_toolkit.utils.backup import backup
 
 
-def test_backup_doesnt_exist(mocker):
+def test_backup_doesnt_exist(mocker: MockerFixture) -> None:
     mocker.patch("pathlib.Path.exists", return_value=False)
     mocker.patch("shutil.copy")
     file_name = "file.txt"
@@ -14,7 +16,7 @@ def test_backup_doesnt_exist(mocker):
         shutil.copy.assert_called_once_with(Path(file_name), Path(backup_name))
 
 
-def test_backup_exists(mocker):
+def test_backup_exists(mocker: MockerFixture) -> None:
     mocker.patch("pathlib.Path.exists", return_value=True)
     mocker.patch("shutil.copy")
     file_name = "file.txt"
