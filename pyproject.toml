@@ -26,6 +26,7 @@ pytest-mock = "^3.14.0"
 coverage = "^7.8.0"
 ruff = "^0.11.2"
 mypy = "^1.15.0"
+types-requests = "*"
 
 [tool.poetry.scripts]
 df_translation_toolkit = "df_translation_toolkit.cli:app"
