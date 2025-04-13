@@ -10,7 +10,7 @@ from df_translation_toolkit.validation.validation_models import ProblemSeverity,
         (ProblemSeverity.WARNING, "Warning"),
     ],
 )
-def test_problem_severity_str(test_data, expected):
+def test_problem_severity_str(test_data: ProblemSeverity, expected: str) -> None:
     assert str(test_data) == expected
 
 
@@ -21,7 +21,7 @@ def test_problem_severity_str(test_data, expected):
         (ValidationProblem("Warning message", ProblemSeverity.WARNING), "Warning: Warning message"),
     ],
 )
-def test_validation_problem_str(test_data, expected):
+def test_validation_problem_str(test_data: ValidationProblem, expected: str) -> None:
     assert str(test_data) == expected
 
 
@@ -32,7 +32,7 @@ def test_validation_problem_str(test_data, expected):
         ([ValidationProblem("Warning", ProblemSeverity.WARNING)], False),
     ],
 )
-def test_validation_problem_contains_errors(test_data, expected):
+def test_validation_problem_contains_errors(test_data: list[ValidationProblem], expected: bool) -> None:  # noqa: FBT001
     assert ValidationProblem.contains_errors(test_data) == expected
 
 
@@ -46,5 +46,5 @@ def test_validation_problem_contains_errors(test_data, expected):
         ([ValidationProblem("Warning message", ProblemSeverity.WARNING)], "Warning: Warning message"),
     ],
 )
-def test_validation_exception_str(test_data, expected):
+def test_validation_exception_str(test_data: list[ValidationProblem], expected: str) -> None:
     assert str(ValidationException(test_data)) == expected

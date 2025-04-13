@@ -22,7 +22,7 @@ from df_translation_toolkit.utils.fix_translated_strings import (
         ),  # Don't change Spanish exclamation mark
     ],
 )
-def test_cleanup_string(original, fixed):
+def test_cleanup_string(original: str, fixed: str) -> None:
     assert cleanup_string(original) == fixed
 
 
@@ -36,7 +36,7 @@ def test_cleanup_string(original, fixed):
         (".  What do you command?", " . ¿Qué ordenas?", ". ¿Qué ordenas?"),
     ],
 )
-def test_fix_leading_spaces(text, translation, fixed):
+def test_fix_leading_spaces(text: str, translation: str, fixed: str) -> None:
     assert fix_leading_spaces(text, translation) == fixed
 
 
@@ -46,7 +46,7 @@ def test_fix_leading_spaces(text, translation, fixed):
         ("test ", "test", "test "),
     ],
 )
-def test_fix_trailing_spaces(text, translation, fixed):
+def test_fix_trailing_spaces(text: str, translation: str, fixed: str) -> None:
     assert fix_trailing_spaces(text, translation) == fixed
 
 
@@ -62,5 +62,5 @@ def test_fix_trailing_spaces(text, translation, fixed):
         (" ", "", " "),
     ],
 )
-def test_fix_spaces(text, translation, fixed):
+def test_fix_spaces(text: str, translation: str, fixed: str) -> None:
     assert fix_spaces(text, translation) == fixed, (text, translation, fixed)

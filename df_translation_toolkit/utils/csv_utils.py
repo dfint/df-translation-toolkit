@@ -1,14 +1,23 @@
 import csv
-from collections.abc import Iterator
+from collections.abc import Iterable, Iterator
 from pathlib import Path
-from typing import TextIO
+from typing import IO, Protocol, TextIO
 
 
-def writer(file: TextIO, **kwargs):  # noqa: ANN201
+class CSVWriter(Protocol):
+    def writerow(self, row: list[str]) -> None: ...
+    def writerows(self, rows: Iterable[list[str]]) -> None: ...
+
+
+class CSVReader(Protocol):
+    def __iter__(self) -> Iterator[list[str]]: ...
+
+
+def writer(file: IO[str], **kwargs) -> CSVWriter:  # type: ignore[no-untyped-def]
     return csv.writer(file, dialect="unix", lineterminator="\r\n", **kwargs)
 
 
-def reader(file: TextIO, **kwargs):  # noqa: ANN201
+def reader(file: TextIO, **kwargs) -> CSVReader:  # type: ignore[no-untyped-def]
     return csv.reader(file, dialect="unix", lineterminator="\r\n", **kwargs)
 
 

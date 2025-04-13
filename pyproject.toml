@@ -25,6 +25,8 @@ pytest-cov = "^6.0.0"
 pytest-mock = "^3.14.0"
 coverage = "^7.8.0"
 ruff = "^0.11.2"
+mypy = "^1.15.0"
+types-requests = "*"
 
 [tool.poetry.scripts]
 df_translation_toolkit = "df_translation_toolkit.cli:app"
@@ -62,9 +64,6 @@ unfixable = ["F401"]
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = [
     "S101",   # Don't warn about using of asserts in tests
-    "ANN001",
-    "ANN201",
-    "ANN202",
     "D",      # Don't warn about missing documentation in tests
     "PT006",
     "PT007",

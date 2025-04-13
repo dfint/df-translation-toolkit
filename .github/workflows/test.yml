@@ -16,6 +16,7 @@ jobs:
           - "3.10"
           - "3.11"
           - "3.12"
+          - "3.13"
 
     steps:
     - uses: actions/checkout@v4
@@ -36,9 +37,15 @@ jobs:
     - name: Lint with ruff
       run: |
         poetry run ruff check . --statistics
+
+    - name: Check with mypy
+      run: |
+        poetry run mypy . --strict
+
     - name: Test with pytest
       run: |
         poetry run pytest --cov=./
+
     - name: Upload coverage data to coveralls.io
       run: |
         pip install coveralls

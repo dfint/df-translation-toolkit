@@ -1,5 +1,5 @@
 import io
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from typing import TypeVar
 
 import pytest
@@ -118,7 +118,7 @@ from tests.strip_margin import strip_margin
         ),
     ],
 )
-def test_extract_translatables_from_raws(content, expected):
+def test_extract_translatables_from_raws(content: str, expected: list[TranslationItem]) -> None:
     assert list(extract_translatables_from_raws(content.splitlines())) == expected
 
 
@@ -169,7 +169,7 @@ def test_extract_translatables_from_raws(content, expected):
         ),
     ],
 )
-def test_translate_raw_file(content, dictionary, result):
+def test_translate_raw_file(content: str, dictionary: Mapping[tuple[str, str | None], str], result: str) -> None:
     assert list(translate_raw_file(io.StringIO(content), dictionary)) == result.splitlines()
 
 
@@ -187,7 +187,7 @@ T = TypeVar("T")
         [[], bool, 0],
     ],
 )
-def test_last_suitable(sequence: Sequence[T], function: Callable[[T], bool], expected):
+def test_last_suitable(sequence: Sequence[T], function: Callable[[T], bool], expected: int) -> None:
     assert last_suitable(sequence, function) == expected
     result = last_suitable(sequence, function)
     assert len(sequence[:result]) == result
