@@ -1,4 +1,5 @@
-from typing import Callable
+from collections.abc import Callable
+
 import pytest
 
 import df_translation_toolkit.utils.df_ignore_string_rules as rules

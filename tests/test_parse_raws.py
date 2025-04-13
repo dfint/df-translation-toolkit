@@ -1,6 +1,6 @@
 import io
-from collections.abc import Callable, Sequence
-from typing import Mapping, TypeVar
+from collections.abc import Callable, Mapping, Sequence
+from typing import TypeVar
 
 import pytest
 
