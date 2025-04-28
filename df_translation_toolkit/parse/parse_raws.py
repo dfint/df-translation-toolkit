@@ -112,7 +112,7 @@ def extract_translatables_from_raws(file: Iterable[str]) -> Iterator[Translation
                 tag_parts = list(tag_parts[:last])
                 tag_parts.append("")  # Add an empty element to the tag to mark the tag as not completed
             translation_keys.add((item.context, tuple(tag_parts)))
-            yield TranslationItem(context=item.context, text=join_tag(tag_parts), line_number=item.line_number)
+            yield TranslationItem(context=item.context, text=join_tag(tag_parts))
 
 
 def get_from_dict_with_context(
