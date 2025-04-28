@@ -9,10 +9,10 @@ from df_translation_toolkit.utils.po_utils import TranslationItem, save_pot
 
 
 def extract_from_speech_file(file: TextIO, source_path: str) -> Iterator[TranslationItem]:
-    for i, line in enumerate(file, 1):
+    for line in file:
         text = line.rstrip("\n")
         if text:
-            yield TranslationItem(text=text, source_file=source_path, line_number=i)
+            yield TranslationItem(text=text, source_file=source_path)
 
 
 def extract_translatables(files: Iterable[Path]) -> Iterator[TranslationItem]:
