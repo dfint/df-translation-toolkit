@@ -22,9 +22,9 @@ cairosvg = "^2.7.0"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"
 pytest-cov = "^6.1.1"
-pytest-mock = "^3.14.0"
-coverage = "^7.8.0"
-ruff = "^0.11.7"
+pytest-mock = "^3.14.1"
+coverage = "^7.8.2"
+ruff = "^0.11.12"
 mypy = "^1.15.0"
 types-requests = "*"
 
