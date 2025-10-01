@@ -11,7 +11,7 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-typer = "^0.16.0"
+typer = "^0.19.2"
 Unidecode = "^1.4.0"
 loguru = "^0.7.3"
 babel = "^2.17.0"
