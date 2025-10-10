@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "df-translation-toolkit"
-version = "0.8.0"
+version = "0.9.0"
 description = "Toolset to convert text extracted from DF to translation format and aback"
 authors = [
     "insolor <insolor@gmail.com>",
