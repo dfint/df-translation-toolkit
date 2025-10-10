@@ -60,20 +60,18 @@ def validate_string(
     original_string_tag: str,
     translation_tag: str,
     diagnostics: Diagnostics | None = None,
-) -> tuple[str, str] | None:
+) -> Iterable[tuple[str, str]]:
     if not (original_string_tag and translation_tag and translation_tag != original_string_tag):
         return None
 
     try:
         for original_string, translation in get_translations_from_tag(original_string_tag, translation_tag):
-            return original_string, cleanup_string(fix_spaces(original_string, translation))
+            yield original_string, cleanup_string(fix_spaces(original_string, translation))
     except ValidationException as ex:
         problem_info = ProblemInfo(original=original_string_tag, translation=translation_tag, problems=ex.problems)
         logger.error("\n" + str(problem_info))
         if diagnostics:
             diagnostics.add(problem_info)
-
-    return None
 
 
 def prepare_dictionary(
@@ -81,9 +79,7 @@ def prepare_dictionary(
     diagnostics: Diagnostics | None = None,
 ) -> Iterable[tuple[str, str]]:
     for original_string_tag, translation_tag in dictionary:
-        result = validate_string(original_string_tag, translation_tag, diagnostics=diagnostics)
-        if result:
-            yield result
+        yield from validate_string(original_string_tag, translation_tag, diagnostics=diagnostics)
 
 
 def convert(po_file: TextIO, csv_file: IO[str], diagnostics: Diagnostics | None = None) -> None:
