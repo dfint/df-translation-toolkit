@@ -9,10 +9,14 @@ from loguru import logger
 from df_translation_toolkit.parse.parse_raws import all_caps, split_tag
 from df_translation_toolkit.utils import csv_utils
 from df_translation_toolkit.utils.fix_translated_strings import cleanup_string, fix_spaces
-from df_translation_toolkit.utils.maybe_open import maybe_open
 from df_translation_toolkit.utils.po_utils import simple_read_po
 from df_translation_toolkit.validation.validate_objects import validate_tag
-from df_translation_toolkit.validation.validation_models import ValidationException, ValidationProblem
+from df_translation_toolkit.validation.validation_models import (
+    Diagnostics,
+    ProblemInfo,
+    ValidationException,
+    ValidationProblem,
+)
 
 
 def get_translations_from_tag_parts(
@@ -52,24 +56,41 @@ def get_translations_from_tag(original_tag: str, translation_tag: str) -> Iterat
         raise ValidationException(validation_problems)  # pass warnings
 
 
-def prepare_dictionary(dictionary: Iterable[tuple[str, str]], errors_file: TextIO | None) -> Iterable[tuple[str, str]]:
+def validate_string(
+    original_string_tag: str,
+    translation_tag: str,
+    diagnostics: Diagnostics | None = None,
+) -> tuple[str, str] | None:
+    if not (original_string_tag and translation_tag and translation_tag != original_string_tag):
+        return None
+
+    try:
+        for original_string, translation in get_translations_from_tag(original_string_tag, translation_tag):
+            return original_string, cleanup_string(fix_spaces(original_string, translation))
+    except ValidationException as ex:
+        problem_info = ProblemInfo(original=original_string_tag, translation=translation_tag, problems=ex.problems)
+        logger.error("\n" + str(problem_info))
+        if diagnostics:
+            diagnostics.add(problem_info)
+
+    return None
+
+
+def prepare_dictionary(
+    dictionary: Iterable[tuple[str, str]],
+    diagnostics: Diagnostics | None = None,
+) -> Iterable[tuple[str, str]]:
     for original_string_tag, translation_tag in dictionary:
-        if original_string_tag and translation_tag and translation_tag != original_string_tag:
-            try:
-                for original_string, translation in get_translations_from_tag(original_string_tag, translation_tag):
-                    yield original_string, cleanup_string(fix_spaces(original_string, translation))
-            except ValidationException as ex:
-                error_text = f"Problematic tag pair: {original_string_tag!r}, {translation_tag!r}\nProblems:\n{ex}"
-                logger.error("\n" + error_text)
-                if errors_file:
-                    print(error_text, end="\n\n", file=errors_file)
+        result = validate_string(original_string_tag, translation_tag, diagnostics=diagnostics)
+        if result:
+            yield result
 
 
-def convert(po_file: TextIO, csv_file: IO[str], error_file: TextIO | None = None) -> None:
+def convert(po_file: TextIO, csv_file: IO[str], diagnostics: Diagnostics | None = None) -> None:
     dictionary = simple_read_po(po_file)
     csv_writer = csv_utils.writer(csv_file)
 
-    for original_string, translation in dict(prepare_dictionary(dictionary, error_file)).items():
+    for original_string, translation in dict(prepare_dictionary(dictionary, diagnostics)).items():
         csv_writer.writerow([original_string, translation])
 
 
@@ -90,11 +111,13 @@ def main(
 
     with open(po_file, encoding="utf-8") as pofile:
         mode = "a" if append else "w"
-        with (
-            open(csv_file, mode, newline="", encoding=encoding, errors="replace") as outfile,
-            maybe_open(errors_file_path, "w", encoding="utf-8") as errors_file,
-        ):
-            convert(pofile, outfile, errors_file)
+        diagnostics = Diagnostics()
+        with open(csv_file, mode, newline="", encoding=encoding, errors="replace") as outfile:
+            convert(pofile, outfile, diagnostics)
+
+        if errors_file_path and diagnostics:
+            with open(errors_file_path, mode, encoding="utf-8") as errors_file:
+                errors_file.write(str(diagnostics))
 
 
 if __name__ == "__main__":
