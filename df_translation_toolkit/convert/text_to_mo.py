@@ -23,13 +23,14 @@ def translate_tag(
     diagnostics: Diagnostics | None = None,
 ) -> str | None:
     validation_problems = list(validate_tag(original_tag, translation_tag))
-    problem_info = ProblemInfo(original=original_tag, translation=translation_tag, problems=validation_problems)
-    logger.error("\n" + str(problem_info))
-    if diagnostics:
-        diagnostics.add(problem_info)
+    if validation_problems:
+        problem_info = ProblemInfo(original=original_tag, translation=translation_tag, problems=validation_problems)
+        logger.error("\n" + str(problem_info))
+        if diagnostics:
+            diagnostics.add(problem_info)
 
-    if problem_info.contains_errors():
-        return None
+        if problem_info.contains_errors():
+            return None
 
     translation_tag = fix_spaces(original_tag, translation_tag, strict=True)
     original_parts = split_tag(original_tag)
