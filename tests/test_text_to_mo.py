@@ -1,6 +1,6 @@
 import pytest
 
-from df_translation_toolkit.convert.text_to_mo import fix_spaces_in_tag_parts_translations, translate_tag_string
+from df_translation_toolkit.convert.objects_po_to_mo import fix_spaces_in_tag_parts_translations, translate_tag_string
 
 
 @pytest.mark.parametrize(
