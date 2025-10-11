@@ -16,7 +16,10 @@ def validate_tag(original_tag: str, translation_tag: str) -> Iterator[Validation
         return
 
     if translation_tag.strip() != translation_tag:
-        yield ValidationProblem("Extra spaces at the beginning or at the end of the translation")
+        yield ValidationProblem(
+            "Extra spaces at the beginning or at the end of the translation",
+            ProblemSeverity.WARNING,
+        )
         translation_tag = translation_tag.strip()
         # No return to check issues with brackets after stripping spaces
 
@@ -39,7 +42,10 @@ def validate_tag_parts(original_parts: list[str], translation_parts: list[str]) 
         if all_caps(original) or original.isdecimal():
             valid = not (original != translation and original == translation.strip())
             if not valid:
-                yield ValidationProblem("Don't add extra spaces at the beginning or at the end of a tag part")
+                yield ValidationProblem(
+                    "Don't add extra spaces at the beginning or at the end of a tag part",
+                    ProblemSeverity.WARNING,
+                )
 
             valid = original == translation or original in ("STP", "NP", "SINGULAR", "PLURAL")
             if not valid:
