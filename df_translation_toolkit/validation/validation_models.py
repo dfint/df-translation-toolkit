@@ -56,10 +56,12 @@ class Diagnostics:
     def add(self, problem_info: ProblemInfo) -> None:
         self.problems.append(problem_info)
 
-    def __bool__(self) -> bool:
+    def contains_problems(self) -> bool:
+        """Contains any problems (including errors)"""
         return bool(self.problems)
 
     def contains_errors(self) -> bool:
+        """Contains any errors among problems."""
         return any(problem.contains_errors() for problem in self.problems)
 
     def __str__(self) -> str:
