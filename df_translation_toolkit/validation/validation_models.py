@@ -61,3 +61,6 @@ class Diagnostics:
 
     def contains_errors(self) -> bool:
         return any(problem.contains_errors() for problem in self.problems)
+
+    def __str__(self) -> str:
+        return "\n".join(map(str, self.problems))
