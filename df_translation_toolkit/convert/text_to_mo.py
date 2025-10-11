@@ -31,6 +31,7 @@ def translate_tag(
     if problem_info.contains_errors():
         return None
 
+    translation_tag = fix_spaces(original_tag, translation_tag, strict=True)
     original_parts = split_tag(original_tag)
     translation_parts = split_tag(translation_tag)
 
@@ -45,7 +46,6 @@ def translate_tag_string(
     if not (original_string_tag and translation_tag and translation_tag != original_string_tag):
         return None
 
-    translation_tag = fix_spaces(original_string_tag, translation_tag, strict=True)
     translation = translate_tag(original_string_tag, translation_tag, diagnostics=diagnostics)
     if not translation:
         return None
