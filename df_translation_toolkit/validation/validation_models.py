@@ -40,8 +40,8 @@ class ProblemInfo:
     problems: list[ValidationProblem] = field(default_factory=list)
 
     def __str__(self) -> str:
-        problems_text = "\n".join(str(problem) for problem in self.problems)
-        return f"Problematic tag pair: {self.original!r}, {self.translation!r}\nProblems:\n{problems_text}"
+        problems_text = "\n".join(f" {problem}" for problem in self.problems)
+        return f"Problematic pair: {self.original!r}, {self.translation!r}\nProblems:\n{problems_text}"
 
     def contains_problems(self) -> bool:
         return bool(self.problems)
