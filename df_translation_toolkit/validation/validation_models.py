@@ -43,6 +43,9 @@ class ProblemInfo:
         problems_text = "\n".join(str(problem) for problem in self.problems)
         return f"Problematic tag pair: {self.original!r}, {self.translation!r}\nProblems:\n{problems_text}"
 
+    def contains_problems(self) -> bool:
+        return bool(self.problems)
+
     def contains_errors(self) -> bool:
         return ValidationProblem.contains_errors(self.problems)
 
@@ -58,7 +61,7 @@ class Diagnostics:
 
     def contains_problems(self) -> bool:
         """Contains any problems (including errors)"""
-        return bool(self.problems)
+        return any(problem.contains_problems() for problem in self.problems)
 
     def contains_errors(self) -> bool:
         """Contains any errors among problems."""
