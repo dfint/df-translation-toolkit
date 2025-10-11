@@ -14,7 +14,7 @@ from df_translation_toolkit.validation.validation_models import Diagnostics, Pro
 
 def fix_spaces_in_tag_parts_translations(original_parts: list[str], translation_parts: list[str]) -> Iterator[str]:
     for original, translation in zip(original_parts, translation_parts, strict=False):
-        yield fix_spaces(original, translation)
+        yield fix_spaces(original, translation, strict=True)
 
 
 def translate_tag(
@@ -45,11 +45,12 @@ def translate_tag_string(
     if not (original_string_tag and translation_tag and translation_tag != original_string_tag):
         return None
 
+    translation_tag = fix_spaces(original_string_tag, translation_tag, strict=True)
     translation = translate_tag(original_string_tag, translation_tag, diagnostics=diagnostics)
     if not translation:
         return None
 
-    return cleanup_string(fix_spaces(original_string_tag, translation))
+    return cleanup_string(translation)
 
 
 def prepare_translation_messages(catalog: Catalog, diagnostics: Diagnostics | None = None) -> Iterable[Message]:

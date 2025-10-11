@@ -1,13 +1,16 @@
 from unidecode import unidecode_expect_nonascii as unidecode
 
 
-def fix_leading_spaces(original_string: str, translation: str) -> str:
+def fix_leading_spaces(original_string: str, translation: str, *, strict: bool = False) -> str:
     """
     Adds missing space in the beginning of the translation.
     Removes extra spaces, if the translation starts with "." or ",".
     """
-    if original_string.startswith(" ") and not translation.startswith(" "):
-        translation = " " + translation
+    if original_string.startswith(" "):
+        if not translation.startswith(" "):
+            translation = " " + translation
+    elif strict:
+        translation = translation.lstrip()
 
     if translation.lstrip().startswith((".", ",")):
         translation = translation.lstrip()
@@ -15,22 +18,25 @@ def fix_leading_spaces(original_string: str, translation: str) -> str:
     return translation
 
 
-def fix_trailing_spaces(original_string: str, translation: str) -> str:
+def fix_trailing_spaces(original_string: str, translation: str, *, strict: bool = False) -> str:
     """
     Adds a missing trailing space.
     """
-    if original_string.endswith(" ") and not translation.endswith(" "):
-        translation += " "
+    if original_string.endswith(" "):
+        if not translation.endswith(" "):
+            translation += " "
+    elif strict:
+        translation = translation.rstrip()
 
     return translation
 
 
-def fix_spaces(original_string: str, translation: str) -> str:
+def fix_spaces(original_string: str, translation: str, *, strict: bool = False) -> str:
     """
     Fixes leading and trailing spaces of the translation string
     """
-    translation = fix_leading_spaces(original_string, translation)
-    return fix_trailing_spaces(original_string, translation)
+    translation = fix_leading_spaces(original_string, translation, strict=strict)
+    return fix_trailing_spaces(original_string, translation, strict=strict)
 
 
 _exclusions = "¿¡"
