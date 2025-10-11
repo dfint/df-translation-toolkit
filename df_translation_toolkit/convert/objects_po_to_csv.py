@@ -46,6 +46,7 @@ def get_translations_from_tag(original_tag: str, translation_tag: str) -> Iterat
     if ValidationProblem.contains_errors(validation_problems):
         raise ValidationException(validation_problems)
 
+    translation_tag = fix_spaces(original_tag, translation_tag, strict=True)
     original_parts = split_tag(original_tag)
     translation_parts = split_tag(translation_tag)
     original_parts = original_parts[1:]

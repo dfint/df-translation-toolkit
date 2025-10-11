@@ -70,6 +70,7 @@ def test_get_translation_from_tag(
                 ("верхний левый первый премолярs", "верхние левые первые премоляры"),
             ],
         ),
+        ("[PREFSTRING:something]", "    [PREFSTRING:translation]    ", [("something", "translation")]),
     ],
 )
 def test_validate_string(
