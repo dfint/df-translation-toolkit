@@ -104,6 +104,7 @@ import df_translation_toolkit.utils.df_ignore_string_rules as rules
         (rules.all_ignore_rules, "She", False),
         (rules.all_ignore_rules, "she", False),
         (rules.all_ignore_rules, "/N", False),
+        (rules.all_ignore_rules, "UNUSED_15_08", True),
     ],
 )
 def test_ignore_rules(rule: Callable[[str], bool], string: str, ignore: bool) -> None:  # noqa: FBT001
