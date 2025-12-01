@@ -10,6 +10,7 @@ updates:
           - "pytest*"
           - "coverage"
           - "ruff"
+          - "mypy"
 
   - package-ecosystem: "github-actions"
     directory: "/"
