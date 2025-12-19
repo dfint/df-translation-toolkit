@@ -64,10 +64,10 @@ def parse_lua_file(
             continue
 
         # Translatable parts
-        result = re.finditer(r"((\w+)\s*=\s*)?(\".*?\")", line)
+        result = re.finditer(r"\".*?\"", line)
         for item in result:
-            text = ast.literal_eval(item.group(3))
-            comment = item.group(2) or line.strip()
+            text = ast.literal_eval(item.group(0))
+            comment = line.strip().rstrip(",")
             yield LuaFileToken(
                 text=text,
                 is_translatable=is_translatable(text),
