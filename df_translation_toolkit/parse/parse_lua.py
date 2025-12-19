@@ -14,8 +14,14 @@ class LuaFileToken(NamedTuple):
     line: str
 
 
+IGNORED_STRINGS = {"cond"}
+
+
 def is_translatable(s: str) -> bool:
     if re.match(r"\w+\d+", s):
+        return False
+
+    if s in IGNORED_STRINGS:
         return False
 
     return any(char.islower() for char in skip_tags(s))
