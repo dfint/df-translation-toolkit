@@ -41,7 +41,7 @@ def _(result):
     from collections import defaultdict
     duplicates = defaultdict(set)
     for _item in result:
-        duplicates[_item.text].add(_item.line.strip().rstrip(","))
+        duplicates[_item.text, _item.context].add(_item.line.strip().rstrip(","))
     return (duplicates,)
 
 
