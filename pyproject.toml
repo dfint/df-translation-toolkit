@@ -28,6 +28,11 @@ ruff = "^0.14.7"
 mypy = "^1.19.0"
 types-requests = "*"
 
+
+[tool.poetry.group.marimo.dependencies]
+marimo = "^0.18.4"
+pandas = "^2.3.3"
+
 [tool.poetry.scripts]
 df_translation_toolkit = "df_translation_toolkit.cli:app"
 convert_hardcoded = "df_translation_toolkit.convert.hardcoded_po_to_csv:app"
