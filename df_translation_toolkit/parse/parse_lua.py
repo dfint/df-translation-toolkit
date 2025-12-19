@@ -4,6 +4,7 @@ from collections.abc import Iterable
 from typing import NamedTuple
 
 from df_translation_toolkit.parse.parse_plain_text import skip_tags
+from df_translation_toolkit.utils.po_utils import TranslationItem
 
 
 class LuaFileToken(NamedTuple):
@@ -75,3 +76,20 @@ def parse_lua_file(
                 comment=comment,
                 context=context,
             )
+
+
+def extract_translatables_from_lua_file(
+    lines: Iterable[str],
+    *,
+    start_line: int = 1,
+) -> Iterable[TranslationItem]:
+    for item in parse_lua_file(lines, start_line=start_line):
+        if not item.is_translatable:
+            continue
+
+        yield TranslationItem(
+            context=item.context,
+            text=item.text,
+            extracted_comment=item.comment,
+            line_number=item.line_number,
+        )
