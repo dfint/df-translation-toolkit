@@ -15,6 +15,9 @@ def extract_from_file(base_path: Path, file_name: Path, source_encoding: str) ->
             yield item
 
 
+SKIP_FILES = {"language.lua"}
+
+
 def extract_translatables_batch(
     base_path: Path,
     files: Iterable[Path],
@@ -24,7 +27,7 @@ def extract_translatables_batch(
     Read all translatable items from files
     """
     for file_name in files:
-        if file_name.is_file():
+        if file_name.is_file() and file_name.name not in SKIP_FILES:
             yield from extract_from_file(base_path, file_name, source_encoding)
 
 
@@ -38,7 +41,7 @@ def create_pot_file(base_path: Path, pot_file: BinaryIO, raw_files: Iterable[Pat
 def main(game_path: Path, pot_file: typer.FileBinaryWrite, source_encoding: str = "cp437") -> None:
     lua_file_path = game_path / "data/vanilla/vanilla_procedural/scripts"
     lua_files = (file for file in lua_file_path.rglob("*.lua"))
-    create_pot_file(lua_file_path, pot_file, sorted(lua_files), source_encoding)
+    create_pot_file(game_path, pot_file, sorted(lua_files), source_encoding)
 
 
 if __name__ == "__main__":

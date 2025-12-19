@@ -38,7 +38,7 @@ def parse_lua_file(
     nesting_level = 0
     for line_number, line in enumerate(lines, start_line):
         # Ignored lines
-        if line.lstrip().startswith(("require ", "require(", "--", "l2(")):
+        if line.lstrip().startswith(("require ", "require(", "--", "get_debug_logger", "l1", "l2", "l3", "l4", "l5")):
             yield LuaFileToken(
                 text=line,
                 is_translatable=False,
