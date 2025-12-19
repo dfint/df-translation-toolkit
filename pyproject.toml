@@ -28,7 +28,6 @@ ruff = "^0.14.7"
 mypy = "^1.19.0"
 types-requests = "*"
 
-
 [tool.poetry.group.marimo.dependencies]
 marimo = "^0.18.4"
 pandas = "^2.3.3"
@@ -84,4 +83,9 @@ unfixable = ["F401"]
     "N803",
     "B018",
     "PLR1711",
+]
+
+[tool.mypy]
+exclude = [
+  "notebooks",
 ]
