@@ -1,3 +1,4 @@
+import ast
 import re
 from collections.abc import Iterable
 from typing import NamedTuple
@@ -14,6 +15,9 @@ class LuaFileToken(NamedTuple):
 
 
 def is_translatable(s: str) -> bool:
+    if re.match(r"\w+\d+", s):
+        return False
+
     return any(char.islower() for char in skip_tags(s))
 
 
@@ -33,9 +37,9 @@ def parse_lua_file(
             )
             continue
 
-        result = re.finditer(r"((\w+)\s*=\s*)?\"(.*?)\"", line)
+        result = re.finditer(r"((\w+)\s*=\s*)?(\".*?\")", line)
         for item in result:
-            text = item.group(3)
+            text = ast.literal_eval(item.group(3))
             comment = item.group(2) or line.strip()
             yield LuaFileToken(
                 text=text,

@@ -6,9 +6,11 @@ app = marimo.App(width="medium")
 
 @app.cell
 def _():
-    from df_translation_toolkit.parse.parse_lua import parse_lua_file
     from pathlib import Path
+
     import pandas as pd
+
+    from df_translation_toolkit.parse.parse_lua import parse_lua_file, is_translatable
     return Path, parse_lua_file, pd
 
 
@@ -21,7 +23,7 @@ def _(Path):
 
 @app.cell
 def _(lua_file_path):
-    lua_files = list(file for file in lua_file_path.rglob("*.lua"))
+    lua_files = lua_file_path.rglob("*.lua")
     return (lua_files,)
 
 
@@ -32,10 +34,26 @@ def _(lua_files, parse_lua_file, pd):
         with file_path.open(encoding="cp437") as file:
             for item in parse_lua_file(lines=file):
                 if item.is_translatable:
-                    result.append(item)
+                    result.append(item)  # noqa: PERF401
 
     dataframe = pd.DataFrame(result)
     dataframe
+    return (result,)
+
+
+@app.cell
+def _(result):
+    from collections import defaultdict
+    duplicates = defaultdict(list)
+    for _item in result:
+        duplicates[_item.text].append(_item)
+    return (duplicates,)
+
+
+@app.cell
+def _(duplicates):
+    sorted_duplicates = sorted(duplicates.items(), key=lambda x: -len(x[1]))
+    sorted_duplicates
     return
 
 
