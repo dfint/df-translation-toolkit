@@ -74,13 +74,14 @@ def parse_lua_file(
             continue
 
         # Translatable parts
-        result = re.finditer(r"\".*?\"", line)
+        result = re.finditer(r"(==)?(\".*?\")", line)
         for item in result:
-            text = ast.literal_eval(item.group(0))
+            is_condition = bool(item.group(1))
+            text = ast.literal_eval(item.group(2))
             comment = line.strip().rstrip(",")
             yield LuaFileToken(
                 text=text,
-                is_translatable=is_translatable(text),
+                is_translatable=not is_condition and is_translatable(text),
                 line_number=line_number,
                 line=line,
                 comment=comment,
