@@ -11,21 +11,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
         
-      - name: Install poetry
-        run: pipx install poetry
+      - name: Install uv
+        run: pipx install uv
       
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: "3.10"
-          cache: "poetry"
-          cache-dependency-path: poetry.lock
       
       - name: Build project
         id: build
         run: |
-          poetry build
-          echo "version=$(poetry version --short)" >> "$GITHUB_OUTPUT"
+          uv build
+          echo "version=$(uv version --short)" >> "$GITHUB_OUTPUT"
 
       - name: Release
         uses: softprops/action-gh-release@v2

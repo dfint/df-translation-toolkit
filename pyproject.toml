@@ -1,47 +1,55 @@
-[tool.poetry]
+[project]
 name = "df-translation-toolkit"
 version = "0.12.0"
 description = "Toolset to convert text extracted from DF to translation format and aback"
 authors = [
-    "insolor <insolor@gmail.com>",
-    "aNNiPAk <annipak@yandex.ru>",
-    "shevernitskiy <hwork@list.ru>",
+    { name = "insolor", email = "insolor@gmail.com" },
+    { name = "aNNiPAk", email = "annipak@yandex.ru" },
+    { name = "shevernitskiy", email = "hwork@list.ru" },
 ]
+requires-python = ">=3.10,<4"
 license = "MIT"
+dependencies = [
+    "typer>=0.20.0,<0.21",
+    "Unidecode>=1.4.0,<2",
+    "loguru>=0.7.3,<0.8",
+    "babel>=2.17.0,<3",
+    "requests>=2.32.5,<3",
+    "jinja2>=3.1.6,<4",
+    "cairosvg>=2.8.2,<3",
+]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-typer = "^0.20.0"
-Unidecode = "^1.4.0"
-loguru = "^0.7.3"
-babel = "^2.17.0"
-requests = "^2.32.5"
-jinja2 = "^3.1.6"
-cairosvg = "^2.8.2"
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^9.0.1"
-pytest-cov = "^7.0.0"
-pytest-mock = "^3.15.1"
-coverage = "^7.12.0"
-ruff = "^0.14.7"
-mypy = "^1.19.0"
-types-requests = "*"
-
-[tool.poetry.group.marimo.dependencies]
-marimo = "^0.18.4"
-pandas = "^2.3.3"
-
-[tool.poetry.scripts]
+[project.scripts]
 df_translation_toolkit = "df_translation_toolkit.cli:app"
 convert_hardcoded = "df_translation_toolkit.convert.hardcoded_po_to_csv:app"
 convert_objects = "df_translation_toolkit.convert.objects_po_to_csv:app"
 create_pot = "df_translation_toolkit.create_pot.cli:app"
 create_mod = "df_translation_toolkit.create_mod.cli:app"
 
+[dependency-groups]
+dev = [
+    "pytest>=9.0.1,<10",
+    "pytest-cov>=7.0.0,<8",
+    "pytest-mock>=3.15.1,<4",
+    "coverage>=7.12.0,<8",
+    "ruff>=0.14.7,<0.15",
+    "mypy>=1.19.0,<2",
+    "types-requests",
+]
+marimo = [
+    "marimo>=0.18.4,<0.19",
+    "pandas>=2.3.3,<3",
+]
+
+[tool.uv]
+default-groups = [
+    "dev",
+    "marimo",
+]
+
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.ruff]
 target-version = "py310"
