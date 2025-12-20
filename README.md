@@ -13,7 +13,7 @@ Toolset to convert text from DF between different formats and prepare it for use
 
 You need Python 3.10 (or higher) and uv (`pipx install uv`).
 
-Clone or download the repo, then install dependencies it with `uv sync` command.
+Clone or download the repo, then install dependencies with `uv sync` command (optional, they will be installed automatically on a command run).
 
 ## Usage examples
 
