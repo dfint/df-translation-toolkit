@@ -11,20 +11,20 @@ Toolset to convert text from DF between different formats and prepare it for use
 
 ## Installation
 
-You need Python 3.10 (or higher) and poetry (`pip install poetry`).
+You need Python 3.10 (or higher) and uv (`pipx install uv`).
 
-Clone or download the repo, then install dependencies it with `poetry install` command
+Clone or download the repo, then install dependencies it with `uv sync` command.
 
 ## Usage examples
 
 ```bash
-poetry run convert hardcoded_steam.po dfint_dictionary.csv cp1251
+uv run convert hardcoded_steam.po dfint_dictionary.csv cp1251
 ```
 
 ```bash
-poetry run create_pot from_steam_text "./Dwarf Fortress/data/vanilla" ./pot_files/
+uv run create_pot from_steam_text "./Dwarf Fortress/data/vanilla" ./pot_files/
 ```
 
 ```bash
-poetry run create_pot from_string_dump stringdump.txt hardcoded_steam.pot
+uv run create_pot from_string_dump stringdump.txt hardcoded_steam.pot
 ```

@@ -21,30 +21,25 @@ jobs:
     steps:
     - uses: actions/checkout@v6
 
-    - name: Install poetry
-      run: pipx install poetry
+    - name: Install uv
+      run: pipx install uv
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python-version }}
-        cache: "poetry"
-        cache-dependency-path: poetry.lock
-
-    - name: Install library
-      run: poetry install --no-interaction
 
     - name: Lint with ruff
       run: |
-        poetry run ruff check . --statistics
+        uv run ruff check . --statistics
 
     - name: Check with mypy
       run: |
-        poetry run mypy . --strict
+        uv run mypy . --strict
 
     - name: Test with pytest
       run: |
-        poetry run pytest --cov=./
+        uv run pytest --cov=./
 
     - name: Upload coverage data to coveralls.io
       continue-on-error: true
