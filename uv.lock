@@ -8,6 +8,12 @@ resolution-markers = [
     "python_full_version < '3.11'",
 ]
 
+[manifest]
+members = [
+    "df-translation-toolkit",
+    "notebooks",
+]
+
 [[package]]
 name = "anyio"
 version = "4.12.0"
@@ -410,10 +416,6 @@ dev = [
     { name = "ruff" },
     { name = "types-requests" },
 ]
-marimo = [
-    { name = "marimo" },
-    { name = "pandas" },
-]
 
 [package.metadata]
 requires-dist = [
@@ -436,10 +438,6 @@ dev = [
     { name = "ruff", specifier = ">=0.14.7,<0.15" },
     { name = "types-requests" },
 ]
-marimo = [
-    { name = "marimo", specifier = ">=0.18.4,<0.19" },
-    { name = "pandas", specifier = ">=2.3.3,<3" },
-]
 
 [[package]]
 name = "docutils"
@@ -455,7 +453,7 @@ name = "exceptiongroup"
 version = "1.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "typing-extensions", marker = "python_full_version < '3.13'" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/50/79/66800aadf48771f6b62f7eb014e352e5d06856655206165d775e675a02c9/exceptiongroup-1.3.1.tar.gz", hash = "sha256:8b412432c6055b0b7d14c310000ae93352ed6754f70fa8f7c34141f91c4e3219", size = 30371, upload-time = "2025-11-21T23:01:54.787Z" }
 wheels = [
@@ -982,6 +980,21 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/4a/84/897fe7b6406d436ef312e57e5a1a13b4a5e7e36d1844e8d934ce8880e3d3/narwhals-2.14.0.tar.gz", hash = "sha256:98be155c3599db4d5c211e565c3190c398c87e7bf5b3cdb157dece67641946e0", size = 600648, upload-time = "2025-12-16T11:29:13.458Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/79/3e/b8ecc67e178919671695f64374a7ba916cf0adbf86efedc6054f38b5b8ae/narwhals-2.14.0-py3-none-any.whl", hash = "sha256:b56796c9a00179bd757d15282c540024e1d5c910b19b8c9944d836566c030acf", size = 430788, upload-time = "2025-12-16T11:29:11.699Z" },
+]
+
+[[package]]
+name = "notebooks"
+version = "0.1.0"
+source = { virtual = "notebooks" }
+dependencies = [
+    { name = "marimo" },
+    { name = "pandas" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "marimo", specifier = ">=0.18.4" },
+    { name = "pandas", specifier = ">=2.3.3" },
 ]
 
 [[package]]
