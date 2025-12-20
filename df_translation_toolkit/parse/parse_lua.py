@@ -23,6 +23,9 @@ def is_translatable(text: str) -> bool:
     if re.match(r"\w+\d+", text):
         return False
 
+    if re.search(r"[a-z]+_[a-z]+", text):
+        return False
+
     if text in IGNORED_STRINGS:
         return False
 
