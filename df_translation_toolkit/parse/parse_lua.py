@@ -6,6 +6,9 @@ from typing import NamedTuple
 from df_translation_toolkit.parse.parse_plain_text import skip_tags
 from df_translation_toolkit.utils.po_utils import TranslationItem
 
+IGNORED_STRINGS = {"cond", "glitchstuff"}
+IGNORED_LINE_STARTS = ("require ", "require(", "get_debug_logger", "l1", "l2", "l3", "l4", "l5")
+
 
 class LuaFileToken(NamedTuple):
     text: str
@@ -14,9 +17,6 @@ class LuaFileToken(NamedTuple):
     context: str | None
     comment: str | None
     line: str
-
-
-IGNORED_STRINGS = {"cond", "glitchstuff"}
 
 
 def is_translatable(text: str) -> bool:
@@ -37,8 +37,15 @@ def parse_lua_file(
     context = None
     nesting_level = 0
     for line_number, line in enumerate(lines, start_line):
+        # Remove line comments
+        if "--" in line:
+            line = line.partition("--")[0]  # noqa: PLW2901
+
+        # TODO(@insolor): Handle block comments properly
+
         # Ignored lines
-        if line.lstrip().startswith(("require ", "require(", "--", "get_debug_logger", "l1", "l2", "l3", "l4", "l5")):
+        stripped = line.strip()
+        if not stripped or stripped.startswith(IGNORED_LINE_STARTS):
             yield LuaFileToken(
                 text=line,
                 is_translatable=False,
