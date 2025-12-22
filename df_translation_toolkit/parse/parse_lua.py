@@ -6,7 +6,7 @@ from typing import NamedTuple
 from df_translation_toolkit.parse.parse_plain_text import skip_tags
 from df_translation_toolkit.utils.po_utils import TranslationItem
 
-IGNORED_STRINGS = {"cond", "glitchstuff", "buggy", "glitch demon:glitch demons:glitch demon"}
+IGNORED_STRINGS = {"cond", "glitchstuff", "buggy", "glitch demon:glitch demons:glitch demon", "unique"}
 IGNORED_LINE_STARTS = (
     "require ",
     "require(",
