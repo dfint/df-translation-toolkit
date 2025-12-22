@@ -7,7 +7,19 @@ from df_translation_toolkit.parse.parse_plain_text import skip_tags
 from df_translation_toolkit.utils.po_utils import TranslationItem
 
 IGNORED_STRINGS = {"cond", "glitchstuff", "buggy", "glitch demon:glitch demons:glitch demon"}
-IGNORED_LINE_STARTS = ("require ", "require(", "get_debug_logger(", "l(", "l1(", "l2(", "l3(", "l4(", "l5(", "log(")
+IGNORED_LINE_STARTS = (
+    "require ",
+    "require(",
+    "get_debug_logger(",
+    "l(",
+    "l1(",
+    "l2(",
+    "l3(",
+    "l4(",
+    "l5(",
+    "log(",
+    "res.info=",
+)
 
 
 class LuaFileToken(NamedTuple):
