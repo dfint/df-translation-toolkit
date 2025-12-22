@@ -32,6 +32,10 @@ class LuaFileToken(NamedTuple):
     line: str
 
 
+def contains_tag(text: str) -> bool:
+    return bool(re.search(r"\[.*?:.*?\]", text))
+
+
 def is_translatable(text: str) -> bool:
     if re.match(r"\w+\d+", text):
         return False
@@ -94,7 +98,7 @@ def parse_lua_file(
             comment = line.strip().rstrip(",")
             yield LuaFileToken(
                 text=text,
-                is_translatable=not is_condition and is_translatable(text),
+                is_translatable=not is_condition and not contains_tag(text) and is_translatable(text),
                 line_number=line_number,
                 line=line,
                 comment=comment,
