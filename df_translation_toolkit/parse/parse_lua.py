@@ -86,7 +86,7 @@ def parse_lua_file(
             continue
 
         # Translatable parts
-        result = re.finditer(r"([~=]=)?(\".*?\")", line)
+        result = re.finditer(r"([~=]=\s*)?(\".*?\")", line)
         for item in result:
             is_condition = bool(item.group(1))
             text = ast.literal_eval(item.group(2))
