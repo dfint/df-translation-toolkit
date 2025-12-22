@@ -11,6 +11,7 @@ IGNORED_LINE_STARTS = (
     "require ",
     "require(",
     "get_debug_logger(",
+    "o(",
     "l(",
     "l1(",
     "l2(",
