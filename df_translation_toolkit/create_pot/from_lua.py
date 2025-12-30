@@ -39,7 +39,7 @@ def create_pot_file(base_path: Path, pot_file: BinaryIO, raw_files: Iterable[Pat
 
 
 def main(game_path: Path, pot_file: typer.FileBinaryWrite, source_encoding: str = "cp437") -> None:
-    lua_file_path = game_path / "data/vanilla/vanilla_procedural/scripts"
+    lua_file_path = game_path / "data"
     lua_files = (file for file in lua_file_path.rglob("*.lua"))
     create_pot_file(game_path, pot_file, sorted(lua_files), source_encoding)
 
