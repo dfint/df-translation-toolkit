@@ -12,7 +12,6 @@ def _():
 
     from df_translation_toolkit.parse.parse_raws import is_translatable, join_tag, split_tag
     from df_translation_toolkit.utils.csv_utils import read_csv
-
     return (
         Path,
         is_translatable,
@@ -47,19 +46,20 @@ def _(catalog, dictionary, is_translatable, join_tag, split_tag):
 
         parts = split_tag(message.id)
         translation_parts = []
+        any_translated = False
         for part in parts:
             if not part or not is_translatable(part):
                 translation_parts.append(part)
                 continue
 
             translation = dictionary.get(part)
-            if not translation:
-                translation_parts = None
-                break
+            if translation:
+                any_translated = True
 
+            translation = translation or part
             translation_parts.append(translation)
 
-        if translation_parts:
+        if any_translated:
             translation = join_tag(translation_parts)
             message.string = translation
     return
