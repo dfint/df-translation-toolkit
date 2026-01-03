@@ -27,7 +27,7 @@ class TranslationItem:
         )
 
 
-_default_header = b"""
+default_header = b"""
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\\n"
@@ -43,7 +43,7 @@ def save_pot(po_file: BinaryIO, template: Iterable[TranslationItem]) -> None:
         comments = [item.extracted_comment] if item.extracted_comment else []
         catalog.add(item.text, context=item.context, locations=locations, auto_comments=comments)
 
-    po_file.write(_default_header + b"\n\n")
+    po_file.write(default_header + b"\n\n")
     write_po(po_file, catalog, omit_header=True)
 
 
