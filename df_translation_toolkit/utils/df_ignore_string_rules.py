@@ -128,7 +128,7 @@ def ignore_dash_separated_words(string: str) -> bool:
 
 @rules.register
 def ignore_mixed_case(string: str) -> bool:
-    return re.search(r"[a-z]+[A-Z]", string) is not None
+    return re.search(r"[a-z]+[A-Z]|[A-Z]{2,}[a-z]+", string) is not None
 
 
 @rules.register
