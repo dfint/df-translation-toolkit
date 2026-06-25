@@ -85,6 +85,7 @@ import df_translation_toolkit.utils.df_ignore_string_rules as rules
         (rules.ignore_mixed_case, "CAPS", False),
         (rules.ignore_mixed_case, "RefusedID/", True),
         (rules.ignore_mixed_case, "plF", True),
+        (rules.ignore_mixed_case, "LOp", True),
         (
             rules.ignore_by_blacklisted_substrings,
             "plotter (assassinate) placed out of bounds",
