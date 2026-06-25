@@ -454,7 +454,7 @@ def ignore_short_words(string: str) -> bool:
     return len(string) < MINIMAL_TRANSLATABLE_WORD_LENGTH and string.strip() not in allowed_short_words
 
 
-blacklisted_substrings = {"placed out of bounds", "set to default", "Patched save"}
+blacklisted_substrings = {"placed out of bounds", "set to default", "Patched save", "%s"}
 
 
 @rules.register
