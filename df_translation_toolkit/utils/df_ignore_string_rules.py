@@ -456,6 +456,8 @@ def ignore_short_words(string: str) -> bool:
 
 blacklisted_substrings = {"placed out of bounds", "set to default", "Patched save", "%s", "%u"}
 
+whitelist = {"VVSlow"}
+
 
 @rules.register
 def ignore_by_blacklisted_substrings(string: str) -> bool:
@@ -463,6 +465,9 @@ def ignore_by_blacklisted_substrings(string: str) -> bool:
 
 
 def all_ignore_rules(string: str) -> str | None:
+    if string in whitelist:
+        return None
+
     return rules.check_ignore(string)
 
 
