@@ -1,6 +1,6 @@
 [project]
 name = "df-translation-toolkit"
-version = "0.12.0"
+version = "0.12.1"
 description = "Toolset to convert text extracted from DF to translation format and aback"
 authors = [
     { name = "insolor", email = "insolor@gmail.com" },
