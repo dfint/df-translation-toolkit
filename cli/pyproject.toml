@@ -14,7 +14,9 @@ dev = [
 ]
 
 [project.scripts]
-df-translation-toolkit = "cli:app"
+convert = "cli.convert:app"
+create_pot = "cli.create_pot:app"
+translate = "cli.translate:app"
 
 [tool.uv.sources]
 df-translation-toolkit = { path = "..", editable = true }
