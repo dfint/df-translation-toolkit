@@ -10,20 +10,12 @@ authors = [
 requires-python = ">=3.10,<4"
 license = "MIT"
 dependencies = [
-    "typer>=0.27.0,<0.28",
     "Unidecode>=1.4.0,<2",
     "loguru>=0.7.3,<0.8",
     "babel>=2.17.0,<3",
     "requests>=2.34.2,<3",
     "jinja2>=3.1.6,<4",
 ]
-
-[project.scripts]
-df_translation_toolkit = "df_translation_toolkit.cli:app"
-convert_hardcoded = "df_translation_toolkit.convert.hardcoded_po_to_csv:app"
-convert_objects = "df_translation_toolkit.convert.objects_po_to_csv:app"
-create_pot = "df_translation_toolkit.create_pot.cli:app"
-create_mod = "df_translation_toolkit.create_mod.cli:app"
 
 [dependency-groups]
 dev = [

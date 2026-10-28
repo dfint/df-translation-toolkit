@@ -2,8 +2,6 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import TextIO
 
-import typer
-
 from df_translation_toolkit.utils import csv_utils
 from df_translation_toolkit.utils.fix_translated_strings import cleanup_string, fix_spaces
 from df_translation_toolkit.utils.po_utils import simple_read_po
@@ -23,10 +21,6 @@ def convert(po_file: TextIO, csv_file: TextIO) -> None:
         csv_writer.writerow([original_string, translation])
 
 
-app = typer.Typer()
-
-
-@app.command()
 def main(po_file: Path, csv_file: Path, encoding: str) -> None:
     """
     Convert a po file into a csv file in a specified encoding
@@ -37,7 +31,3 @@ def main(po_file: Path, csv_file: Path, encoding: str) -> None:
         csv_file.open("w", newline="", encoding=encoding, errors="replace") as outfile,
     ):
         convert(pofile, outfile)
-
-
-if __name__ == "__main__":
-    app()

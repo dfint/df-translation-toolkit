@@ -13,18 +13,19 @@ Toolset to convert text from DF between different formats and prepare it for use
 
 You need Python 3.10 (or higher) and uv (`pipx install uv`).
 
-Clone or download the repo, then install dependencies with `uv sync` command (optional, they will be installed automatically on a command run).
+Clone or download the repo. Install the library dependencies with `uv sync`. The CLI is a separate project in `cli/` with its own `pyproject.toml` and `uv.lock`; its dependencies, including Typer, are isolated from the library package.
+Run CLI commands from the repository root with `uv run --project cli df-translation-toolkit`.
 
 ## Usage examples
 
 ```bash
-uv run convert hardcoded_steam.po dfint_dictionary.csv cp1251
+uv run --project cli df-translation-toolkit convert hardcoded_to_csv hardcoded_steam.po dfint_dictionary.csv cp1251
 ```
 
 ```bash
-uv run create_pot from_steam_text "./Dwarf Fortress/data/vanilla" ./pot_files/
+uv run --project cli df-translation-toolkit create_pot from_steam_text "./Dwarf Fortress/data/vanilla" ./pot_files/
 ```
 
 ```bash
-uv run create_pot from_string_dump stringdump.txt hardcoded_steam.pot
+uv run --project cli df-translation-toolkit create_pot from_string_dump stringdump.txt hardcoded_steam.pot
 ```

@@ -1,9 +1,11 @@
-# `python -m df_translation_toolkit`
+# `df-translation-toolkit`
+
+The CLI is a separate uv project in the `cli/` directory with its own lockfile and is not included in the built library package. Run commands from the repository root using `uv run --project cli df-translation-toolkit`.
 
 **Usage**:
 
 ```console
-$ python -m df_translation_toolkit [OPTIONS] COMMAND [ARGS]...
+$ uv run --project cli df-translation-toolkit [OPTIONS] COMMAND [ARGS]...
 ```
 
 **Options**:
@@ -16,13 +18,15 @@ $ python -m df_translation_toolkit [OPTIONS] COMMAND [ARGS]...
 
 * `convert`
 * `create_pot`
+* `create_mod`
+* `translate`
 
-## `python -m df_translation_toolkit convert`
+## `df-translation-toolkit convert`
 
 **Usage**:
 
 ```console
-$ python -m df_translation_toolkit convert [OPTIONS] COMMAND [ARGS]...
+$ uv run --project cli df-translation-toolkit convert [OPTIONS] COMMAND [ARGS]...
 ```
 
 **Options**:
@@ -31,16 +35,17 @@ $ python -m df_translation_toolkit convert [OPTIONS] COMMAND [ARGS]...
 
 **Commands**:
 
-* `hardcoded_to_csv`: Convert a po file into a csv file in a...
+* `hardcoded_to_csv`
+* `objects_to_csv`
 
-### `python -m df_translation_toolkit convert po_to_csv`
+### `df-translation-toolkit convert hardcoded_to_csv`
 
 Convert a po file into a csv file in a specified encoding
 
 **Usage**:
 
 ```console
-$ python -m df_translation_toolkit convert po_to_csv [OPTIONS] PO_FILE CSV_FILE ENCODING
+$ uv run --project cli df-translation-toolkit convert hardcoded_to_csv [OPTIONS] PO_FILE CSV_FILE ENCODING
 ```
 
 **Arguments**:
@@ -53,12 +58,12 @@ $ python -m df_translation_toolkit convert po_to_csv [OPTIONS] PO_FILE CSV_FILE 
 
 * `--help`: Show this message and exit.
 
-## `python -m df_translation_toolkit create_pot`
+## `df-translation-toolkit create_pot`
 
 **Usage**:
 
 ```console
-$ python -m df_translation_toolkit create_pot [OPTIONS] COMMAND [ARGS]...
+$ uv run --project cli df-translation-toolkit create_pot [OPTIONS] COMMAND [ARGS]...
 ```
 
 **Options**:
@@ -69,13 +74,16 @@ $ python -m df_translation_toolkit create_pot [OPTIONS] COMMAND [ARGS]...
 
 * `from_steam_text`
 * `from_string_dump`
+* `from_lua`
+* `from_raw_objects`
+* `from_speech`
 
-### `python -m df_translation_toolkit create_pot from_steam_text`
+### `df-translation-toolkit create_pot from_steam_text`
 
 **Usage**:
 
 ```console
-$ python -m df_translation_toolkit create_pot from_steam_text [OPTIONS] VANILLA_PATH DESTINATION_PATH
+$ uv run --project cli df-translation-toolkit create_pot from_steam_text [OPTIONS] VANILLA_PATH DESTINATION_PATH
 ```
 
 **Arguments**:
@@ -88,12 +96,12 @@ $ python -m df_translation_toolkit create_pot from_steam_text [OPTIONS] VANILLA_
 * `--source-encoding TEXT`: [default: cp437]
 * `--help`: Show this message and exit.
 
-### `python -m df_translation_toolkit create_pot from_string_dump`
+### `df-translation-toolkit create_pot from_string_dump`
 
 **Usage**:
 
 ```console
-$ python -m df_translation_toolkit create_pot from_string_dump [OPTIONS] SOURCE_FILE DESTINATION_FILE
+$ uv run --project cli df-translation-toolkit create_pot from_string_dump [OPTIONS] SOURCE_FILE DESTINATION_FILE
 ```
 
 **Arguments**:
@@ -106,3 +114,9 @@ $ python -m df_translation_toolkit create_pot from_string_dump [OPTIONS] SOURCE_
 * `--no-ignore / --no-no-ignore`: [default: no-no-ignore]
 * `--help`: Show this message and exit.
 
+## Other command groups
+
+* `create_mod`: `from_template`, `template_from_vanilla`, `generate_preview`, and `batch`
+* `translate`: `plain_text` and `raws`
+
+Run `uv run --project cli df-translation-toolkit create_mod --help` or `uv run --project cli df-translation-toolkit translate --help` for command options.

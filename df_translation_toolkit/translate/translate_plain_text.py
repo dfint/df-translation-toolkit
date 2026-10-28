@@ -2,7 +2,6 @@ import sys
 from collections.abc import Iterator, Mapping
 from pathlib import Path
 
-import typer
 from babel.messages.pofile import read_po
 
 from df_translation_toolkit.parse.parse_plain_text import parse_plain_text_file
@@ -61,7 +60,3 @@ def main(
     join_paragraphs = not split
     for filename in translate_plain_text(po_filename, path, encoding, join_paragraphs=join_paragraphs):
         print(filename, file=sys.stderr)
-
-
-if __name__ == "__main__":
-    typer.run(main)

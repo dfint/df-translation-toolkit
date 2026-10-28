@@ -3,7 +3,6 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
 
-import typer
 from loguru import logger
 
 from df_translation_toolkit.create_pot.from_raw_objects import extract_from_raw_file
@@ -94,7 +93,3 @@ def main(vanilla_path: Path, destination_path: Path, source_encoding: str = "cp4
                 pot_path = destination_path / (group.lower() + ".pot")
                 with pot_path.open("wb") as pot_file:
                     save_pot(pot_file, data)
-
-
-if __name__ == "__main__":
-    typer.run(main)

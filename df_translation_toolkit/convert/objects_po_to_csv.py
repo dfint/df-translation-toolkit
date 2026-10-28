@@ -3,7 +3,6 @@ from collections.abc import Iterable, Iterator
 from pathlib import Path
 from typing import IO, TextIO
 
-import typer
 from loguru import logger
 
 from df_translation_toolkit.parse.parse_raws import all_caps, split_tag
@@ -91,10 +90,6 @@ def convert(po_file: TextIO, csv_file: IO[str], diagnostics: Diagnostics | None 
         csv_writer.writerow([original_string, translation])
 
 
-app = typer.Typer()
-
-
-@app.command()
 def main(
     po_file: Path,
     csv_file: Path,
@@ -115,7 +110,3 @@ def main(
         if errors_file_path and diagnostics:
             with open(errors_file_path, mode, encoding="utf-8") as errors_file:
                 errors_file.write(str(diagnostics))
-
-
-if __name__ == "__main__":
-    app()

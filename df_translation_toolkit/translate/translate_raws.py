@@ -2,7 +2,6 @@ import sys
 from collections.abc import Iterator, Mapping
 from pathlib import Path
 
-import typer
 from babel.messages.pofile import read_po
 
 from df_translation_toolkit.parse.parse_raws import translate_raw_file
@@ -48,7 +47,3 @@ def translate_raws(po_filename: Path, path: Path, encoding: str) -> Iterator[str
 def main(po_filename: Path, path: Path, encoding: str) -> None:
     for filename in translate_raws(po_filename, path, encoding):
         print(filename, file=sys.stderr)
-
-
-if __name__ == "__main__":
-    typer.run(main)

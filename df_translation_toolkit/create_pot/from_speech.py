@@ -1,9 +1,7 @@
 import sys
 from collections.abc import Iterable, Iterator, Sequence
 from pathlib import Path
-from typing import TextIO
-
-import typer
+from typing import BinaryIO, TextIO
 
 from df_translation_toolkit.utils.po_utils import TranslationItem, save_pot
 
@@ -23,7 +21,7 @@ def extract_translatables(files: Iterable[Path]) -> Iterator[TranslationItem]:
                 yield from extract_from_speech_file(file, file_path.name)
 
 
-def create_pot_file(pot_file: typer.FileBinaryWrite, files: Sequence[Path]) -> None:
+def create_pot_file(pot_file: BinaryIO, files: Sequence[Path]) -> None:
     save_pot(
         pot_file,
         extract_translatables(files),
@@ -32,11 +30,7 @@ def create_pot_file(pot_file: typer.FileBinaryWrite, files: Sequence[Path]) -> N
 
 def main(
     path: Path,
-    pot_file: typer.FileBinaryWrite,
+    pot_file: BinaryIO,
 ) -> None:
     files = (file for file in path.glob("*.txt") if file.is_file())
     create_pot_file(pot_file, sorted(files))
-
-
-if __name__ == "__main__":
-    typer.run(main)
