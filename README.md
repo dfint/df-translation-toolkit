@@ -11,7 +11,7 @@ Toolset to convert text from DF between different formats and prepare it for use
 
 ## Installation
 
-You need Python 3.10 (or higher) and uv (`pipx install uv`).
+You need Python 3.12 (or higher) and uv (`pipx install uv`).
 
 Clone or download the repo. Install the library dependencies with `uv sync`. The CLI is a separate project in `cli/` with its own `pyproject.toml` and `uv.lock`; its dependencies, including Typer, are isolated from the library package.
 Run CLI commands from the repository root with `uv run --project cli df-translation-toolkit`.

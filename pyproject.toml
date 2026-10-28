@@ -7,7 +7,7 @@ authors = [
     { name = "aNNiPAk", email = "annipak@yandex.ru" },
     { name = "shevernitskiy", email = "hwork@list.ru" },
 ]
-requires-python = ">=3.10,<4"
+requires-python = ">=3.12,<4"
 license = "MIT"
 dependencies = [
     "Unidecode>=1.4.0,<2",
@@ -46,7 +46,7 @@ packages = ["df_translation_toolkit"]
 packages = ["df_translation_toolkit"]
 
 [tool.ruff]
-target-version = "py310"
+target-version = "py312"
 line-length = 120
 
 [tool.ruff.lint]
