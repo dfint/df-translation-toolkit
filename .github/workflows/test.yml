@@ -34,9 +34,13 @@ jobs:
       run: |
         uv run ruff check . --statistics
 
-    - name: Check with mypy
+    - name: Check core with mypy
       run: |
-        uv run mypy . --strict
+        uv run mypy . --strict --exclude '(^|/)cli/cli/'
+
+    - name: Check CLI with mypy
+      run: |
+        uv run --project cli --group dev mypy cli/cli --strict
 
     - name: Test with pytest
       run: |
