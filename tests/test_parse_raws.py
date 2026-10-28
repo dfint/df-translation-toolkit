@@ -1,6 +1,5 @@
 import io
 from collections.abc import Callable, Mapping, Sequence
-from typing import TypeVar
 
 import pytest
 
@@ -173,9 +172,6 @@ def test_translate_raw_file(content: str, dictionary: Mapping[tuple[str, str | N
     assert list(translate_raw_file(io.StringIO(content), dictionary)) == result.splitlines()
 
 
-T = TypeVar("T")
-
-
 @pytest.mark.parametrize(
     "sequence, function, expected",
     [
@@ -187,7 +183,7 @@ T = TypeVar("T")
         [[], bool, 0],
     ],
 )
-def test_last_suitable(sequence: Sequence[T], function: Callable[[T], bool], expected: int) -> None:
+def test_last_suitable[T](sequence: Sequence[T], function: Callable[[T], bool], expected: int) -> None:
     assert last_suitable(sequence, function) == expected
     result = last_suitable(sequence, function)
     assert len(sequence[:result]) == result

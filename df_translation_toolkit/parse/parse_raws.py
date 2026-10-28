@@ -1,5 +1,5 @@
 from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
-from typing import NamedTuple, TypeVar
+from typing import NamedTuple
 
 from df_translation_toolkit.utils.po_utils import TranslationItem
 
@@ -34,10 +34,7 @@ def join_tag(tag: Iterable[str]) -> str:
     return "[{}]".format(":".join(tag))
 
 
-T = TypeVar("T")
-
-
-def last_suitable(parts: Sequence[T], func: Callable[[T], bool]) -> int:
+def last_suitable[T](parts: Sequence[T], func: Callable[[T], bool]) -> int:
     for i in range(len(parts) - 1, -1, -1):
         if func(parts[i]):
             return i + 1  # if the last element is suitable, then return len(s), so that s[:i] gives full list
