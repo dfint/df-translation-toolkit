@@ -272,7 +272,7 @@ wheels = [
 [[package]]
 name = "df-translation-toolkit"
 version = "0.12.1"
-source = { directory = "../" }
+source = { editable = "../" }
 dependencies = [
     { name = "babel" },
     { name = "jinja2" },
@@ -318,7 +318,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "df-translation-toolkit", directory = "../" },
+    { name = "df-translation-toolkit", editable = "../" },
     { name = "typer", specifier = ">=0.27.0,<0.28" },
 ]
 

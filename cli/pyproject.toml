@@ -18,7 +18,7 @@ dev = [
 df-translation-toolkit = "cli:app"
 
 [tool.uv.sources]
-df-translation-toolkit = { path = ".." }
+df-translation-toolkit = { path = "..", editable = true }
 
 [build-system]
 requires = ["hatchling"]
