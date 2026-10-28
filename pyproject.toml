@@ -13,8 +13,6 @@ dependencies = [
     "Unidecode>=1.4.0,<2",
     "loguru>=0.7.3,<0.8",
     "babel>=2.17.0,<3",
-    "requests>=2.34.2,<3",
-    "jinja2>=3.1.6,<4",
 ]
 
 [dependency-groups]
@@ -25,7 +23,6 @@ dev = [
     "coverage>=7.15.2,<8",
     "ruff>=0.16.0,<0.17",
     "mypy>=2.3.0,<3",
-    "types-requests",
 ]
 
 [tool.uv]

@@ -18,7 +18,6 @@ $ uv run --project cli df-translation-toolkit [OPTIONS] COMMAND [ARGS]...
 
 * `convert`
 * `create_pot`
-* `create_mod`
 * `translate`
 
 ## `df-translation-toolkit convert`
@@ -114,9 +113,8 @@ $ uv run --project cli df-translation-toolkit create_pot from_string_dump [OPTIO
 * `--no-ignore / --no-no-ignore`: [default: no-no-ignore]
 * `--help`: Show this message and exit.
 
-## Other command groups
+## Other command group
 
-* `create_mod`: `from_template`, `template_from_vanilla`, `generate_preview`, and `batch`
 * `translate`: `plain_text` and `raws`
 
-Run `uv run --project cli df-translation-toolkit create_mod --help` or `uv run --project cli df-translation-toolkit translate --help` for command options.
+Run `uv run --project cli df-translation-toolkit translate --help` for command options.

@@ -21,7 +21,6 @@ updates:
       dev-dependencies:
         patterns:
           - "mypy"
-          - "types-requests"
 
   - package-ecosystem: "github-actions"
     directory: "/"
