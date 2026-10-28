@@ -13,6 +13,16 @@ updates:
           - "ruff"
           - "mypy"
 
+  - package-ecosystem: "uv"
+    directory: "/cli"
+    schedule:
+      interval: "monthly"
+    groups:
+      dev-dependencies:
+        patterns:
+          - "mypy"
+          - "types-requests"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

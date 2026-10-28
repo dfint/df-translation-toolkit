@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import jinja2
-import typer
 from babel.messages.pofile import read_po
 from loguru import logger
 
@@ -153,7 +152,3 @@ def main(
         "All done! Consider to change info.txt file and made unique preview.png "
         "before uploading to steam or sharing the mod.",
     )
-
-
-if __name__ == "__main__":
-    typer.run(main)

@@ -2,7 +2,6 @@ from pathlib import Path
 from urllib.error import HTTPError
 
 import requests
-import typer
 from loguru import logger
 
 from df_translation_toolkit.create_mod.from_template import main as from_template
@@ -46,7 +45,3 @@ def main(vanilla_path: Path, destination_path: Path, encoding: str, languages: l
         po.unlink()
 
     logger.success("All done!")
-
-
-if __name__ == "__main__":
-    typer.run(main)

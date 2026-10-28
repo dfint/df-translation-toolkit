@@ -1,7 +1,6 @@
 import shutil
 from pathlib import Path
 
-import typer
 from loguru import logger
 
 from df_translation_toolkit.create_pot.from_steam_text import file_is_translatable, traverse_vanilla_directories
@@ -51,7 +50,3 @@ def main(
         total_dirs += 1
 
     logger.info(f"Total copied: {total_files} files from {total_dirs} dirs")
-
-
-if __name__ == "__main__":
-    typer.run(main)

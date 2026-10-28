@@ -2,8 +2,6 @@ from collections.abc import Iterable, Iterator
 from pathlib import Path
 from typing import BinaryIO
 
-import typer
-
 from df_translation_toolkit.parse.parse_raws import extract_translatables_from_raws
 from df_translation_toolkit.utils.po_utils import TranslationItem, save_pot
 
@@ -31,10 +29,6 @@ def create_pot_file(pot_file: BinaryIO, raw_files: Iterable[Path], source_encodi
     )
 
 
-def main(raws_path: Path, pot_file: typer.FileBinaryWrite, source_encoding: str = "cp437") -> None:
+def main(raws_path: Path, pot_file: BinaryIO, source_encoding: str = "cp437") -> None:
     raw_files = (file for file in raws_path.glob("*.txt") if not file.name.startswith("language_"))
     create_pot_file(pot_file, sorted(raw_files), source_encoding)
-
-
-if __name__ == "__main__":
-    typer.run(main)
